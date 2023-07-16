@@ -1,0 +1,7 @@
+name: substrate-conda-env
+# channels:
+#   - conda-forge
+#   # - pytorch
+dependencies:
+  - python=3.9
+  - pytorch

@@ -1,0 +1,65 @@
+FROM --platform=linux/x86_64 nvidia/cuda:12.2.0-devel-ubuntu20.04
+
+# ARG PYTHON_VERSION=3.6
+# RUN apt-get update && apt-get install -y --no-install-recommends
+
+ARG DEBIAN_FRONTEND=noninteractive
+# ENV TZ=Europe/London
+RUN apt-get update && apt-get install -y --no-install-recommends \
+            # build-essential \
+            # cmake \
+            # nginx \
+            # jq \
+            # wget \
+            # git \
+            curl \
+            # vim \
+            # ca-certificates \
+            # libjpeg-dev \
+            # libpng-dev &&\
+            rm -rf /var/lib/apt/lists/*
+        
+
+# TODO change to mambaforge
+
+# RUN curl -Lo ~/miniconda.sh -O  https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh 
+RUN curl -Lo ~/mambaforge.sh -O  https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh 
+# && \
+#     chmod +x ~/miniconda.sh && \
+#     ~/miniconda.sh -b -p /opt/conda && \
+#     rm ~/miniconda.sh
+# RUN chmod +x ~/miniconda.sh
+# RUN ~/miniconda.sh 
+# RUN ~/miniconda.sh -h
+# RUN ~/miniconda.sh -b -p /opt/conda
+RUN bash ~/mambaforge.sh -b -p /opt/conda
+
+#     #  \
+    #  /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include cython typing && \
+    #  /opt/conda/bin/conda install -y -c pytorch pytorch && \
+    #  /opt/conda/bin/conda clean -ya
+
+COPY environment.yml /environment.yml
+
+# RUN  cat /environment.yml && \
+#      sleep 100 
+
+RUN /opt/conda/bin/conda env create -f /environment.yml
+
+RUN /opt/conda/bin/conda clean -ya 
+
+# RUN /opt/conda/bin/conda init bash
+
+# RUN /opt/conda/bin/conda activate substrate-conda-env
+
+ENV PATH /opt/conda/envs/substrate-conda-env/bin:$PATH
+
+COPY ./project.py ~/code/main.py
+
+# ENTRYPOINT ["python", "~/code/main.py"]
+
+ENTRYPOINT ["/opt/conda/bin/conda", "run", "--no-capture-output", "-n", "substrate-conda-env", "python", "~/code/main.py"]
+
+# https://github.com/aws/amazon-sagemaker-examples/blob/02fac3c08cb1d5d8e4a661af56aa7817c16c98de/advanced_functionality/fairseq_translation/Dockerfile#L15
+# https://github.com/aws/amazon-sagemaker-examples/blob/02fac3c08cb1d5d8e4a661af56aa7817c16c98de/sagemaker-pipelines/tabular/local-mode/framework-processor-byoc/code/training/Dockerfile#L4
+# https://github.com/aws/amazon-sagemaker-examples/blob/02fac3c08cb1d5d8e4a661af56aa7817c16c98de/sagemaker_processing/feature_transformation_with_sagemaker_processing_dask/container/Dockerfile#L4
