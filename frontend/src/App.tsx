@@ -1,9 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import RootLayout from './components/RootLayout';
-import BlogLayout from './pages/BlogLayout';
-import BlogPostsPage from './pages/BlogPosts';
-import NewPostPage from './pages/NewPost';
-import PostDetailPage from './pages/PostDetail';
+
 import WelcomePage from './pages/WelcomePage';
 import { CustomProvider } from 'rsuite';
 import Login from './pages/Login';
@@ -12,9 +9,9 @@ import { AuthProvider } from './hooks/Auth';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from './pages/Checkout';
 import PageNotFound from './pages/PageNotFound';
 import Dashboard from './pages/Dashboard';
+import BillingSection from './pages/dashboard-sections/BillingSection';
 
 const stripePromise = loadStripe("pk_test_51NTikzIaSQMc4h1thj38McKyOeLfJOGobRJe1oMhrZOeZziVl2Cy8wLfCJsa2yWxh9USLT8do0VXEFUq6BYOapuA001nSVIu1z");
 
@@ -62,20 +59,22 @@ function App() {
               <Route path="/" element={<WelcomePage />} />
               <Route path="/login" element={<Login />} />
               <Route
-                path="/checkout"
+                path="/billing"
                 element={
    
-                    <Elements stripe={stripePromise}>
-                      <CheckoutForm />
-                    </Elements>
+                    // <Elements stripe={stripePromise}>
+                    //   <CheckoutForm />
+                    // </Elements>
+
+                    <BillingSection></BillingSection>
                   
                 
                 }
               >
-                <Route index element={<BlogPostsPage />} />
-                <Route path=":id" element={<PostDetailPage />} />
+                {/* <Route index element={<BlogPostsPage />} />
+                <Route path=":id" element={<PostDetailPage />} /> */}
               </Route>
-              <Route path="/blog/new" element={<NewPostPage />} />
+              {/* <Route path="/blog/new" element={<NewPostPage />} /> */}
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/404" element={<PageNotFound />} />
           	  <Route path="*" element={<Navigate to="/404" />} />
