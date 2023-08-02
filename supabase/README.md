@@ -1,0 +1,1 @@
+supabase secrets set --env-file /Users/baptiste/Git/substrate/supabase/functions/.env

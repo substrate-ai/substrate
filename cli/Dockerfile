@@ -1,38 +1,35 @@
 # Container for building the environment
-FROM --platform=linux/amd64 condaforge/mambaforge as conda
+FROM --platform=linux/amd64 nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04 as conda
 
-# Install the package as normal:
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get install -y --no-install-recommends \
+    curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    curl -Lo ~/mambaforge.sh -O  https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh && \
+    bash ~/mambaforge.sh -b -p /opt/conda
+
+ENV PATH /opt/conda/bin:$PATH
+ARG CONDA_ENV_NAME=substrate-conda-env
+
+
 COPY environment.yml .
 
 RUN conda env create -f environment.yml && \
     conda install -c conda-forge conda-pack && \
-    conda clean -ya
+    conda clean -ya && \
+    conda-pack -n ${CONDA_ENV_NAME} -o /tmp/env.tar && \
+    mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
+    rm /tmp/env.tar && \
+    conda remove --name ${CONDA_ENV_NAME} --all && \
+    /venv/bin/conda-unpack
 
-# Use conda-pack to create a standalone enviornment
-# in /venv:
-RUN conda-pack -n substrate-conda-env -o /tmp/env.tar && \
-  mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
-  rm /tmp/env.tar
 
-# We've put venv in same path it'll be in final image,
-# so now fix up paths:
-RUN /venv/bin/conda-unpack
-
-# The runtime-stage image; we can use Debian as the
-# base image since the Conda env also includes Python
-# for us.
 FROM --platform=linux/amd64 nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04 as runtime
 
-# Copy /venv from the previous stage:
 COPY --from=conda /venv /venv
 
-RUN du -sh /venv && sleep 100
+COPY src /src
 
-COPY code ~/code
-
-# When image is run, run the code with the environment
-# activated:
 SHELL ["/bin/bash", "-c"]
-RUN chmod +x /venv/bin/activate
-
-ENTRYPOINT ["/venv/bin/activate", "&&", "python", "~/code/main.py"]
+ENTRYPOINT source /venv/bin/activate && \
+           python /src/main.py
