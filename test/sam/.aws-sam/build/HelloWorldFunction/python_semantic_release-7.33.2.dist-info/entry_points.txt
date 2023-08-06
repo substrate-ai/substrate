@@ -1,0 +1,2 @@
+[console_scripts]
+semantic-release = semantic_release.cli:entry

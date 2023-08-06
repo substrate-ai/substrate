@@ -1,0 +1,14 @@
+supabase/__init__.py,sha256=CuujIIViPxu6HoDQZJqEZZz5ak-HCvZgY79O9T1qyy0,392
+supabase/__version__.py,sha256=2plzdEEb24FLjE2I2XyBBcJEPYWHccNL4SgtLC_6erg,22
+supabase/client.py,sha256=lY44fC522fCuaHo9xyRU7MJK5MGEzttDpO2G5XhmfYo,8648
+supabase/lib/__init__.py,sha256=S09gxgVOvy5Fn4ZuR-EbAvTddjaQ7dD1odvu0peh1Yg,100
+supabase/lib/auth_client.py,sha256=iOgo_tt0uKVh_CGhgPdaueu5SKkYqpohSyK4ejGOA4o,1072
+supabase/lib/client_options.py,sha256=j55JvFEgPwn1DVrTyR19p-6sQHvqzlp6F-g9xsk5p2Y,3102
+supabase/lib/realtime_client.py,sha256=c_gN_l9U8gGH-d8MdQATDpad8ZazWhuOf5280dUXq_I,1892
+supabase/lib/storage_client.py,sha256=yNHLhHZvZvXv-UUG_x4_-egkN5gd2U5B7eUxXJOr5zc,382
+supabase/py.typed,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+supabase-1.0.3.dist-info/LICENSE,sha256=uTab7vzaOZGPTnEmI7hmwN7H9iROJHmTOaX4fSAhEyk,1065
+supabase-1.0.3.dist-info/WHEEL,sha256=vVCvjcmxuUltf8cYhJ0sJMRDLr1XsPuxEId8YDzbyCY,88
+supabase-1.0.3.dist-info/entry_points.txt,sha256=F4onP9kSP0FoU2sCoOxrYbU-c60KwlZ_0quCskleaKg,50
+supabase-1.0.3.dist-info/METADATA,sha256=Cs2WEc0Ol_7iITdwagKAMLTBfXFLnRys6duvXH-6Jdg,8875
+supabase-1.0.3.dist-info/RECORD,,
