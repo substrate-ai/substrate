@@ -6,6 +6,8 @@ https://docs.getlago.com/guide/self-hosted/docker
 SLACK
 https://lago-community.slack.com/ssb/redirect
 
+ASK baptiste for .env
+
 
 Goal: 
 Deploying the lago inside AWS. This means that lago code run on in an ec2 instance and is connected to RDS (databse), S3 (file bucket) and Redis (this is not stricly necessary...)
