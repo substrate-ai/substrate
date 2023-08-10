@@ -1,3 +1,0 @@
-[console_scripts]
-humanid-gen=human_id.cli:main
-
