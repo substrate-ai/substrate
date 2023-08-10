@@ -12,9 +12,17 @@ import { Elements } from '@stripe/react-stripe-js';
 import PageNotFound from './pages/PageNotFound';
 import Dashboard from './pages/Dashboard';
 import BillingSection from './pages/dashboard-sections/BillingSection';
+import TokenSection from './pages/dashboard-sections/TokenSection';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
-const stripePromise = loadStripe("pk_test_51NTikzIaSQMc4h1thj38McKyOeLfJOGobRJe1oMhrZOeZziVl2Cy8wLfCJsa2yWxh9USLT8do0VXEFUq6BYOapuA001nSVIu1z");
 
+const queryClient = new QueryClient()
 
 function App() {
 
@@ -46,40 +54,45 @@ function App() {
     <CustomProvider theme="dark">
       <BrowserRouter>
         <AuthProvider>
-          <RootLayout>
-            <Routes>
-              <Route
-                path="/protected"
-                element={
-                  <ProtectedRoute>
-                    <WelcomePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/" element={<WelcomePage />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/billing"
-                element={
-   
-                    // <Elements stripe={stripePromise}>
-                    //   <CheckoutForm />
-                    // </Elements>
+          <QueryClientProvider client={queryClient}>
+            <RootLayout>
+              <Routes>
+                <Route
+                  path="/protected"
+                  element={
+                    <ProtectedRoute>
+                      <WelcomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/" element={<WelcomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/billing"
+                  element={
+    
+                      // <Elements stripe={stripePromise}>
+                      //   <CheckoutForm />
+                      // </Elements>
 
-                    <BillingSection></BillingSection>
+                      <BillingSection></BillingSection>
+                    
                   
-                
-                }
-              >
-                {/* <Route index element={<BlogPostsPage />} />
-                <Route path=":id" element={<PostDetailPage />} /> */}
-              </Route>
-              {/* <Route path="/blog/new" element={<NewPostPage />} /> */}
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/404" element={<PageNotFound />} />
-          	  <Route path="*" element={<Navigate to="/404" />} />
-            </Routes>
-          </RootLayout>
+                  }
+                >
+                  {/* <Route index element={<BlogPostsPage />} />
+                  <Route path=":id" element={<PostDetailPage />} /> */}
+                </Route>
+                {/* <Route path="/blog/new" element={<NewPostPage />} /> */}
+                <Route path="/dashboard" element={<Dashboard />} >
+                  <Route index path="billing" element={<BillingSection/>}/>
+                  <Route index path="token" element={<TokenSection/>}/>
+                </Route>
+                <Route path="/404" element={<PageNotFound />} />
+                <Route path="*" element={<Navigate to="/404" />} />
+              </Routes>
+            </RootLayout>
+          </QueryClientProvider>
         </AuthProvider>
       </BrowserRouter>
     </CustomProvider>

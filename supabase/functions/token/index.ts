@@ -3,6 +3,7 @@ import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { getUserFromContext } from '../_shared/getUserFromRequest.ts';
 import { Context } from 'oak';
 import { supabaseAdmin } from "../_shared/supabaseClients.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 
 const router = new Router()
@@ -118,7 +119,9 @@ async function createToken(tokenName: string, supabaseId: string): Promise<Token
   
 
 const app = new Application()
+app.use(oakCors())
 app.use(router.routes())
 app.use(router.allowedMethods())
+
 
 await app.listen({ port: 8000 })

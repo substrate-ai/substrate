@@ -1,58 +1,101 @@
 import { supabaseClient } from "src/config/supabase-client";
-import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAuth } from "src/hooks/Auth";
+import axios from "axios";
 
 
-type GetTokenDTO = {
+export type GetTokenDTO = {
     token_name: string
 }
 
+export function useGetTokensQuery() {
+    return useQuery(['tokens'], async () => {
+      const {data, error} = await supabaseClient.from("token").select("token_name")
+
+      if (error) {
+          console.error("error getting tokens", error)
+          throw new Error(error.message)
+      }
+
+      return data
+    });
+  }
+
+export type CreateTokenDTO = {
+    tokenName: string
+}
 
 
-async function getTokens(): Promise<GetTokenDTO[]> {
-    const {data, error} = await supabaseClient.from("token").select("token_name")
+
+export function usePostTokenQuery() {
+    return useMutation(['tokens'], async (token: CreateTokenDTO) => {
+        const session = useAuth()
+
+        if (token.tokenName === "") {
+            throw new Error("token name cannot be empty")
+        }
+        // do post request to supabase function via axios
+        const response = await axios.post<CreateTokenDTO>(import.meta.env.VITE_SUPABASE_URL + "/token/token", {
+            token_name: token.tokenName
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.session!.access_token
+            }
+        })
+
+        if (response.status !== 200) {
+            console.log("response", response)
+            throw new Error("error creating token")
+        }
+
+        return response.data
+    });
+}
+
+
+
+
+// export async function getTokens(): Promise<GetTokenDTO[]> {
+//     const {data, error} = await supabaseClient.from("token").select("token_name")
     
-    if (error) {
-        console.error("error getting tokens", error)
-        throw new Error(error.message)
-    }
+//     if (error) {
+//         console.error("error getting tokens", error)
+//         throw new Error(error.message)
+//     }
 
-    if (!data) {
-        throw new Error("no data")
-    }
+//     if (!data) {
+//         throw new Error("no data")
+//     }
 
-    return data
-}
+//     return data
+// }
 
 
-async function deleteToken(tokenName: string): Promise<boolean> {
-    const {data, error} = await supabaseClient.from("token").delete().eq("token_name", tokenName)
+// export async function deleteToken(tokenName: string): Promise<boolean> {
+//     const {data, error} = await supabaseClient.from("token").delete().eq("token_name", tokenName)
     
-    if (error) {
-        console.error("error getting tokens", error)
-        throw new Error(error.message)
-    }
+//     if (error) {
+//         console.error("error getting tokens", error)
+//         throw new Error(error.message)
+//     }
 
-    if (!data) {
-        throw new Error("no data")
-    }
+//     if (!data) {
+//         throw new Error("no data")
+//     }
 
-    return data
-}
+//     return data
+// }
 
-type CreateTokenDTO = {
-    access_token: string
-}
+// const session = useAuth()
 
-async function createToken(token_name: string): Promise<CreateTokenDTO> {
-
-    const session = useAuth()
+export async function createToken(token_name: string): Promise<CreateTokenDTO> {
+    const access_token = (await supabaseClient.auth.getSession()).data.session?.access_token
     // do post request to supabase function via axios
-    const response = await axios.post(import.meta.env.VITE_SUPABASE_URL + "/token/token", {
-        token_name: token_name
+    const response = await axios.post(import.meta.env.VITE_SUPABASE_URL + "/functions/v1/token/token", {
+        tokenName: token_name
     }, {
         headers: {
-            Authorization: "Bearer " + session.session!.access_token
+            Authorization: "Bearer " + access_token
         }
     })
 

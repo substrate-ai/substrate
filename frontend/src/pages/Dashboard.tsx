@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { supabaseClient } from "../config/supabase-client"
-import { CreditCard } from 'tabler-icons-react';
-import { Button } from "@/components/ui/button"
+import DashboardLayout from "src/components/DashboardLayout";
 import BillingSection from "./dashboard-sections/BillingSection";
+import { Outlet } from "react-router-dom"
+
 
 export default function Dashboard() {
     
@@ -14,8 +13,11 @@ export default function Dashboard() {
     
     // call the url on click
     return (   
+        <DashboardLayout>
+            {/* <BillingSection></BillingSection> */}
+            <Outlet />
+        </DashboardLayout>
 
-        <BillingSection></BillingSection>
 
         )
         

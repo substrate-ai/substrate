@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { CreditCard } from 'tabler-icons-react';
 import { Button } from "@/components/ui/button"
-import { supabaseClient } from "../../config/supabase-client"
 import { useNavigate } from "react-router-dom";
+import { supabaseClient } from "src/config/supabase-client";
 
 export default function BillingSection() {
 
