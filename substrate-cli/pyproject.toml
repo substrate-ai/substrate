@@ -1,0 +1,55 @@
+# pyproject.toml
+
+[project]
+name = "substrate-cli"
+dynamic = ["version"]
+description = "Substrate AI cli tool"
+readme = "README.md"
+# todo to change email to support@substrateai
+authors = [{ name = "SubstrateAI", email = "admin@substrateai.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["cloud", "gpu", "ml", "ai"]
+dependencies = [
+    "boto3 >= 1.28.0",
+    "docker >= 6.1.0",
+    "typer[all] >= 0.9.0",
+    "human-id >= 0.2.0",
+]
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
+
+[project.urls]
+Homepage = "https://docs.substrateai.com/"
+
+[project.scripts]
+substrate-cli = "cli:app"
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.bumpver]
+current_version = "2023.1001-alpha"
+version_pattern = "YYYY.BUILD[-TAG]"
+commit_message = "bump version {old_version} -> {new_version}"
+tag_message = "{new_version}"
+tag_scope = "default"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+"README.md" = [
+    "{version}",
+    "{pep440_version}",
+]
