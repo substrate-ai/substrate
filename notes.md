@@ -19,3 +19,11 @@ https://www.tremor.so/
 
 https://autospotting.io/
 https://leanercloud.beehiiv.com/p/recommended-ecs-instead-kubernetes-latest-customer
+
+
+
+TODO 
+verify token
+front end redo 
+sign in auth
+prevent force push on github

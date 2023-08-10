@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripeClient.ts"
-import { supabaseClient } from "../_shared/supabaseClient.ts";
 import { corsHeaders } from '../_shared/cors.ts'
+import { getUserFromServe } from "../_shared/getUserFromRequest.ts";
+import { supabaseAnon } from "../_shared/supabaseClients.ts";
 
 
 // Tp be called from frontend
@@ -10,21 +11,10 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
-  console.log("req", req)
+  const supabaseUser = await getUserFromServe(req)
+  const supabaseId = supabaseUser.id
 
-  const {data, error} = (await supabaseClient.auth.getUser(req.headers.get('Authorization')!))
-
-  if (error) {
-    console.error("error getting user", error)
-    return new Response(
-      JSON.stringify({ error: "error getting user" }),
-      { headers: { "Content-Type": "application/json" }, status: 401 },
-    )
-  }
-
-  const supabaseId = data.user.id
-
-  const queryStripeId = await supabaseClient.from('user_data')
+  const queryStripeId = await supabaseAnon.from('user_data')
                             .select('stripe_id').eq('id', supabaseId).single()
 
   if (queryStripeId.error) {
