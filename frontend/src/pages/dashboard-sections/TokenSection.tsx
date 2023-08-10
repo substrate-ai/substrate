@@ -10,7 +10,7 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { useState } from "react";
-import { GetTokenDTO, useGetTokensQuery } from "src/api/token";
+import { GetTokenDTO, useDeleteToken, useGetTokensQuery } from "src/api/token";
 import { InputForm } from "src/components/InputForm";
    
    
@@ -29,6 +29,10 @@ export default function TokenSection() {
     console.log("isLoading", isLoading)
     console.log("isError", isError)
     const tokens = data ?? []
+
+    const {mutate} = useDeleteToken()
+
+
 
 
 
@@ -50,12 +54,12 @@ export default function TokenSection() {
                 </TableRow>
                 </TableHeader>
                 <TableBody>
-                {tokens.map((tokens, i) => (
-                    <TableRow key={i}>
+                {tokens.map((tokens) => (
+                    <TableRow key={tokens.id}>
                     <TableCell className="font-medium">{tokens.token_name}</TableCell>
                     <TableCell>***********</TableCell>
                     <TableCell className="text-right">
-                        <Button onClick={() => console.log("deleted")}>Delete me</Button>
+                        <Button onClick={() => mutate(tokens.id)}>Delete me</Button>
                         </TableCell>
                     </TableRow>
                 ))}

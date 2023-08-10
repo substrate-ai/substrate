@@ -1,5 +1,5 @@
 import { supabaseClient } from "src/config/supabase-client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "src/hooks/Auth";
 import axios from "axios";
 
@@ -27,7 +27,10 @@ export function useGetTokensQuery() {
         }
 
         return data
-    });
+    }
+    
+    
+    );
   }
 
 export type CreateTokenDTO = {
@@ -61,6 +64,34 @@ export function usePostTokenQuery() {
     });
 }
 
+
+export function useDeleteToken() {
+
+    const queryClient = useQueryClient()
+
+    return useMutation(['tokens'], async (id: string) => {
+        console.log(supabaseClient.auth.getSession())
+        // todo fix RLS and this should work
+        const {data, error} = await supabaseClient.from("token").delete().eq("id", id)
+
+        if (error) {
+            console.error("error getting tokens", error)
+            throw new Error(error.message)
+        }
+
+        return data
+    }, { onSuccess: (data,variables) => {
+
+       // filter out the deleted token
+         queryClient.setQueryData(['tokens'], (oldData: any) => {
+            return oldData.filter((token: any) => token.id !== variables)
+        })
+
+    }}
+    
+    
+    );
+}
 
 
 
