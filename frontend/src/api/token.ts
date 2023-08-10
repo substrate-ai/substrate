@@ -10,14 +10,23 @@ export type GetTokenDTO = {
 
 export function useGetTokensQuery() {
     return useQuery(['tokens'], async () => {
-      const {data, error} = await supabaseClient.from("token").select("token_name")
 
-      if (error) {
-          console.error("error getting tokens", error)
-          throw new Error(error.message)
-      }
+        console.log(supabaseClient.auth.getSession())
+        // todo fix RLS and this should work
+        const {data, error} = await supabaseClient.from("token").select()
 
-      return data
+        if (error) {
+            console.error("error getting tokens", error)
+            throw new Error(error.message)
+        }
+
+        if (!data) {
+            throw new Error("no data")
+        } else {
+            console.log("data", data)
+        }
+
+        return data
     });
   }
 
@@ -88,7 +97,11 @@ export function usePostTokenQuery() {
 
 // const session = useAuth()
 
-export async function createToken(token_name: string): Promise<CreateTokenDTO> {
+type typeCreateTokenResponse = {
+    accessToken: string
+}
+
+export async function createToken(token_name: string): Promise<typeCreateTokenResponse> {
     const access_token = (await supabaseClient.auth.getSession()).data.session?.access_token
     // do post request to supabase function via axios
     const response = await axios.post(import.meta.env.VITE_SUPABASE_URL + "/functions/v1/token/token", {

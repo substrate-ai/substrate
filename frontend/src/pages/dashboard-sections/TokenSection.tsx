@@ -18,8 +18,17 @@ export default function TokenSection() {
 
     // const [tokens, setTokens] = useState<GetTokenDTO[]>([]);
 
-    const query = useGetTokensQuery();
-    const tokens = query.data ?? []
+
+    const { 
+        data, 
+        isLoading, 
+        isError 
+    } = useGetTokensQuery();
+
+    console.log("data", data)
+    console.log("isLoading", isLoading)
+    console.log("isError", isError)
+    const tokens = data ?? []
 
 
 
