@@ -19,6 +19,7 @@ import { useState } from "react"
 import axios from "axios"
 import ConfirmDialog from "./ConfirmDialog"
 import ReadOnlyInput from "./ReadOnlyInput"
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query"
  
 const FormSchema = z.object({
   tokenName: z.string().nonempty({ message: "Token name is required" })
@@ -33,17 +34,18 @@ export function InputForm() {
 
   const [open, setOpen] = useState(false)
   const [newToken, setNewToken] = useState("")
-
+  const queryClient = useQueryClient()
+  const [loading, setLoading] = useState(false)
   
 //   mutate({tokenName: newToken})
   // TODO add loading state after submit + ideally handle everything with reatc query
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("token name", data.tokenName)
+    setLoading(true)
     const response = await createToken(data.tokenName)
-    console.log("response", response)
-    setOpen(true)
     setNewToken(response.accessToken)
-    console.log("newToken", newToken)
+    setOpen(true)
+    setLoading(false)
+    queryClient.invalidateQueries(["tokens"])
     
 
   }
@@ -72,7 +74,12 @@ export function InputForm() {
               </FormItem>
             )}
           />
+          {loading ? 
+          <Button disabled>Loading...</Button> 
+          : 
           <Button type="submit">Add Token</Button>
+          }
+          
         </form>
       </Form>
     </>
