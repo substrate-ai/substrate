@@ -8,4 +8,11 @@ todo maybe check in dockerfile that GPu is availabel but this need to be done at
 
 todo terraform
 
+python -m pip install -e .
+
 # todo experiment with https://github.com/tensorchord/envd
+
+maybe import code into docker image compare to rebuilding would that improve user expereicne?
+
+create base image to share layer between images
+

@@ -21,9 +21,9 @@ supabase = create_client(SUPABSE_URL, SUPABSE_KEY)
 
 class Job(BaseModel):
     jobName : str
-    hardwareCode : str 
+    hardware : str 
     token: str
-    imageNmae: str
+    repoUri: str
 
 
 app = FastAPI()
@@ -35,10 +35,6 @@ def get_settings():
 
 @app.post("/start_job")
 async def create_item(job: Job, settings: Annotated[config.Settings, Depends(get_settings)]):
-
-
-
-
     token = job.token
     response = requests.post('https://substrate.supabase.co/auth/v1/token/verify', json={'token': token})
 
@@ -49,19 +45,12 @@ async def create_item(job: Job, settings: Annotated[config.Settings, Depends(get
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    
-
-    
-
-
-    hardware_code = job.hardwareCode
-
     with open('aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
 
 
-    instance_type = aws_hardware_code[hardware_code]
-    image_name = job.imageNmae
+    instance_type = aws_hardware_code[job.hardware]
+    image_name = job.repoUri
 
     sage = boto3.client('sagemaker', region_name='us-east-1')
 

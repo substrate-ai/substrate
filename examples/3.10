@@ -1,0 +1,25 @@
+Retrieving notices: ...working... done
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /opt/homebrew/Caskroom/miniforge/base/envs/substrate-conda-env
+
+  added / updated specs:
+    - python
+
+
+The following packages will be UPDATED:
+
+  ca-certificates                       2023.5.7-hf0a4a13_0 --> 2023.7.22-hf0a4a13_0 
+  openssl                                  3.1.1-h53f4e23_1 --> 3.1.2-h53f4e23_0 
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done

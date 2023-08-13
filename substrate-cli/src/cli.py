@@ -5,25 +5,40 @@ import os
 import typer
 from human_id import generate_id
 import yaml
-from client import AWS_Client
 import shutil
+from requests.structures import CaseInsensitiveDict
+import base64
+from client import AWS_Client, JobClient
+from utils import get_user_config
 
-app = typer.Typer()
 
-PYTHON_BACKEND_URL: str = os.environ.get("PYTHON_BACKEND_URL")
+from env import config_data
 
-AWS_ECR_REPOSITORY_NAME = os.environ.get("AWS_ECR_REPOSITORY_NAME")
-SUPABSE_URL: str = os.environ.get("SUPABSE_URL")
-SUPABSE_KEY: str = os.environ.get("SUPABSE_KEY")
+def init_typer():
+    if config_data["PYTHON_BACKEND_URL"] is None:
+        typer.echo("Environment variables are not properly set, contact the developer")
+        exit(1)
 
+app = typer.Typer(callback=init_typer)
 
 @app.command()
+# init folder for user
 def init():
     typer.echo("Init project with config file and requirements.txt 2")
 
-    # TODO add choice about how to init project
-    shutil.copyfile(os.path.join(os.path.dirname(__file__), 'resources/substrate.yaml'), 'substrate.yaml')
-    shutil.copyfile(os.path.join(os.path.dirname(__file__), 'resources/requirements.txt'), 'requirements.txt')
+    project_name = os.path.basename(os.getcwd())
+
+    # load substrate.yaml
+    with open(os.path.join(os.path.dirname(__file__), 'resources/substrate.dev.yaml'), 'r') as f:
+        substrate_yaml = yaml.safe_load(f)
+
+    substrate_yaml['project_name'] = project_name
+
+    # save substrate.yaml
+    with open('substrate.yaml', 'w') as f:
+        f.write(yaml.dump(substrate_yaml, sort_keys=False))
+
+    shutil.copyfile(os.path.join(os.path.dirname(__file__), 'resources/requirements.dev.txt'), 'requirements.txt')
 
     typer.echo("Project successfully initialized")
 
@@ -34,32 +49,35 @@ def login():
     while True:
         token = typer.prompt("Please enter access token, this can be find in the substrateai.com website")
 
-        response = requests.get(f'{SUPABSE_URL}/functions/v1/token/verify-token', headers={'Authorization': f'Bearer {SUPABSE_KEY}'}, json={"accessToken": token})
+        endpoint = f'{config_data["SUPABASE_URL"]}/functions/v1/token/verify-token'
+        data = {"accessToken": token}
+        headers = {"Authorization": f"Bearer {config_data['SUPABASE_KEY']}"}
 
-        if response.status_code == 200:
+        response = requests.post(endpoint, headers=headers, json=data)
+
+        if response.status_code == 200 and response.json()['verified'] == True:
             break
 
         typer.echo("Invalid token, please try again")
 
     # if exist then load and modify
-    if os.path.exists(os.path.expanduser('~/.substrateai')):
-        with open(os.path.expanduser('~/.substrateai'), 'r') as f:
-            user_config = yaml.load(f)
-            user_config['accessToken'] = token
+    if os.path.exists(os.path.expanduser('~/.substrate')):
+        user_config = get_user_config()
+        user_config['access_token'] = token
     else:
         user_config = {
-            "accessToken": token
+            "access_token": token
         }
 
-    # todo check multipe login
-    with open(os.path.expanduser('~/.substrateai'), 'w') as f:
+
+
+    # save to file
+    with open(os.path.expanduser('~/.substrate'), 'w') as f:
         f.write(yaml.dump(user_config))
+
+    typer.echo("Login successful")
     
-@lru_cache()
-def get_token():
-    with open(os.path.expanduser('~/.substrateai'), 'r') as f:
-        user_config = yaml.load(f)
-        return user_config['accessToken']
+
     
 
 
@@ -67,13 +85,8 @@ def get_token():
 # push container to ecr aws
 @app.command()
 def push():
-    typer.echo("Create and push container to ecr aws")
-
-    AWS_Client = AWS_Client()
-    AWS_Client.push_and_build()
-
-    typer.echo("Code successfully uploaded to cloud")
-
+    jobClient = JobClient()
+    jobClient.start_job()
 
 @app.command()
 # run the builded container on aws
@@ -91,7 +104,7 @@ def start():
 
     # todo stream the response
 
-    response = requests.post(f'{PYTHON_BACKEND_URL}/launch_job', headers={'Authorization': f'Bearer {get_token()}'}, json=payload)
+    response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/launch_job', headers={'Authorization': f'Bearer {get_token()}'}, json=payload)
 
     if response.status_code != 200:
         typer.echo("Job failed to start")

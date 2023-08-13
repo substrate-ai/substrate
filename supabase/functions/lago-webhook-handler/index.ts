@@ -5,7 +5,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 import { verify } from "https://deno.land/x/djwt@v2.9.1/mod.ts"
-import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
+import { supabaseAdmin } from "../_shared/supabaseClients.ts";
 
 
 

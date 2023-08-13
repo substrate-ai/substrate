@@ -20,6 +20,8 @@ import axios from "axios"
 import ConfirmDialog from "./ConfirmDialog"
 import ReadOnlyInput from "./ReadOnlyInput"
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query"
+import { ReloadIcon } from "@radix-ui/react-icons"
+
  
 const FormSchema = z.object({
   tokenName: z.string().nonempty({ message: "Token name is required" })
@@ -75,7 +77,10 @@ export function InputForm() {
             )}
           />
           {loading ? 
-          <Button disabled>Loading...</Button> 
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
           : 
           <Button type="submit">Add Token</Button>
           }

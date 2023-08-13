@@ -1,0 +1,3 @@
+project_name: substrate_project
+hardware: a100
+main_file_location: ./main.py

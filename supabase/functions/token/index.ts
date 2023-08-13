@@ -35,19 +35,38 @@ router
     // This is done client-side
     ctx.response.status = 404
   })
+  .post('/token/user-id', async (ctx: Context) => {
+    // get user from context
+    const result = ctx.request.body();
+    const value = await result.value;
+    const token = value.accessToken
+
+    const userId = await getUserIdFromToken(token)
+    ctx.response.body = { userId: userId }
+  })
 
 type Token = {
     accessToken: string
 }
 
 async function verifyToken(token: string): Promise<boolean> {
+      try {
+          const supabaseId = await getUserIdFromToken(token)
+          return true
+      } catch (error) {
+          console.error("error verifying token", error)
+          return false
+      }
+}
+
+async function getUserIdFromToken(token: string): Promise<string> {
 
     console.log("token", token)
 
     const [uuid, password] = token.split(":")
 
     console.log("uuid", uuid)
-    const {data, error} = await supabaseAdmin.from('token').select("encrypted_token").eq('id', uuid).single()
+    const {data, error} = await supabaseAdmin.from('token').select("encrypted_token, supabase_id").eq('id', uuid).single()
 
     if (error) {
         console.error("error getting token", error)
@@ -62,7 +81,11 @@ async function verifyToken(token: string): Promise<boolean> {
 
     const match = bcrypt.compareSync(password, encryptedToken)
 
-    return match
+    if (!match) {
+        throw new Error("token does not match")
+    }
+
+    return data.supabase_id
 
 }
 

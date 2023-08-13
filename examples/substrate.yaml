@@ -1,1 +1,3 @@
-gpu: a100
+project_name: examples
+hardware: a100
+main_file_location: ./main.py
