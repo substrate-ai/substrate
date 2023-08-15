@@ -12,12 +12,20 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from pydantic import BaseModel
-from . import config
+from src.config import Settings
 from typing_extensions import Annotated
 
-supabase = create_client(SUPABSE_URL, SUPABSE_KEY)
+@lru_cache()
+def get_settings():
+    return Settings()
+
+settings = get_settings()
+print(settings.model_config)
+
+supabase = create_client(settings.SUPABSE_URL, settings.SUPABSE_KEY)
 
 
+app = FastAPI()
 
 class Job(BaseModel):
     jobName : str
@@ -25,16 +33,8 @@ class Job(BaseModel):
     token: str
     repoUri: str
 
-
-app = FastAPI()
-
-@lru_cache()
-def get_settings():
-    return config.Settings()
-
-
 @app.post("/start_job")
-async def create_item(job: Job, settings: Annotated[config.Settings, Depends(get_settings)]):
+async def create_item(job: Job, settings: Annotated[Settings, Depends(get_settings)]):
     token = job.token
     response = requests.post('https://substrate.supabase.co/auth/v1/token/verify', json={'token': token})
 
