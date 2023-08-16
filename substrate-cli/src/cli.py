@@ -84,33 +84,11 @@ def login():
 # https://github.com/AlexIoannides/py-docker-aws-example-project/blob/master/deploy_to_aws.py
 # push container to ecr aws
 @app.command()
-def push():
+def run():
     jobClient = JobClient()
     jobClient.start_job()
 
-@app.command()
-# run the builded container on aws
-def start():
-    typer.echo("Running")
 
-    jobName = generate_id()
-
-    payload = {
-        "jobName": jobName,
-        "hardwareCode": "g4dn.xlarge",
-        "token": get_token(),
-        "imageName": "substrate:latest"
-    }
-
-    # todo stream the response
-
-    response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/launch_job', headers={'Authorization': f'Bearer {get_token()}'}, json=payload)
-
-    if response.status_code != 200:
-        typer.echo("Job failed to start")
-        return
-    
-    typer.echo("Job successfully started")
     
     
 

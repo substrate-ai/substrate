@@ -1,5 +1,6 @@
 import torch
 import os
+from time import sleep
 
 print(2+2)
 
@@ -12,3 +13,7 @@ print("cuda", torch.cuda.is_available())
 os.system('nvidia-smi')
 
 print(torch.version.cuda)
+
+while True:
+    sleep(1)
+    print("sleeping")

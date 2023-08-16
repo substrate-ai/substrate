@@ -1,5 +1,7 @@
 __pycache__/
 
+env.py
+
 .env
 dist/
 

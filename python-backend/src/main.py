@@ -5,24 +5,27 @@ import datetime
 import requests
 
 import boto3
-from botocore.exceptions import ClientError
 from human_id import generate_id
-from supabase import create_client, Client
+from supabase import create_client
 from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from pydantic import BaseModel
 from src.config import Settings
-from typing_extensions import Annotated
+from src.env import config_data
+import logging
 
 @lru_cache()
 def get_settings():
     return Settings()
 
-settings = get_settings()
-print(settings.model_config)
+supabase_url = config_data["SUPABASE_URL"]
+supabase_anon_key = config_data["SUPABASE_ANON_KEY"]
+supabase_admin_key = config_data["SUPABASE_SERVICE_ROLE_KEY"]
+access_key_id = config_data["AWS_ACCESS_KEY_ID"]
+secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
 
-supabase = create_client(settings.SUPABSE_URL, settings.SUPABSE_KEY)
+supabase_anon = create_client(supabase_url, supabase_anon_key)
+supabase_admin = create_client(supabase_url, supabase_admin_key)
 
 
 app = FastAPI()
@@ -33,10 +36,21 @@ class Job(BaseModel):
     token: str
     repoUri: str
 
-@app.post("/start_job")
-async def create_item(job: Job, settings: Annotated[Settings, Depends(get_settings)]):
+
+
+@app.post("/start-job")
+async def create_item(job: Job):
     token = job.token
-    response = requests.post('https://substrate.supabase.co/auth/v1/token/verify', json={'token': token})
+
+    # look at setSession with access_token
+
+    endpoint = f'{supabase_url}/functions/v1/token/verify-token'
+    payload = {'accessToken': token}
+    headers = {"Authorization": f"Bearer {supabase_anon_key}"}
+    response = requests.post(endpoint, headers=headers, json=payload)
+
+
+    # todo check for payment status
 
     if response.status_code != 200:
         raise HTTPException(
@@ -44,18 +58,41 @@ async def create_item(job: Job, settings: Annotated[Settings, Depends(get_settin
             detail="Incorrect access token",
             headers={"WWW-Authenticate": "Basic"},
         )
+    
+    endpoint = f'{supabase_url}/functions/v1/token/user-id'
+    payload = {'accessToken': token}
+    response = requests.post(endpoint, headers=headers, json=payload)
 
-    with open('aws_hardware_code.json') as f:
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    
+    user_id = response.json()['userId']
+    
+
+    with open('./resources/aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
+
+    if job.hardware not in aws_hardware_code:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Hardware type selected is not supported",
+            headers={"WWW-Authenticate": "Basic"},
+        )
 
 
     instance_type = aws_hardware_code[job.hardware]
     image_name = job.repoUri
 
-    sage = boto3.client('sagemaker', region_name='us-east-1')
+    sage = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
 
     job_name = generate_id()
 
+    now = datetime.datetime.now()
+    iso_time = now.strftime("%Y-%m-%dT%H:%M:%SZ") 
 
     response = sage.create_training_job(
         TrainingJobName=job_name,
@@ -74,7 +111,8 @@ async def create_item(job: Job, settings: Annotated[Settings, Depends(get_settin
             'VolumeSizeInGB': 1,
         },
         StoppingCondition={
-            'MaxRuntimeInSeconds': 600
+            # todo change max runtime
+            'MaxRuntimeInSeconds': 60
         }
     )
 
@@ -87,23 +125,32 @@ async def create_item(job: Job, settings: Annotated[Settings, Depends(get_settin
             headers={"WWW-Authenticate": "Basic"},
 
         )
+    else:
+        print("job on aws created")
+
+
+    try:
+        supabase_admin.table('job').insert([{
+        'job_name': job_name,
+        'created_at': iso_time,
+        'supabase_id': user_id,
+        'hardware': job.hardware,
+        'image_name': image_name,
+        'status': 'running'
+         }]).execute()
+    except Exception as e:
+        logging.error(e)
+        logging.error("job was terminated on aws")
 
         
-    now = datetime.datetime.now()
-    iso_time = now.strftime("%Y-%m-%dT%H:%M:%SZ") 
-
-    supabase.table('jobs').insert([{
-        'job_name': job_name,
-        'hardware_code': hardware_code,
-        'image_name': image_name,
-        'status': 'running',
-        'start_time': iso_time
-    }]).execute()
-
-
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error in talking to database",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    
     return {
-        "response": response,
-        "job_name": job_name,
+        "jobName": job_name,
     }
     
 

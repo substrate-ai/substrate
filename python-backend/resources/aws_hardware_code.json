@@ -1,0 +1,4 @@
+{
+    "cpu": "ml.m5.large",
+    "gpu": "ml.g4dn.xlarge"
+}

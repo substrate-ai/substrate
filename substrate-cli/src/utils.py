@@ -30,7 +30,7 @@ def get_supabase_endpoint():
     return f'{config_data["SUPABASE_URL"]}/functions/v1'
 
 def get_supabase_headers():
-    return {"Authorization": f"Bearer {config_data['SUPABASE_KEY']}"}
+    return {"Authorization": f"Bearer {config_data['SUPABASE_ANON_KEY']}"}
 
 def supabase_request(method, path, json):
     endpoint = f'{get_supabase_endpoint()}/{path}'
