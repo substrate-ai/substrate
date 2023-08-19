@@ -2,6 +2,8 @@ from functools import lru_cache
 from typing import Optional
 import requests
 import os
+
+from tail import tail_logs
 import typer
 from human_id import generate_id
 import yaml
@@ -88,7 +90,9 @@ def run():
     jobClient = JobClient()
     jobClient.start_job()
 
-
+@app.command()
+def tail():
+    tail_logs()
     
     
 

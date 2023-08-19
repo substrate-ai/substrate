@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
     Table,
@@ -44,27 +45,30 @@ export default function TokenSection() {
 
             <div className="h-5"/>
         
+            {/* <ScrollArea className="rounded-md border"> */}
 
-            <Table>
-                <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[100px]">Token name</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead className="text-right"></TableHead>
-                </TableRow>
-                </TableHeader>
-                <TableBody>
-                {tokens.map((tokens) => (
-                    <TableRow key={tokens.id}>
-                    <TableCell className="font-medium">{tokens.token_name}</TableCell>
-                    <TableCell>***********</TableCell>
-                    <TableCell className="text-right">
-                        <Button onClick={() => mutate(tokens.id)}>Delete me</Button>
-                        </TableCell>
+                <Table>
+                    <TableHeader>
+                    <TableRow>
+                        <TableHead >Token name</TableHead>
+                        <TableHead>Value</TableHead>
+                        <TableHead className="text-right"></TableHead>
                     </TableRow>
-                ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                    {tokens.map((tokens) => (
+                        <TableRow key={tokens.id}>
+                        <TableCell className="font-medium">{tokens.token_name}</TableCell>
+                        <TableCell>***********</TableCell>
+                        <TableCell className="text-right">
+                            <Button variant="outline" onClick={() => mutate(tokens.id)}>Delete me</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            {/* </ScrollArea> */}
+
       </>
     )
   }

@@ -11,7 +11,7 @@ from env import config_data
 
 SLEEP = 5
 
-def main(profile_name, group_name, instance_id):
+def tail_logs():
     access_key_id = config_data["AWS_ACCESS_KEY_ID"]
     secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
     client = boto3.client('logs', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
@@ -24,7 +24,6 @@ def main(profile_name, group_name, instance_id):
         "startTime": int(time.time()) * 1000
     }
     return _filter_log_events(client, filter_logs_events_kwargs)
-
 
 def _filter_log_events(client, filter_logs_events_kwargs):
     try:

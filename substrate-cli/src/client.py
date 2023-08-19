@@ -14,6 +14,38 @@ from docker.client import DockerClient as DockerPyClient
 from human_id import generate_id
 import requests
 import time
+import shutil
+import tempfile
+from python_on_whales import DockerClient as DockerPyClientPOW
+
+
+class DockerClient2:
+    def __init__(self, aws_access_key_id, aws_secret_access_key, region_name) -> None:
+        self.docker = DockerPyClientPOW()
+        self.tag =  f"substrate:latest"
+        self.docker.login_ecr(aws_access_key_id, aws_secret_access_key, region_name)
+
+    def push(self, repo_uri):
+        self.docker.image.tag(self.tag, repo_uri)
+        self.docker.push(repo_uri)
+
+    def build(self):
+        typer.echo(f"Building image with tag {self.tag}")
+
+        # use tempfile to copy requirements.txt to dockerfile directory (traversable)
+
+        with tempfile.TemporaryDirectory() as tempdir:
+            shutil.copyfile("./requirements.txt", os.path.join(tempdir, "requirements.txt"))
+
+            dockerfile_traversable = importlib.resources.files("resources").joinpath("Dockerfile")
+            with open(dockerfile_traversable, "rt") as dockerfile:
+                    # copy dockerfile to tempdir
+                    shutil.copyfile(dockerfile_traversable, os.path.join(tempdir, "Dockerfile"))
+            
+
+            image = self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"])
+
+
 
 # https://stackoverflow.com/questions/43540254/how-to-stream-the-logs-in-docker-python-api/70059037#70059037
 
@@ -48,11 +80,26 @@ def log_docker_output(generator, task_name: str = 'docker command execution') ->
         except ValueError:
             typer.echo(f'Error parsing output from {task_name}: {output}')
 
+def log_docker_output_api(generator, task_name: str = 'docker command execution') -> None:
+    while True:
+            try:
+                output = generator.__next__
+                output = output.strip('\r\n')
+                json_output = json.loads(output)
+                if 'stream' in json_output:
+                    typer.echo(json_output['stream'].strip('\n'))
+            except StopIteration:
+                typer.echo("Docker image build complete.")
+                break
+            except ValueError:
+                typer.echo("Error parsing output from docker image build: %s" % output)
+    
+
 class DockerClient:
     def __init__(self) -> None:
         try:
             self.docker_py_client: DockerPyClient = docker.from_env()
-            # self.docker_py_client = docker.APIClient(base_url='unix://var/run/docker.sock')
+            self.docker_py_client_api = docker.APIClient(base_url='unix://var/run/docker.sock')
         except Exception as e:
             # print(e)
             typer.echo(type(e))
@@ -82,19 +129,41 @@ class DockerClient:
 
         tag = self.get_tag()
 
-        
-        dockerfile_traversable = importlib.resources.files("resources").joinpath("Dockerfile")
-        with open(dockerfile_traversable, "rb") as dockerfile:
-                image, log_generator = self.docker_py_client.images.build(fileobj=dockerfile, tag=tag, rm=True, forcerm=True)
-                log_docker_output(log_generator)
+        typer.echo(f"Building image with tag {tag}")
+
+        # use tempfile to copy requirements.txt to dockerfile directory (traversable)
+
+
+        with tempfile.TemporaryDirectory() as tempdir:
+            shutil.copyfile("./requirements.txt", os.path.join(tempdir, "requirements.txt"))
+
+            dockerfile_traversable = importlib.resources.files("resources").joinpath("Dockerfile")
+            with open(dockerfile_traversable, "rt") as dockerfile:
+                    # copy dockerfile to tempdir
+                    shutil.copyfile(dockerfile_traversable, os.path.join(tempdir, "Dockerfile"))
             
 
-        # alternative way to build image
-        # dockerfile_path = importlib.resources.as_file(dockerfile_traversable)
-        # with importlib.resources.as_file(dockerfile_traversable) as dockerfile_path:
-        #     with dockerfile_path.open("rb") as dockerfile:
-        #         image, build_log = self.docker_py_client.images.build(fileobj=dockerfile, tag=tag, rm=True, forcerm=True)
-        return image
+
+                    
+                #     test = dockerfile.read()
+                #     dockerfileIO = io.BytesIO(test.encode('utf-8'))
+                #     dockerfileIO = io.BytesIO(dockerfile_traversable.read_bytes())
+
+                # # copy requirements.txt to dockerfile directory (traversable)
+                # path = importlib.resources.files("resources").joinpath("requirements.txt")
+
+                # typer.echo(f"{path} path")
+                # shutil.copyfile("./requirements.txt", path)
+
+
+            generator = self.docker_py_client_api.build(path=tempdir, tag=tag, rm=True, forcerm=True, decode=True, platform="linux/amd64", nocache=True)
+            log_docker_output(generator)
+        
+       
+
+        return self.docker_py_client.images.get(tag)    
+
+        # return image
     
 
         
@@ -166,12 +235,6 @@ class AWS_Client:
         except KeyboardInterrupt:
             typer.echo("Finishing due to keyboard interrupt")
 
-
-
-
-    def push_and_build(self):
-        self.docker_py_client.build_and_push(self.registry, self.username, self.password)
-
         # create a docker repository for the user (should be project repository in the future)
     def get_or_create_user_repo(self):
         repo_name = f"repo.{get_user_id()}"
@@ -194,7 +257,10 @@ class AWS_Client:
 class JobClient:
     def __init__(self):
         self.aws_client = AWS_Client()
-        self.docker_client = DockerClient()
+        # self.docker_client = DockerClient()
+        access_key_id = config_data["AWS_ACCESS_KEY_ID"]
+        secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
+        self.docker_client2 = DockerClient2(access_key_id, secret_access_key, 'us-east-1')
 
     def run_container_from_backend(self, repo_uri):
         typer.echo("Running")
@@ -217,8 +283,9 @@ class JobClient:
         response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/start-job', headers={'Authorization': f'Bearer {auth_token}'}, json=payload)
 
         if response.status_code != 200:
+            typer.echo(response.text)
             typer.echo("Job failed to start")
-            return
+            raise typer.Exit(code=1)
         
         job_name = response.json()["jobName"]
         
@@ -228,13 +295,28 @@ class JobClient:
 
 
     def start_job(self):
-        typer.echo("Create and push container to ecr aws")
-        image = self.docker_client.build_image()
+
+
+        self.docker_client2.build()
+        typer.echo("image built")
         repo_uri = self.aws_client.get_or_create_user_repo()
-        self.docker_client.push(repo_uri, self.aws_client.username, self.aws_client.password, image)
+        typer.echo("repo created")
+        self.docker_client2.push(repo_uri)
+        typer.echo("image pushed")
         job_name = self.run_container_from_backend(repo_uri)
+        typer.echo("job started")
         self.aws_client.stream_logs(job_name)
-        typer.echo("Code successfully uploaded to cloud")
+        typer.echo("streaming logs")
+
+
+
+
+        # typer.echo("Create and push container to ecr aws")
+        # image = self.docker_client.build_image()
+        # self.docker_client.push(repo_uri, self.aws_client.username, self.aws_client.password, image)
+        # job_name = self.run_container_from_backend(repo_uri)
+        # self.aws_client.stream_logs(job_name)
+        # typer.echo("Code successfully uploaded to cloud")
 
 
 

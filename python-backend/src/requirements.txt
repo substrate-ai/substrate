@@ -1,0 +1,8 @@
+supabase
+fastapi
+uvicorn[standard]
+boto3
+pydantic
+human-id
+pydantic_settings
+requests

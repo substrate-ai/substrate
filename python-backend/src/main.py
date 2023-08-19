@@ -10,8 +10,8 @@ from supabase import create_client
 from fastapi import Depends, FastAPI, HTTPException, status
 
 from pydantic import BaseModel
-from src.config import Settings
-from src.env import config_data
+from config import Settings
+from env import config_data
 import logging
 
 @lru_cache()
@@ -31,10 +31,13 @@ supabase_admin = create_client(supabase_url, supabase_admin_key)
 app = FastAPI()
 
 class Job(BaseModel):
-    jobName : str
     hardware : str 
     token: str
     repoUri: str
+
+@app.get("/hello")
+def hello_world():
+    return "hello"
 
 
 
@@ -71,8 +74,10 @@ async def create_item(job: Job):
         )
     
     user_id = response.json()['userId']
-    
 
+    import os
+    print(os.getcwd())
+    
     with open('./resources/aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
 
@@ -112,7 +117,7 @@ async def create_item(job: Job):
         },
         StoppingCondition={
             # todo change max runtime
-            'MaxRuntimeInSeconds': 60
+            'MaxRuntimeInSeconds': 600
         }
     )
 

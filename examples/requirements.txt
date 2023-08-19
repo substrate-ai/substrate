@@ -1,3 +1,2 @@
-torch==3.0.1
-torchvision==0.15
-
+torch
+torchvision

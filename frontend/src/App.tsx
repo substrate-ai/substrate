@@ -20,6 +20,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { ThemeProvider } from "@/components/theme-provider"
+
 
 
 const queryClient = new QueryClient()
@@ -51,7 +53,7 @@ function App() {
 
 
   return (
-    <CustomProvider theme="dark">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
@@ -95,7 +97,8 @@ function App() {
           </QueryClientProvider>
         </AuthProvider>
       </BrowserRouter>
-    </CustomProvider>
+    </ThemeProvider>
+
   );
 }
 

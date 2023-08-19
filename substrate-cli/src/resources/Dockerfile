@@ -1,21 +1,23 @@
-# Container for building the environment
-# FROM --platform=linux/amd64 nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04 as conda
+FROM --platform=linux/amd64 nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
 
-# RUN DEBIAN_FRONTEND=noninteractive && apt update && \
-#     apt install --no-install-recommends -y build-essential software-properties-common && \
-#     add-apt-repository -y ppa:deadsnakes/ppa && \
-#     apt install --no-install-recommends -y python3.10 python3-pip python3-setuptools python3-distutils && \
-#     apt clean && rm -rf /var/lib/apt/lists/*
 
-# COPY requirements.txt /requirements.txt
-# RUN python3.10 -m pip install --upgrade pip && \
-#     python3.10 -m pip install --no-cache-dir -r /requirements.txt
+ARG DEBIAN_FRONTEND=noninteractive
 
-# COPY . /code
+ARG PYTHON_VERSION=3.10
 
-# ARG MAIN_FILE_LOCATION=/code/main.py
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y build-essential software-properties-common curl && \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get install --no-install-recommends -y python${PYTHON_VERSION} python3-pip python3-setuptools python${PYTHON_VERSION}-distutils && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
 
-# ENTRYPOINT ["python3", ${MAIN_FILE_LOCATION}]
+COPY requirements.txt /requirements.txt
 
-FROM ubuntu:23.04
-CMD echo hello world
+RUN  python${PYTHON_VERSION} -m pip install --no-cache-dir -r /requirements.txt
+
+COPY . /code
+
+ARG MAIN_FILE_LOCATION=/code/main.py
+
+ENTRYPOINT ["python3", "/code/main.py"]
