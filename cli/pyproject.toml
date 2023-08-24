@@ -1,9 +1,9 @@
 # pyproject.toml
 
 [project]
-name = "substrate-cli"
+name = "substrate-ai"
 dynamic = ["version"]
-description = "Substrate AI cli tool"
+description = "Substrate AI package"
 readme = "README.md"
 # todo to change email to support@substrateai
 authors = [{ name = "SubstrateAI", email = "admin@substrateai.com" }]
@@ -30,7 +30,7 @@ dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 Homepage = "https://docs.substrateai.com/"
 
 [project.scripts]
-substrate-cli = "cli:app"
+substrate-ai = "cli:app"
 
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel"]

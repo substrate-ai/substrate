@@ -92,9 +92,9 @@ function MainNavigation() {
                         <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                           Dashboard
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate("/settings")}>
+                        {/* <DropdownMenuItem onClick={() => navigate("/settings")}>
                           Settings
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout} >

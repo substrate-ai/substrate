@@ -21,8 +21,8 @@ def get_project_config():
         error_message = """
         Substrate.yaml not found. \n \
         Potential solutions: \n \
-            - The project is not initialized, please run substrate-cli init \n \
-            - You are not in the root directory of the project when using the substrate-cli"""
+            - The project is not initialized, please run substrate-ai init \n \
+            - You are not in the root directory of the project when using the substrate-ai """
         typer.echo(clean_mutliline_string(error_message))
         raise typer.Exit(code=1)
     
