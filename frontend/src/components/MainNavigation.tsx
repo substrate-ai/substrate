@@ -1,27 +1,19 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { IconButton, Nav, Navbar, Tag } from 'rsuite';
-import HomeIcon from '@rsuite/icons/legacy/Home';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/Auth';
-import OffRoundIcon from '@rsuite/icons/OffRound';
-import AdminIcon from '@rsuite/icons/Admin';
+
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import React from 'react';
 import { cn } from "@/lib/utils"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
 
 
 function MainNavigation() {
@@ -40,9 +32,12 @@ function MainNavigation() {
     <NavigationMenu>
       <NavigationMenuList>
           <NavigationMenuItem>
-                  <NavigationMenuLink className="font-bold" onClick={() => navigate("/")} >
+                  <NavigationMenuLink className="font-bold px-5" onClick={() => navigate("/")} >
                     SubstrateAI
                   </NavigationMenuLink>
+
+                  <>
+                  
 
                   <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => window.open('https://docs.substrateai.com', '_blank', 'noreferrer')}>
                     Documentation
@@ -61,6 +56,8 @@ function MainNavigation() {
 
                 }
 
+                  </>
+
                 { !user &&
                   <>  
                       <NavigationMenuLink className={navigationMenuTriggerStyle()}  onClick={() => navigate("/login")}>
@@ -73,7 +70,10 @@ function MainNavigation() {
                   </>
                 }
 
+                {/* dropdown */}
                 { user &&
+                  <>
+                
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -102,6 +102,7 @@ function MainNavigation() {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  </>
                 }
                 
         </NavigationMenuItem>

@@ -14,10 +14,8 @@ RUN apt-get update && \
 
 COPY requirements.txt /requirements.txt
 
-RUN  python${PYTHON_VERSION} -m pip install --no-cache-dir -r /requirements.txt
+RUN python${PYTHON_VERSION} -m pip install --no-cache-dir -r /requirements.txt
 
-COPY . /code
+COPY ./code /code
 
-ARG MAIN_FILE_LOCATION=/code/main.py
-
-ENTRYPOINT ["python3", "/code/main.py"]
+ENTRYPOINT ["python3.10", "/code/main.py"]

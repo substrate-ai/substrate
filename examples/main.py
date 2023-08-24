@@ -10,10 +10,10 @@ print("cuda", torch.cuda.is_available())
 # run the nvidia-smi cmd in the terminal
 # !nvidia-smi
 
-os.system('nvidia-smi')
-
 print(torch.version.cuda)
 
-while True:
-    sleep(1)
-    print("sleeping")
+# os.system('nvidia-smi')
+
+# while True:
+#     sleep(1)
+#     print("sleeping")

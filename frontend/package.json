@@ -1,5 +1,5 @@
 {
-  "name": "frontend-2",
+  "name": "frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -43,6 +43,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
     "react-icons": "^4.7.1",
+    "react-markdown": "^8.0.7",
     "react-router-dom": "^6.6.2",
     "rsuite": "^5.37.1",
     "tabler-icons-react": "^1.56.0",
