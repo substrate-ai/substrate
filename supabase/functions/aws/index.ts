@@ -1,6 +1,5 @@
 import { Application, Router } from 'oak'
-import { supabaseAdmin } from '../_shared/supabaseClients.ts'
-import { getUserFromContext } from "../_shared/getUserFromRequest.ts";
+import { supabaseAdmin, supabaseAnon } from '../_shared/supabaseClients.ts'
 import getUserIdFromToken from "../_shared/tokenUtils.ts";
 
 const router = new Router()
@@ -30,8 +29,9 @@ router
         ctx.response.status = 500
         return
       }
-        
-      
+
+      await supabaseAnon.functions.invoke('payment/job-done', {body: {jobName: trainingJobName}})
+
       // return 200
 
       ctx.response.status = 200
@@ -40,18 +40,14 @@ router
 
 
   })
-  .get('/aws/get-jobs', async (ctx) => {
-    console.log('get jobs')
+  .post('/aws/get-jobs', async (ctx) => {
     const result = ctx.request.body();
-    console.log('result', result)
     const value = await result.value;
-    console.log('value', value)
     const token = value.accessToken
-    console.log('token', token)
 
     const userId = await getUserIdFromToken(token)
 
-    const {data, error} = await supabaseAdmin.from('job').select('job_name, created_at, finished_at, hardware, status').eq('user_id', userId).order('created_at', {ascending: false})
+    const {data, error} = await supabaseAdmin.from('job').select('job_name, created_at, finished_at, hardware, status').eq('supabase_id', userId).order('created_at', {ascending: false})
 
     if (error) {
       console.error('Error getting jobs', error)

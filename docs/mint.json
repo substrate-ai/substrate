@@ -37,7 +37,7 @@
   "anchors": [
     {
       "name": "Package",
-      "url": "essentials/introduction",
+      "url": "https://pypi.org/project/substrate-ai",
       "icon": "python"
     }
     

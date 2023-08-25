@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripeClient.ts"
 import { corsHeaders } from '../_shared/cors.ts'
-import { getUserFromServe } from "../_shared/getUserFromRequest.ts";
 import { supabaseAnon } from "../_shared/supabaseClients.ts";
+import { getUserFromServe } from "../_shared/userUtils.ts";
 
 
 // Tp be called from frontend

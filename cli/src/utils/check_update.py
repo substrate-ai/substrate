@@ -5,13 +5,16 @@ from utils.console import console
 
 
 def check_update():
-    pip_repo_url = "https://pypi.org/pypi/substrate-ai/json"
+    pip_repo_url = "https://pypi.org/project/substrate-ai/json"
 
     response = requests.get(pip_repo_url)
 
     if response.status_code != 200:
-        console.print(f"Failed to check for updates: {response.text}", style="bold red")
+
+        console.print(f"Failed to check for updates: {response.status_code}", style="bold red")
         return
+    
+
     
 
     current_version = pkg_resources.get_distribution("substrate-ai").version

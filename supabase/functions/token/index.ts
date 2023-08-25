@@ -1,10 +1,10 @@
 import { Application, Router } from 'oak'
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
-import { getUserFromContext } from '../_shared/getUserFromRequest.ts';
 import { Context } from 'oak';
 import { supabaseAdmin } from "../_shared/supabaseClients.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import getUserIdFromToken from "../_shared/tokenUtils.ts";
+import { getUserFromContext } from "../_shared/userUtils.ts";
 
 
 

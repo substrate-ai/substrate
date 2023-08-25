@@ -26,3 +26,14 @@ async function getUserFromAuthorizationHeader(authorizationToken: string): Promi
     return data.user
 }
 
+export async function getUserFromId(id: string): Promise<any> {
+    const {data, error} = (await supabaseAnon.from('user_data').select().eq('id', id).single())
+
+    if (error) {
+      console.error("error getting user", error)
+      throw new Error(error.message)
+    }
+  
+    return data
+}
+

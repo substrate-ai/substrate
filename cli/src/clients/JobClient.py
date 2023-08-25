@@ -1,3 +1,4 @@
+from clients.HttpClient import HttpClient
 from utils.env import config_data
 import typer
 from utils.utils import get_cli_token, get_project_config
@@ -14,6 +15,7 @@ class JobClient:
         access_key_id = config_data["AWS_ACCESS_KEY_ID"]
         secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
         self.docker_client2 = DockerClient(access_key_id, secret_access_key, 'us-east-1')
+        self.http_client = HttpClient()
 
     def start_job(self):
         self.docker_client2.build()
@@ -23,7 +25,7 @@ class JobClient:
         self.docker_client2.push(repo_uri)
         console.print("Code uploaded", style="bold green")
 
-        job_name = self.run_container_from_backend(repo_uri)
+        job_name = self.http_client.run_container_from_backend(repo_uri)
         console.print(f"Job is starting, your job name is {job_name}", style="bold green")
 
         spinner = yaspin()

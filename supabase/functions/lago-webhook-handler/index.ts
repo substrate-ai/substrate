@@ -2,9 +2,8 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
-import { verify } from "https://deno.land/x/djwt@v2.9.1/mod.ts"
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { supabaseAdmin } from "../_shared/supabaseClients.ts";
 
 

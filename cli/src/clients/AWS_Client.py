@@ -16,7 +16,7 @@ class AWS_Client:
         access_key_id = config_data["AWS_ACCESS_KEY_ID"]
         secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
         self.ecr_client = boto3.client('ecr', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
-        self.kinesis_client = boto3.client('kinesis', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
+        # self.kinesis_client = boto3.client('kinesis', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
         self.logs_client = boto3.client('logs', aws_access_key_id=config_data["AWS_ACCESS_KEY_ID"], aws_secret_access_key=config_data["AWS_SECRET_ACCESS_KEY"], region_name='us-east-1')
         self.sagemaker_client = boto3.client('sagemaker', aws_access_key_id=config_data["AWS_ACCESS_KEY_ID"], aws_secret_access_key=config_data["AWS_SECRET_ACCESS_KEY"], region_name='us-east-1')
 

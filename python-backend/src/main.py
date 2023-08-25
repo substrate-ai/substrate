@@ -73,6 +73,8 @@ def getUser(token: str):
     
     user_id = response.json()['userId']
 
+    return user_id
+
 
 @app.post("/stop-job/{job_name}")
 async def stop_job(token: Token, job_name: str):
@@ -199,6 +201,7 @@ async def create_item(job: Job):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error in talking to database",
+
             headers={"WWW-Authenticate": "Basic"},
         )
     
