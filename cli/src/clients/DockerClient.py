@@ -4,6 +4,7 @@ import importlib.resources
 import shutil
 import tempfile
 from python_on_whales import DockerClient as DockerPyClient
+from utils.console import console
 
 class DockerClient:
     def __init__(self, aws_access_key_id, aws_secret_access_key, region_name) -> None:
@@ -13,7 +14,7 @@ class DockerClient:
         try:
             self.docker.stats()
         except:
-            typer.echo("Docker engine is not running, please start docker and try again")
+            console.print("Docker engine is not running, please start docker and try again")
             raise typer.Exit(code=1)
 
     def push(self, repo_uri):
@@ -22,7 +23,7 @@ class DockerClient:
 
     # https://towardsdatascience.com/a-complete-guide-to-building-a-docker-image-serving-a-machine-learning-system-in-production-d8b5b0533bde
     def build(self):
-        typer.echo(f"Building image with tag {self.tag}")
+        console.print(f"Packaging your code", style="bold green")
 
         # use tempfile to copy requirements.txt to dockerfile directory (traversable)
 

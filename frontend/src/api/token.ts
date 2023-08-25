@@ -80,7 +80,7 @@ export function useDeleteToken() {
         }
 
         return data
-    }, { onSuccess: (data,variables) => {
+    }, { onSuccess: (_data,variables) => {
 
        // filter out the deleted token
          queryClient.setQueryData(['tokens'], (oldData: any) => {

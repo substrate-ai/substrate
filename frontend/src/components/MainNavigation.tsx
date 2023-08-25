@@ -33,6 +33,7 @@ function MainNavigation() {
       <NavigationMenuList>
           <NavigationMenuItem>
                   <NavigationMenuLink className="font-bold px-5" onClick={() => navigate("/")} >
+                    {/* todo add logo */}
                     SubstrateAI
                   </NavigationMenuLink>
 

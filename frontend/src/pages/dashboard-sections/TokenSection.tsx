@@ -1,17 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { useState } from "react";
-import { GetTokenDTO, useDeleteToken, useGetTokensQuery } from "src/api/token";
+import { useDeleteToken, useGetTokensQuery } from "src/api/token";
 import { InputForm } from "src/components/InputForm";
    
    

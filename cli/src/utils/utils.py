@@ -3,7 +3,8 @@ import os
 import typer
 import inspect
 import requests
-from env import config_data
+from utils.env import config_data
+from utils.console import console
 
 
 def get_user_config():
@@ -45,6 +46,7 @@ def supabase_request(method, path, json):
 
     response = methods.get(method, lambda: None)()
     if response is None:
+        console.print("Failed to make supabase request")
         raise typer.Exit(code=1)
     
     return response

@@ -25,3 +25,4 @@ async function getUserFromAuthorizationHeader(authorizationToken: string): Promi
   
     return data.user
 }
+

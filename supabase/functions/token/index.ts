@@ -4,6 +4,8 @@ import { getUserFromContext } from '../_shared/getUserFromRequest.ts';
 import { Context } from 'oak';
 import { supabaseAdmin } from "../_shared/supabaseClients.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
+import getUserIdFromToken from "../_shared/tokenUtils.ts";
+
 
 
 const router = new Router()
@@ -59,35 +61,7 @@ async function verifyToken(token: string): Promise<boolean> {
       }
 }
 
-async function getUserIdFromToken(token: string): Promise<string> {
 
-    console.log("token", token)
-
-    const [uuid, password] = token.split(":")
-
-    console.log("uuid", uuid)
-    const {data, error} = await supabaseAdmin.from('token').select("encrypted_token, supabase_id").eq('id', uuid).single()
-
-    if (error) {
-        console.error("error getting token", error)
-        throw new Error(error.message)
-    }
-
-    if (!data) {
-        throw new Error("no data")
-    }
-
-    const encryptedToken = data.encrypted_token
-
-    const match = bcrypt.compareSync(password, encryptedToken)
-
-    if (!match) {
-        throw new Error("token does not match")
-    }
-
-    return data.supabase_id
-
-}
 
 async function createToken(tokenName: string, supabaseId: string): Promise<Token> {
 

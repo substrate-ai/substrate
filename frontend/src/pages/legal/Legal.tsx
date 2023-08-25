@@ -1,4 +1,3 @@
-import terms from "src/assets/markdowns/terms.md";
 import "./markdown.css"
 
 import { useState, useEffect } from 'react';

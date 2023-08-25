@@ -3,14 +3,14 @@ import os
 import yaml
 import shutil
 import requests
-from utils import get_user_config
-from env import config_data
+from utils.utils import get_user_config
+from utils.env import config_data
+from utils.console import console
+
 
 class SetupClient:
-
-
     def init_folder_creation():
-        typer.echo("Init project with config file and requirements.txt 2")
+        console.print("Init project with config file and requirements.txt 2")
 
         project_name = os.path.basename(os.getcwd())
 
@@ -26,7 +26,7 @@ class SetupClient:
 
         shutil.copyfile(os.path.join(os.path.dirname(__file__), 'resources/requirements.dev.txt'), 'requirements.txt')
 
-        typer.echo("Project successfully initialized")
+        console.print("Project successfully initialized")
 
     def login():
             # do while loop
@@ -42,7 +42,7 @@ class SetupClient:
             if response.status_code == 200 and response.json()['verified'] == True:
                 break
 
-            typer.echo("Invalid token, please try again")
+            console.print("Invalid token, please try again")
 
         # if exist then load and modify
         if os.path.exists(os.path.expanduser('~/.substrate')):
@@ -57,5 +57,5 @@ class SetupClient:
         with open(os.path.expanduser('~/.substrate'), 'w') as f:
             f.write(yaml.dump(user_config))
 
-        typer.echo("Login successful")
+        console.print("Login successful")
 

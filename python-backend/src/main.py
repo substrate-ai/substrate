@@ -35,18 +35,16 @@ class Job(BaseModel):
     token: str
     repoUri: str
 
+class Token(BaseModel):
+    token: str
+
 @app.get("/hello")
 def hello_world():
     return "hello"
 
+def getUser(token: str):
 
-
-@app.post("/start-job")
-async def create_item(job: Job):
-    token = job.token
-
-    # look at setSession with access_token
-
+    # todo should remove first post request and do everything in the second one?
     endpoint = f'{supabase_url}/functions/v1/token/verify-token'
     payload = {'accessToken': token}
     headers = {"Authorization": f"Bearer {supabase_anon_key}"}
@@ -74,6 +72,56 @@ async def create_item(job: Job):
         )
     
     user_id = response.json()['userId']
+
+
+@app.post("/stop-job/{job_name}")
+async def stop_job(token: Token, job_name: str):
+    token = token.token
+
+    user_id = getUser(token)
+
+    # check user of job is same as user of token
+    try:
+        response = supabase_admin.table('job').select('supabase_id').eq('job_name', job_name).execute()
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error in talking to database",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    
+    if len(response['data']) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    
+    if response['data'][0]['supabase_id'] != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not authorized to stop this job",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+    sage = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
+    response = sage.stop_training_job(TrainingJobName=job_name)
+
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error in stopping training job",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+    return "Job stopped"
+
+@app.post("/start-job")
+async def create_item(job: Job):
+    token = job.token
+
+    user_id = getUser(token)
 
     import os
     print(os.getcwd())

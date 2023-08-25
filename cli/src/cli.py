@@ -1,12 +1,17 @@
 import typer
-from env import config_data
+from clients.HttpClient import HttpClient
+from clients.AWS_Client import AWS_Client
+from utils.env import config_data
 from clients.JobClient import JobClient
 from clients.SetupClient import SetupClient
+from utils.check_update import check_update
 
 def init_typer():
     if config_data["PYTHON_BACKEND_URL"] is None:
         typer.echo("Environment variables are not properly set, contact the developer")
         exit(1)
+
+    check_update()
 
 app = typer.Typer(callback=init_typer, help="Substrate CLI", name="substrate-ai")
 
@@ -39,15 +44,26 @@ def logs(job_name: str):
     """
     Stream the logs of a job
     """
-    job_client = JobClient()
-    job_client.stream_logs(job_name)
+    aws_client = AWS_Client()
+    aws_client.stream_logs(job_name, False)
 
-def get_jobs():
-    # TODO
-    pass
+@app.command()
+def jobs():
+    """
+    Get all jobs
+    """
+    # TODO add running argument
+    http_client = HttpClient()
+    http_client.get_jobs()
+    # todo not working
 
-def stop():
-    # TODO
-    pass
+@app.command()
+def stop(job_name: str):
+    """
+    Stop a job
+    """
+
+    aws_client = AWS_Client()
+    aws_client.stop_job(job_name)
 
 
