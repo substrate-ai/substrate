@@ -12,5 +12,15 @@ export default defineConfig({
       "src": path.resolve(__dirname, "./src"),
     },
   },
-  assetsInclude: ['**/*.md']
+  assetsInclude: ['**/*.md'],
+  // build: {
+  //   rollupOptions: {
+  //       external: ["react", "react-router", "react-router-dom", "react-redux"],
+  //       output: {
+  //         globals: {
+  //           react: "React",
+  //         },
+  //       },
+  //     },
+  // }
 })
