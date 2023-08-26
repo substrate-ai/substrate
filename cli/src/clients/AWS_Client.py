@@ -8,23 +8,40 @@ import boto3
 from utils.env import config_data
 import boto3
 import time
-from utils.utils import get_user_id
+from utils.utils import get_cli_token, get_user_id
 from utils.console import console
+import requests
 
 class AWS_Client:
     def __init__(self):
-        access_key_id = config_data["AWS_ACCESS_KEY_ID"]
-        secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
-        self.ecr_client = boto3.client('ecr', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
-        # self.kinesis_client = boto3.client('kinesis', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
-        self.logs_client = boto3.client('logs', aws_access_key_id=config_data["AWS_ACCESS_KEY_ID"], aws_secret_access_key=config_data["AWS_SECRET_ACCESS_KEY"], region_name='us-east-1')
-        self.sagemaker_client = boto3.client('sagemaker', aws_access_key_id=config_data["AWS_ACCESS_KEY_ID"], aws_secret_access_key=config_data["AWS_SECRET_ACCESS_KEY"], region_name='us-east-1')
+        credentials = self.get_credentials()
+        access_key_id = credentials["AccessKeyId"]
+        secret_access_key = credentials["SecretAccessKey"]
+        session_token = credentials["SessionToken"]
+        region_name = config_data["AWS_REGION_NAME"]
+        self.ecr_client = boto3.client('ecr', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
+        self.logs_client = boto3.client('logs', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
+        self.sagemaker_client = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
 
-        token = self.ecr_client.get_authorization_token()
-        self.username, self.password = base64.b64decode(token['authorizationData'][0]['authorizationToken']).decode().split(':')
-        self.registry = token['authorizationData'][0]['proxyEndpoint']    
+        # token = self.ecr_client.get_authorization_token()
+        # self.username, self.password = base64.b64decode(token['authorizationData'][0]['authorizationToken']).decode().split(':')
+        # self.registry = token['authorizationData'][0]['proxyEndpoint']    
 
         # create a docker repository for the user (should be project repository in the future)
+
+    def get_credentials(self):
+        # get credentials from backend
+        auth_token = get_cli_token()
+        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/get-credentials', json={"accessToken": auth_token})
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get cloud credentials")
+            raise typer.Exit(code=1)
+        
+        credentials = response.json()
+        return credentials
+        
+    
     def get_or_create_user_repo(self):
         repo_name = f"repo.{get_user_id()}"
 

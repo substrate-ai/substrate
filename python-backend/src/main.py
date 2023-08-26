@@ -36,7 +36,7 @@ class Job(BaseModel):
     repoUri: str
 
 class Token(BaseModel):
-    token: str
+    accessToken: str
 
 @app.get("/hello")
 def hello_world():
@@ -64,12 +64,13 @@ def getUser(token: str):
     payload = {'accessToken': token}
     response = requests.post(endpoint, headers=headers, json=payload)
 
-    if response.status_code != 200:
+    if response.status_code != 200 or len(response.json()['userId']) == 0:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found",
             headers={"WWW-Authenticate": "Basic"},
         )
+    
     
     user_id = response.json()['userId']
 
@@ -78,7 +79,7 @@ def getUser(token: str):
 
 @app.post("/stop-job/{job_name}")
 async def stop_job(token: Token, job_name: str):
-    token = token.token
+    token = token.accessToken
 
     user_id = getUser(token)
 
@@ -208,5 +209,29 @@ async def create_item(job: Job):
     return {
         "jobName": job_name,
     }
+
+@app.post("/get-credentials")
+async def get_aws_credentials(token: Token):
+
+    # frist get user id from token
+    user_id = getUser(token.accessToken)
+
+    # then use sts to assume role
+    sts = boto3.client('sts', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
+    role_arn = "arn:aws:iam::038700340820:role/CLI_Users"
+    role_session_name = f"session.{user_id}"
+    response = sts.assume_role(RoleArn=role_arn, RoleSessionName=role_session_name)
+
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        logging.error(response)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error in getting credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+    credentials = response['Credentials']
+
+    return credentials
     
 

@@ -45,7 +45,7 @@ class HttpClient:
     
     def stop_job(self, job_name):
         auth_token = get_cli_token()
-        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/stop-job/{job_name}', headers={'Authorization': f'Bearer {auth_token}'})
+        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/stop-job/{job_name}', json={"accessToken": auth_token})
         if response.status_code != 200:
             console.print(response.text)
             console.print("Job failed to stop")

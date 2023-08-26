@@ -12,8 +12,9 @@ from yaspin import yaspin
 class JobClient:
     def __init__(self):
         self.aws_client = AWS_Client()
-        access_key_id = config_data["AWS_ACCESS_KEY_ID"]
-        secret_access_key = config_data["AWS_SECRET_ACCESS_KEY"]
+        credentials = self.aws_client.get_credentials()
+        access_key_id = credentials["AccessKeyId"]
+        secret_access_key = credentials["SecretAccessKey"]
         self.docker_client2 = DockerClient(access_key_id, secret_access_key, 'us-east-1')
         self.http_client = HttpClient()
 
