@@ -7,10 +7,10 @@ from python_on_whales import DockerClient as DockerPyClient
 from utils.console import console
 
 class DockerClient:
-    def __init__(self, aws_access_key_id, aws_secret_access_key, region_name) -> None:
+    def __init__(self, server, username, password) -> None:
         self.docker = DockerPyClient()
         self.tag =  f"substrate:latest"
-        self.docker.login_ecr(aws_access_key_id, aws_secret_access_key, region_name)
+        self.docker.login(server=server, username=username, password=password)        
         try:
             self.docker.stats()
         except:

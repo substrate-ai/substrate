@@ -1,4 +1,0 @@
-tls:
-  certificates:
-    - certFile: "/etc/certs/lago.dev.pem"
-      keyFile: "/etc/certs/lago.dev-key.pem"

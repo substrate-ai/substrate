@@ -22,21 +22,35 @@ router
 
     const job = response.data
 
+    const minutes = Math.ceil((new Date(job.finished_at).getTime() - new Date(job.created_at).getTime()) / 60000)
+
     const userId = job.supabase_id
 
     const user = await getUserFromId(userId)
     const lagoId = user.lago_id
 
     const url = Deno.env.get('LAGO_API_URL') + '/v1/events'
+
+    const freePlanLagoId = "9c3b45cb-7f6c-4d17-bb5d-181f9e540760"
+
+    // check hardware 
+    const hardware = job.hardware
+    if (!["cpu", "gpu"].includes(hardware)) {
+      console.error('Error getting hardware', hardware)
+      ctx.response.status = 500
+      return
+    }
+
     const payload = {
-      "lago_id": lagoId,
-      "event_type": "job_finished",
-      "event_data": {
-        "job_name": jobName,
-        "hardware": job.hardware,
-        "status": job.status,
-        "created_at": job.created_at,
-        "finished_at": job.finished_at
+      "event": {
+        "lago_subscription_id": freePlanLagoId,
+        "transaction_id": job.id,
+        "external_customer_id": userId,
+        // "external_subscription_id": "maybe we need to setup this, this is for each customer",
+        "code": "CPU",
+        "properties": {
+            "minutes": minutes
+        }
       }
     }
 
@@ -47,15 +61,17 @@ router
         'Authorization': 'Bearer ' + Deno.env.get('LAGO_API_KEY')
       },
       body: JSON.stringify(payload)
-
-
   })
   
   if (response2.status != 200) {
     console.error('Error sending event to lago', response2)
+    console.error("associated payload", payload)
     ctx.response.status = 500
     return
   }
+  
+
+  // update job payment  status to send to lago
 
   ctx.response.status = 200
 })

@@ -39,8 +39,11 @@
       "name": "Package",
       "url": "https://pypi.org/project/substrate-ai",
       "icon": "python"
+    },
+    {
+      "name": "Examples",
+      "url": "https://github.com/substrate-ai/examples"
     }
-    
   ],
   "navigation": [
     {

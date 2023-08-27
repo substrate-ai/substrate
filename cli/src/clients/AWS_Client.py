@@ -12,12 +12,13 @@ from utils.utils import get_cli_token, get_user_id
 from utils.console import console
 import requests
 
+
 class AWS_Client:
     def __init__(self):
-        credentials = self.get_credentials()
-        access_key_id = credentials["AccessKeyId"]
-        secret_access_key = credentials["SecretAccessKey"]
-        session_token = credentials["SessionToken"]
+        self.credentials = self.__get_credentials()
+        access_key_id = self.credentials["AccessKeyId"]
+        secret_access_key = self.credentials["SecretAccessKey"]
+        session_token = self.credentials["SessionToken"]
         region_name = config_data["AWS_REGION_NAME"]
         self.ecr_client = boto3.client('ecr', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
         self.logs_client = boto3.client('logs', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
@@ -29,7 +30,7 @@ class AWS_Client:
 
         # create a docker repository for the user (should be project repository in the future)
 
-    def get_credentials(self):
+    def __get_credentials(self):
         # get credentials from backend
         auth_token = get_cli_token()
         response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/get-credentials', json={"accessToken": auth_token})
@@ -39,7 +40,17 @@ class AWS_Client:
             raise typer.Exit(code=1)
         
         credentials = response.json()
+        console.print(credentials)
+
         return credentials
+    
+    def get_ecr_login_password(self):
+        ecr_credentials = self.ecr_client.get_authorization_token()['authorizationData'][0]['authorizationToken']
+        username, password = base64.b64decode(ecr_credentials).decode().split(':')
+        return username, password
+
+        
+
         
     
     def get_or_create_user_repo(self):

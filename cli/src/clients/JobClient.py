@@ -1,10 +1,6 @@
 from clients.HttpClient import HttpClient
-from utils.env import config_data
-import typer
-from utils.utils import get_cli_token, get_project_config
 from clients.AWS_Client import AWS_Client
 from clients.DockerClient import DockerClient
-import requests
 from utils.console import console
 from yaspin import yaspin
 
@@ -12,18 +8,17 @@ from yaspin import yaspin
 class JobClient:
     def __init__(self):
         self.aws_client = AWS_Client()
-        credentials = self.aws_client.get_credentials()
-        access_key_id = credentials["AccessKeyId"]
-        secret_access_key = credentials["SecretAccessKey"]
-        self.docker_client2 = DockerClient(access_key_id, secret_access_key, 'us-east-1')
+        username, password = self.aws_client.get_ecr_login_password()
+        repo = self.aws_client.get_or_create_user_repo()
+        self.docker_client = DockerClient(repo, username, password)
         self.http_client = HttpClient()
 
     def start_job(self):
-        self.docker_client2.build()
+        self.docker_client.build()
         console.print("Image built", style="bold green")
         repo_uri = self.aws_client.get_or_create_user_repo()
         console.print("Uploading your code to the cloud", style="bold green")
-        self.docker_client2.push(repo_uri)
+        self.docker_client.push(repo_uri)
         console.print("Code uploaded", style="bold green")
 
         job_name = self.http_client.run_container_from_backend(repo_uri)

@@ -1,4 +1,4 @@
-import terms from "src/assets/markdowns/terms.md";
+import terms from "src/assets/markdowns/privacy.md";
 import LegalPage from "./Legal";
 
 export default function PrivacyPage() {
