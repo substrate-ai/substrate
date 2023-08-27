@@ -1,17 +1,13 @@
 import asyncio
 
-from utils.utils import get_user_config
-from utils.utils import supabase_request
 from utils.env import config_data
 import typer
 from utils.utils import get_cli_token, get_project_config
 import requests
 from utils.console import console
 from utils.supabase import supabase_client
-import time
 from rich.table import Table
 import json
-import datetime
 
 
 

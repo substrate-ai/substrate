@@ -40,8 +40,6 @@ class AWS_Client:
             raise typer.Exit(code=1)
         
         credentials = response.json()
-        console.print(credentials)
-
         return credentials
     
     def get_ecr_login_password(self):

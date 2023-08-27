@@ -25,6 +25,8 @@ const queryClient = new QueryClient()
 
 function App() {
 
+  // if user is logged in, redirect to dashboard
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
