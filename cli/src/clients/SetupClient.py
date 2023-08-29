@@ -9,7 +9,11 @@ from utils.console import console
 
 
 class SetupClient:
-    def init_folder_creation():
+
+    def __init__(self):
+        pass
+
+    def init_folder_creation(self):
         console.print("Init project with config file and requirements.txt 2")
 
         project_name = os.path.basename(os.getcwd())
@@ -28,14 +32,14 @@ class SetupClient:
 
         console.print("Project successfully initialized")
 
-    def login():
+    def login(self):
             # do while loop
         while True:
             token = typer.prompt("Please enter access token, this can be find in the substrateai.com website")
 
             endpoint = f'{config_data["SUPABASE_URL"]}/functions/v1/token/verify-token'
             data = {"accessToken": token}
-            headers = {"Authorization": f"Bearer {config_data['SUPABASE_KEY']}"}
+            headers = {"Authorization": f"Bearer {config_data['SUPABASE_ANON_KEY']}"}
 
             response = requests.post(endpoint, headers=headers, json=data)
 

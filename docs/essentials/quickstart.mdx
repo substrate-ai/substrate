@@ -32,6 +32,13 @@ substrate-ai init
 ```
 </CodeGroup>
 
+## Requirements
+
+In order to run substrateAI, you need to have installed the Docker Engine. To install it, follow the instructions for your operating system:
+    - [MacOS](https://docs.docker.com/docker-for-mac/install/)
+    - [Windows](https://docs.docker.com/docker-for-windows/install/)
+    - [Linux](https://docs.docker.com/desktop/install/linux-install/)
+
 ## Usage
 
 To start running your code in the cloud with SubstrateAI, run the following command in your terminal:
@@ -41,6 +48,40 @@ To start running your code in the cloud with SubstrateAI, run the following comm
 substrate-ai run
 ```
 </CodeGroup>
+
+## Configuration your project
+
+To configure your project you can modify the following files:
+    - **substrate.yaml** 
+    - **requirements.txt**
+
+### substrate.yaml 
+
+This allow you to configure the following attribute
+
+- **name**: The name of your project
+- **hardware**: the type of hardware you want to use
+- **main_file_location**: the location of your main file, to be use as python entry point
+
+Here is an example of a substrate.yaml file:
+
+```yaml
+name: my-project
+hardware:
+  name: cpu
+main_file_location: ./main.py
+```
+
+### requirements.txt
+
+This is a standard requirements.txt file. This allow you to specify any package you want to install in your environment.
+The specifcation can be found at the following link: https://pip.pypa.io/en/stable/reference/requirements-file-format/
+
+## Remarks
+
+The job launched on SubstrateAI are not saved, thus any files are automatically deleted when a job is done. 
+Thus we recommend to upload your trained model or data to a cloud service such as HuggingFace or AWS S3.
+
 
 
 

@@ -2,7 +2,16 @@ import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { supabaseClient } from 'src/config/supabase-client';
 
-export default function AuthPage() {
+export enum View {
+  SIGN_IN = 'sign_in',
+  SIGN_UP = 'sign_up',
+}
+
+type Props = {
+  view: View
+}
+
+export function AuthPage({ view }: Props) {
 
 
     return(
@@ -24,7 +33,9 @@ export default function AuthPage() {
             }}
           theme="dark" 
           providers={['github']}
-          redirectTo='/dashboard'
+          redirectTo={`${window.location.origin}/dashboard`}
+          // redirectTo='/dashboard'
+          view={view}
           /> 
           </div>
         

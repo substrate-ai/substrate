@@ -1,31 +1,32 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { stripe } from "../_shared/stripeClient.ts"
-import { corsHeaders } from '../_shared/cors.ts'
-import { supabaseAnon } from "../_shared/supabaseClients.ts";
-import { getUserFromServe } from "../_shared/userUtils.ts";
+import { Application, Router } from 'oak';
+import { stripe } from '../_shared/stripeClient.ts';
+import { getUserFromContext } from '../_shared/userUtils.ts';
+import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
+import { LAGO_URL } from "../_shared/lagoUrl.ts";
 
+const router = new Router();
+router.get('/stripe-checkout-url', async (ctx) => {  
+  const supabaseUser = await getUserFromContext(ctx);
+  const supabaseId = supabaseUser.id;
 
-// Tp be called from frontend
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+  const lagoResponse = await fetch(`${LAGO_URL}/customers/${supabaseId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Deno.env.get('LAGO_API_KEY')}`,
+    },
+  });
+
+  if (lagoResponse.status !== 200) {
+    console.error('error getting customer', lagoResponse);
+    console.error('supabaseId', supabaseId)
+    ctx.response.status = 500;
+    ctx.response.body = { error: 'error getting customer', response: lagoResponse };
+    return;
   }
 
-  const supabaseUser = await getUserFromServe(req)
-  const supabaseId = supabaseUser.id
-
-  const queryStripeId = await supabaseAnon.from('user_data')
-                            .select('stripe_id').eq('id', supabaseId).single()
-
-  if (queryStripeId.error) {
-    console.error("error getting stripe_id", queryStripeId.error)
-    return new Response(
-      JSON.stringify({ error: "error getting stripe_id" }),
-      { headers: { "Content-Type": "application/json" }, status: 401 },
-    )
-  }
-
-  const stripeId = queryStripeId.data.stripe_id
+  const lagoCustomer = (await lagoResponse.json());
+  const stripeId = lagoCustomer.customer.billing_configuration.provider_customer_id
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -36,17 +37,20 @@ serve(async (req) => {
   });
 
   if (session.error) {
-    console.error("error creating session", session.error)
-    return new Response(
-      JSON.stringify({ error: "error creating session" }),
-      { headers: { "Content-Type": "application/json" }, status: 401 },
-    )
+    console.error('error creating session', session.error);
+    console.error('supabaseId', supabaseId)
+    console.error('stripeId', stripeId)
+    ctx.response.status = 401;
+    ctx.response.body = { error: 'error creating session' };
+    return;
   }
-  
-  return new Response(JSON.stringify({"checkout_url": session.url}), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    status: 200,
-  })
 
+  ctx.response.status = 200;
+  ctx.response.body = { checkoutUrl: session.url };
+});
 
-})
+const app = new Application()
+app.use(oakCors())
+app.use(router.routes())
+app.use(router.allowedMethods())
+await app.listen({ port: 8000 });

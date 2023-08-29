@@ -42,7 +42,8 @@
     },
     {
       "name": "Examples",
-      "url": "https://github.com/substrate-ai/examples"
+      "url": "https://github.com/substrate-ai/examples",
+      "icon": "github"
     }
   ],
   "navigation": [

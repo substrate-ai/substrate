@@ -9,6 +9,12 @@ if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
     throw new Error('Missing SUPABASE_URL or SUPABASE_KEY');
 }
 
-export const supabaseAnon = new SupabaseClient(supabaseUrl, supabaseAnonKey);
-export const supabaseAdmin = new SupabaseClient(supabaseUrl, supabaseServiceRoleKey);
+const options = {
+    auth: {
+      persistSession: false,
+    },
+  }
+
+export const supabaseAnon = new SupabaseClient(supabaseUrl, supabaseAnonKey, options);
+export const supabaseAdmin = new SupabaseClient(supabaseUrl, supabaseServiceRoleKey, options);
 

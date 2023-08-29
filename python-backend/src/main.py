@@ -126,9 +126,11 @@ async def create_item(job: Job):
 
     user_id = getUser(token)
 
-    import os
-    print(os.getcwd())
+
+    # call /payment/user_status to check if user has paid
+    endpoint = f'{supabase_url}/functions/v1/payment/user_status?id={user_id}'
     
+
     with open('./resources/aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
 

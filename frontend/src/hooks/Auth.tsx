@@ -5,6 +5,12 @@ import { supabaseClient } from 'src/config/supabase-client';
 // create a context for authentication
 const AuthContext = createContext<{ session: Session | null | undefined, user: User | null | undefined, signOut: () => void }>({ session: null, user: null, signOut: () => {} });
 
+declare global {
+    interface Window {
+        analytics:any;
+    }
+}
+
 export const AuthProvider = ({ children }: any) => {
     const [user, setUser] = useState<User>()
     const [session, setSession] = useState<Session | null>();
@@ -17,6 +23,18 @@ export const AuthProvider = ({ children }: any) => {
             setSession(session)
             setUser(session?.user)
             setLoading(false);
+
+            if ('analytics' in window) {
+                window.analytics.identify(session?.user?.id, {
+                    name: session?.user?.user_metadata?.full_name,
+                    email: session?.user?.email,
+                });
+
+                // todo to be removed log
+                console.log('analytics')
+            }
+
+            
         };
 
         const { data: listener } = supabaseClient.auth.onAuthStateChange((_event, session) => {
@@ -30,6 +48,9 @@ export const AuthProvider = ({ children }: any) => {
         return () => {
             listener?.subscription.unsubscribe();
         };
+
+
+
     }, []);
 
     const value = {

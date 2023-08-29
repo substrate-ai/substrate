@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import RootLayout from './components/RootLayout';
 
 import WelcomePage from './pages/Welcome';
-import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './hooks/Auth';
 import PageNotFound from './pages/PageNotFound';
@@ -18,6 +17,7 @@ import Pricing from './pages/Pricing';
 import TermsPage from './pages/legal/Terms';
 import PrivacyPage from './pages/legal/Privacy';
 import HelpPage from './pages/Help';
+import { AuthPage, View } from './pages/AuthPage';
 
 
 
@@ -35,14 +35,15 @@ function App() {
             <RootLayout>
               <Routes>
                 <Route path="/" element={<WelcomePage />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<AuthPage view={View.SIGN_IN} />} />
+                <Route path="/sign-up" element={<AuthPage view={View.SIGN_UP} />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                       <Dashboard />
                   </ProtectedRoute>
                 } >
                   <Route index path="billing" element={<BillingSection/>}/>
-                  <Route index path="token" element={<TokenSection/>}/>
+                  <Route path="token" element={<TokenSection/>}/>
                 </Route>
                 <Route path="legal">
                   <Route path="terms-and-conditions" element={<TermsPage />} />

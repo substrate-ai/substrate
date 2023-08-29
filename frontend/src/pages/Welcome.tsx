@@ -9,7 +9,7 @@ function WelcomePage() {
       <div className="container flex flex-col m-auto p-0 px-6 py-10 space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
         <div className="flex-1 py-24 flex flex-col items-center justify-center text-center lg:px-6">
           <p className="text-lg font-medium leading-8 text-indigo-600/95">
-            The easiest way to run your ML workflow at scale
+            The easiest way to run your ML workflows at scale
           </p>
           <h1 className="mt-3 text-[3.5rem] font-bold leading-[4rem] tracking-tight text-white">
             Accelerate your ML training by using cloud GPUs
