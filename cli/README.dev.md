@@ -1,18 +1,28 @@
-docker build . -t substrate-test --platform linux/amd64
+# To install the CLI 
 
-docker build . -t substrate-test --no-cache  --platform linux/x86_64        
+How to install the cli locally
 
-docker run substrate-test --platform linux/x86_64
+create a conda environement 
 
-todo maybe check in dockerfile that GPu is availabel but this need to be done at runtime
+``` bash
+conda create --name substrate-ai-cli
+```
 
-todo terraform
+Then activate it
 
-python -m pip install -e .
 
-# todo experiment with https://github.com/tensorchord/envd
+``` bash
+conda activate substrate-ai-cli
+```
 
-maybe import code into docker image compare to rebuilding would that improve user expereicne?
 
-create base image to share layer between images
+Install dependency to do once
+``` bash
+pip install -r requirements.txt
+```
 
+To install the substrate cli
+
+``` bash
+python -m pip install -e ../cli   
+```
