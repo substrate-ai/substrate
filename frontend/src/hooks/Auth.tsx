@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: any) => {
                 });
 
                 // todo to be removed log
-                console.log('analytics')
+                // console.log('analytics')
             }
 
             
