@@ -9,15 +9,9 @@ export function useGetPaymentStatusQuery() {
     const id = useAuth().session!.user.id
 
     return useQuery(['payment_status'], async () => {
-
-        
-
         const payload = {   
             id: id
         }
-
-        const VITE_SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-        console.log("VITE_SUPABASE_URL", VITE_SUPABASE_ANON_KEY)
         
         const headers = { 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` }
         
