@@ -5,10 +5,11 @@ from utils.env import config_data
 from clients.JobClient import JobClient
 from clients.SetupClient import SetupClient
 from utils.check_update import check_update
+from utils.console import console
 
 def init_typer():
     if config_data["PYTHON_BACKEND_URL"] is None:
-        typer.echo("Environment variables are not properly set, contact the developer")
+        console.print("Environment variables are not properly set, contact the developer")
         exit(1)
 
     check_update()

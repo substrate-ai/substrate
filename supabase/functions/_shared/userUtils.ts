@@ -15,6 +15,7 @@ export function getUserFromContext(context: Context): Promise<User> {
     return getUserFromAuthorizationHeader(token)
 }
 
+
 async function getUserFromAuthorizationHeader(authorizationToken: string): Promise<User> {
     const {data, error} = (await supabaseAnon.auth.getUser(authorizationToken))
 

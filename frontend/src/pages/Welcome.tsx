@@ -1,7 +1,6 @@
 import Footer from "src/components/Footer";
 import terminal from "src/assets/images/terminal.png";
 
-
 function WelcomePage() {
   return (
     <>

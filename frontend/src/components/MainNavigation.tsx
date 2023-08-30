@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { AvatarImage } from '@radix-ui/react-avatar';
+import { Badge } from "@/components/ui/badge"
+
 
 
 function MainNavigation() {
@@ -34,7 +35,10 @@ function MainNavigation() {
           <NavigationMenuItem>
                   <NavigationMenuLink className="font-bold px-5" onClick={() => navigate("/")} >
                     {/* todo add logo */}
-                    SubstrateAI
+                    <p className='inline px-2'>SubstrateAI</p>
+                    
+                    <Badge variant="outline">Beta</Badge>
+
                   </NavigationMenuLink>
 
                   <>

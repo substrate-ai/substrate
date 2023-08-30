@@ -85,6 +85,7 @@ async def stop_job(token: Token, job_name: str):
 
     # check user of job is same as user of token
     try:
+        # todo add .eq('supabase_id', user_id) so match on job_name and user_id
         response = supabase_admin.table('job').select('supabase_id').eq('job_name', job_name).execute()
     except Exception as e:
         logging.error(e)
@@ -122,14 +123,38 @@ async def stop_job(token: Token, job_name: str):
 
 @app.post("/start-job")
 async def create_item(job: Job):
-    token = job.token
+    # token = job.token
 
-    user_id = getUser(token)
+    # user_id = getUser(token)
+
+    user_id = "dc6b38a4-77c1-4350-8f19-41c2fde98917"
 
 
     # call /payment/user_status to check if user has paid
-    endpoint = f'{supabase_url}/functions/v1/payment/user_status?id={user_id}'
-    
+    endpoint = f'{supabase_url}/functions/v1/payment/user-status?id={user_id}'
+    headers = {"Authorization": f"Bearer {supabase_anon_key}"}
+
+    print(endpoint)
+    print(headers)
+
+    response = requests.get(endpoint, headers=headers)
+
+    if response.status_code != 200:
+        logging.error("cannot get payment status")
+        logging.error(response.status_code)
+        logging.error(response)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="cannot get payment status",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+    if response.json()['paymentStatus'] != 'active':
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="user has not paid",
+            headers={"WWW-Authenticate": "Basic"},
+        )
 
     with open('./resources/aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
@@ -197,9 +222,9 @@ async def create_item(job: Job):
         'status': 'running'
          }]).execute()
     except Exception as e:
+        logging.error("error in inserting job into database")
         logging.error(e)
-        logging.error("job was terminated on aws")
-
+        logging.error("due to error, the job was terminated on aws")
         
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

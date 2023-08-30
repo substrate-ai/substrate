@@ -53,6 +53,7 @@ function App() {
 
                 <Route path="/pricing" element={<Pricing/>}/>
                 <Route path="/404" element={<PageNotFound />} />
+                <Route path="/success" element={<Navigate to="/" />} />
                 <Route path="*" element={<Navigate to="/404" />} />
               </Routes>
             </RootLayout>

@@ -50,7 +50,11 @@ async function handle_payment_method(event: any) {
       handle_user_with_failed_payment(data.id)
     }
 
-    const {data : data2, error: error2} = await supabaseAdmin.from('user_data').update({status: 'active'}).eq('stripe_id', stripeId).single()
+    if (data.payment_status === "banned") {
+      return;
+    }
+
+    const {data : data2, error: error2} = await supabaseAdmin.from('user_data').update({payment_status: 'active'}).eq('stripe_id', stripeId).single()
 
     if (error2) {
       console.error('error updating user after new credit card', error2);

@@ -8,8 +8,13 @@ from utils.console import console
 
 
 def get_user_config():
-    with open(os.path.expanduser('~/.substrate'), 'r') as f:
-        return yaml.safe_load(f)
+    try:
+        with open(os.path.expanduser('~/.substrate'), 'r') as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        console.print("User not logged in", style="bold red")
+        raise typer.Exit(code=1)
+
     
 def get_cli_token():
     return get_user_config()['access_token']

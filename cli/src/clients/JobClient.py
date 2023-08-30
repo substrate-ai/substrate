@@ -3,6 +3,7 @@ from clients.AWS_Client import AWS_Client
 from clients.DockerClient import DockerClient
 from utils.console import console
 from yaspin import yaspin
+import typer
 
 
 class JobClient:
@@ -14,6 +15,12 @@ class JobClient:
         self.http_client = HttpClient()
 
     def start_job(self):
+        spinner = yaspin()
+        spinner.start()
+        
+        self.http_client.check_payment_status()
+
+        spinner.stop()
         self.docker_client.build()
         console.print("Image built", style="bold green")
         repo_uri = self.aws_client.get_or_create_user_repo()

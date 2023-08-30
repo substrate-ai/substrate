@@ -40,8 +40,11 @@ export type CreateTokenDTO = {
 
 
 export function usePostTokenQuery() {
+
+    const session = useAuth()
+
     return useMutation(['tokens'], async (token: CreateTokenDTO) => {
-        const session = useAuth()
+
 
         if (token.tokenName === "") {
             throw new Error("token name cannot be empty")

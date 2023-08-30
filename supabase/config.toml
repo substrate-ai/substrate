@@ -83,3 +83,6 @@ gcp_jwt_path = "supabase/gcloud.json"
 
 [functions.lago-webhook]
 verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

@@ -1,6 +1,10 @@
 import { Application, Context, Router } from 'oak'
 import { supabaseAdmin } from '../_shared/supabaseClients.ts'
+import { LAGO_URL } from '../_shared/lagoUrl.ts';
+import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import { getUserFromId } from "../_shared/userUtils.ts";
+import getUserIdFromToken from "../_shared/tokenUtils.ts";
+
 
 const router = new Router()
 router
@@ -8,14 +12,22 @@ router
   .post('/payment/job-done', async (ctx) => {
     await jobDoneHandler(ctx)
 })
-.get('/payment/user_status', async (ctx) => {
+.get('/payment/user-status', async (ctx) => {
+  let id = ""
 
-  if (!ctx.request.url.searchParams.has('id')) {
+  if (ctx.request.url.searchParams.has('token')) {
+    const token = ctx.request.url.searchParams.get('token')
+
+    const userId = await getUserIdFromToken(token!)
+
+    id = userId
+  } else if (ctx.request.url.searchParams.has('id')) {
+    id = ctx.request.url.searchParams.get('id')!
+  } else {
     ctx.response.status = 400
     return
   }
 
-  const id = ctx.request.url.searchParams.get('id')
   const {data, error} = await supabaseAdmin.from('user_data').select().eq('id', id).single()
 
   if (error) {
@@ -29,6 +41,7 @@ router
   ctx.response.body = {paymentStatus: data.payment_status}
 
 })
+
 
 
 
@@ -58,7 +71,7 @@ async function jobDoneHandler(ctx: Context) {
   const user = await getUserFromId(userId)
   const lagoId = user.lago_id
 
-  const url = Deno.env.get('LAGO_API_URL') + '/v1/events'
+  const url = LAGO_URL + '/v1/events'
 
   const freePlanLagoId = "9c3b45cb-7f6c-4d17-bb5d-181f9e540760"
 
@@ -114,6 +127,7 @@ ctx.response.status = 200
 
 
 const app = new Application()
+app.use(oakCors());
 app.use(router.routes())
 app.use(router.allowedMethods())
 

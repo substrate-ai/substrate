@@ -50,7 +50,21 @@ class HttpClient:
         console.print("Job successfully stopped")
 
 
+    def check_payment_status(self):
+        auth_token = get_cli_token()
+        header = {"Authorization": f"Bearer {config_data['SUPABASE_ANON_KEY']}"}
+        response = requests.get(f'{config_data["SUPABASE_URL"]}/functions/v1/payment/user-status?token={auth_token}', headers=header)
+        
+        if response.status_code != 200:
+            # console.print(response.status_code)
+            console.print("Failed to get payment status")
+            raise typer.Exit(code=1)
+        
+        payment_status = response.json()["paymentStatus"]
 
+        if payment_status != "active":
+            console.print("To use substrate, you need to add a payment method on the substrate website")
+            raise typer.Exit(code=1)
 
 
     def get_jobs(self):

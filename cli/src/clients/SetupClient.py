@@ -19,7 +19,7 @@ class SetupClient:
         project_name = os.path.basename(os.getcwd())
 
         # load substrate.yaml
-        with open(os.path.join(os.path.dirname(__file__), 'resources/substrate.dev.yaml'), 'r') as f:
+        with open(os.path.join(os.path.dirname(__file__), '../resources/substrate.dev.yaml'), 'r') as f:
             substrate_yaml = yaml.safe_load(f)
 
         substrate_yaml['project_name'] = project_name
@@ -28,7 +28,7 @@ class SetupClient:
         with open('substrate.yaml', 'w') as f:
             f.write(yaml.dump(substrate_yaml, sort_keys=False))
 
-        shutil.copyfile(os.path.join(os.path.dirname(__file__), 'resources/requirements.dev.txt'), 'requirements.txt')
+        shutil.copyfile(os.path.join(os.path.dirname(__file__), '../resources/requirements.dev.txt'), 'requirements.txt')
 
         console.print("Project successfully initialized")
 

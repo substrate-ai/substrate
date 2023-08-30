@@ -1,3 +1,3 @@
-uvicorn src.main:app --reload
+cd src; uvicorn main:app --reload
 
 space push
