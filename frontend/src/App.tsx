@@ -6,19 +6,42 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './hooks/Auth';
 import PageNotFound from './pages/PageNotFound';
 import Dashboard from './pages/Dashboard';
-import BillingSection from './pages/dashboard-sections/BillingSection';
-import TokenSection from './pages/dashboard-sections/TokenSection';
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { ThemeProvider } from "@/components/theme-provider"
 import Pricing from './pages/Pricing';
-import TermsPage from './pages/legal/Terms';
-import PrivacyPage from './pages/legal/Privacy';
 import HelpPage from './pages/Help';
 import { AuthPage, View } from './pages/AuthPage';
+import loadable from '@loadable/component';
+import pMinDelay from 'p-min-delay';
 
+// todo I think component are reloaded when navigating to a new page
+
+const fallback = <h1>Loading</h1>
+
+const minDelay = 200;
+
+const BillingSection = loadable(() =>
+  pMinDelay(import('./pages/dashboard-sections/BillingSection'), minDelay),
+  { fallback }
+);
+
+const TokenSection = loadable(() =>
+  pMinDelay(import('./pages/dashboard-sections/TokenSection'), minDelay),
+  { fallback }
+);
+
+const TermsPage = loadable(() =>
+  pMinDelay(import('./pages/legal/Terms'), minDelay),
+  { fallback }
+);
+
+const PrivacyPage = loadable(() =>
+  pMinDelay(import('./pages/legal/Privacy'), minDelay),
+  { fallback }
+);
 
 
 const queryClient = new QueryClient(
@@ -51,7 +74,7 @@ function App() {
                       <Dashboard />
                   </ProtectedRoute>
                 } >
-                  <Route index path="billing" element={<BillingSection/>}/>
+                  <Route path="billing" element={<BillingSection />}/>
                   <Route path="token" element={<TokenSection/>}/>
                 </Route>
                 <Route path="legal">

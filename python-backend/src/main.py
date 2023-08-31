@@ -30,8 +30,11 @@ supabase_admin = create_client(supabase_url, supabase_admin_key)
 
 app = FastAPI()
 
+class Hardware(BaseModel):
+    type: str
+
 class Job(BaseModel):
-    hardware : str 
+    hardware : Hardware
     token: str
     repoUri: str
 
@@ -149,7 +152,7 @@ async def create_item(job: Job):
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    if response.json()['paymentStatus'] != 'active':
+    if response.json()['paymentStatus'] != 'active' or response.json()['paymentStatus'] != 'admin':
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="user has not paid",
@@ -159,15 +162,16 @@ async def create_item(job: Job):
     with open('./resources/aws_hardware_code.json') as f:
         aws_hardware_code = json.load(f)
 
-    if job.hardware not in aws_hardware_code:
+    hardwareType = job.hardware.type
+
+    if hardwareType not in aws_hardware_code:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Hardware type selected is not supported",
             headers={"WWW-Authenticate": "Basic"},
         )
 
-
-    instance_type = aws_hardware_code[job.hardware]
+    instance_type = aws_hardware_code[hardwareType]
     image_name = job.repoUri
 
     sage = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')

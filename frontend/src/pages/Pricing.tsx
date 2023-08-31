@@ -2,6 +2,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
@@ -16,16 +17,17 @@ import {
    
   const pricingData = [
     {
-        name: 'CPU',
-        pricePerSeconds: 0.0111,
+        name: 'CPU (2 cores, 4GB RAM)',
+        pricePerHour: 0.15,
     },
     {
         name: 'NVIDIA T4',
-        pricePerSeconds: 0.012,
+        availability: "COMING SOON",
+
     },
     {
-        name: 'NVIDIA P100',
-        pricePerSeconds: 0.0144,
+        name: 'NVIDIA A100',
+        availability: "COMING SOON",
     },
 ]
    
@@ -46,19 +48,29 @@ import {
             <TableHeader>
             <TableRow className="pointer-events-none">
                 <TableHead className="w-[100px]"></TableHead>
-                <TableHead className="text-right">Price per Seconds</TableHead>
+                <TableHead className="text-right">Price per Hour</TableHead>
             </TableRow>
             </TableHeader>
             <TableBody>
             {pricingData.map((data) => (
                 <TableRow key={data.name}>
                 <TableCell className="font-medium">{data.name}</TableCell>
-                <TableCell className="text-right">${data.pricePerSeconds} / sec</TableCell>
+                {data.availability ? (
+                    <TableCell className="text-right">{data.availability}</TableCell>
+                ) : (
+                    <TableCell className="text-right">${data.pricePerHour} / hr</TableCell>
+                )}
                 </TableRow>
             ))}
             </TableBody>
         </Table>
       </CardContent>
+      <CardFooter>
+        <div>
+            <p className="font-bold text-indigo-500">Paid by the minute</p>
+        </div>
+        
+      </CardFooter>
 
       </Card>
         </div>

@@ -20,7 +20,6 @@ class HttpClient:
         auth_token = get_cli_token()
         
         payload = {
-
             "hardware": hardware,
             "token": auth_token,
             "repoUri": repo_uri

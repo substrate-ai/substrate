@@ -1,3 +1,4 @@
 project_name: folder_name
-hardware: cpu
+hardware: 
+  type: cpu
 main_file_location: ./main.py

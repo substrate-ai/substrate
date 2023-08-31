@@ -47,7 +47,9 @@ async function handle_payment_method(event: any) {
     }
 
     if (data.payment_status === "payment_failed") {
-      handle_user_with_failed_payment(data.id)
+      // handle_user_with_failed_payment(data.id)
+      console.error('user has failed payment')
+      return;
     }
 
     if (data.payment_status === "banned") {
