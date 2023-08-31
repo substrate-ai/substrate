@@ -66,13 +66,13 @@ async function verifyToken(token: string): Promise<boolean> {
 async function createToken(tokenName: string, supabaseId: string): Promise<Token> {
 
 
-    // generate random string
-    const randomString = crypto.getRandomValues(new Uint8Array(32));
-    // convert to base64
-    const base64String = btoa(String.fromCharCode(...randomString)).replace(':', '!');
-    const password = base64String;
+    // // generate random string
+    // const randomString = crypto.getRandomValues(new Uint8Array(32));
+    // // convert to base64
+    // const base64String = btoa(String.fromCharCode(...randomString)).replace(':', '!').replace('/', '_');
+    const password = crypto.randomUUID().replaceAll("-", "");
 
-    const uuid = crypto.randomUUID()
+    const uuid = crypto.randomUUID().replaceAll("-", "")
 
 
     // hash the password

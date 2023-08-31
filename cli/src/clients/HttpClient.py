@@ -55,14 +55,15 @@ class HttpClient:
         response = requests.get(f'{config_data["SUPABASE_URL"]}/functions/v1/payment/user-status?token={auth_token}', headers=header)
         
         if response.status_code != 200:
-            # console.print(response.status_code)
+            console.print(response.status_code)
+            console.print(response.text)
             console.print("Failed to get payment status")
             raise typer.Exit(code=1)
         
         payment_status = response.json()["paymentStatus"]
 
         if payment_status != "active":
-            console.print("To use substrate, you need to add a payment method on the substrate website")
+            console.print("To use substrate, you need to add a payment method on the substrate website", style="bold red")
             raise typer.Exit(code=1)
 
 

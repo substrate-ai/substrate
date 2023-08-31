@@ -17,8 +17,8 @@ import {
    
   const pricingData = [
     {
-        name: 'CPU (2 cores, 4GB RAM)',
-        pricePerHour: 0.15,
+        name: 'CPU (2 cores, 8GB RAM)',
+        pricePerHour: 0.345,
     },
     {
         name: 'NVIDIA T4',

@@ -1,6 +1,6 @@
 ---
 title: 'Quickstart'
-description: 'Start training your ml model in the cloud in under 5 minutes'
+description: 'Start training your ML model in the cloud in under 5 minutes'
 ---
 
 ## Installation
@@ -34,7 +34,7 @@ substrate-ai init
 
 ## Requirements
 
-In order to run substrateAI, you need to have installed the Docker Engine. To install it, follow the instructions for your operating system:
+In order to run SubstrateAI, you need to have installed the Docker Engine. To install it, follow the instructions for your operating system:
     - [MacOS](https://docs.docker.com/docker-for-mac/install/)
     - [Windows](https://docs.docker.com/docker-for-windows/install/)
     - [Linux](https://docs.docker.com/desktop/install/linux-install/)
@@ -48,6 +48,13 @@ To start running your code in the cloud with SubstrateAI, run the following comm
 substrate-ai run
 ```
 </CodeGroup>
+
+<Warning>
+Running your project for the first time can take up to 30min to start, as we need to create your environment.
+Subsequent job with this project will start in less than 2min.
+
+This is a known issue and we are working on improving this.
+</Warning>
 
 ## Project configuration
 
@@ -80,8 +87,8 @@ The specifcation can be found at the following link: https://pip.pypa.io/en/stab
 
 ## Remarks
 
-The job launched on SubstrateAI are not saved, thus any files are automatically deleted when a job is done. 
-Thus we recommend to upload your trained model or data to a cloud service such as HuggingFace or AWS S3.
+The jobs launched on SubstrateAI are not saved, therefore any files are automatically deleted when a job is done. 
+We recommend that you upload your trained model or data to a cloud service such as HuggingFace or AWS S3.
 
 
 

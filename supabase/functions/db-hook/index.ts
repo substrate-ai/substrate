@@ -54,9 +54,11 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
     return;
   } 
 
+
   const lagoBody = (await responseCreateCustomer.json())
+
   const payloadSupabase = {
-    lago_id: lagoBody.lago_id,
+    lago_id: lagoBody.customer.lago_id,
     stripe_id: lagoBody.customer.billing_configuration.provider_customer_id
   };
 

@@ -8,19 +8,15 @@ import typer
 
 class JobClient:
     def __init__(self):
+        console.print("Initialization...", style="bold green")     
         self.aws_client = AWS_Client()
         username, password = self.aws_client.get_ecr_login_password()
         repo = self.aws_client.get_or_create_user_repo()
         self.docker_client = DockerClient(repo, username, password)
         self.http_client = HttpClient()
 
-    def start_job(self):
-        spinner = yaspin()
-        spinner.start()
-        
+    def start_job(self):   
         self.http_client.check_payment_status()
-
-        spinner.stop()
         self.docker_client.build()
         console.print("Image built", style="bold green")
         repo_uri = self.aws_client.get_or_create_user_repo()

@@ -1,5 +1,5 @@
 import { supabaseAdmin } from "./supabaseClients.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
+import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 
 
 export default async function getUserIdFromToken(token: string): Promise<string> {
@@ -17,6 +17,7 @@ export default async function getUserIdFromToken(token: string): Promise<string>
     }
 
     if (!data) {
+        console.error("no data")
         throw new Error("no data")
     }
 
@@ -25,7 +26,8 @@ export default async function getUserIdFromToken(token: string): Promise<string>
     const match = bcrypt.compareSync(password, encryptedToken)
 
     if (!match) {
-        throw new Error("token does not match")
+        console.error("token provided does not match saved token in db")
+        throw new Error("token provided does not match saved token in db")
     }
 
     return data.supabase_id

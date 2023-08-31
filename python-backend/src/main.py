@@ -126,19 +126,13 @@ async def stop_job(token: Token, job_name: str):
 
 @app.post("/start-job")
 async def create_item(job: Job):
-    # token = job.token
+    token = job.token
 
-    # user_id = getUser(token)
-
-    user_id = "dc6b38a4-77c1-4350-8f19-41c2fde98917"
-
+    user_id = getUser(token)
 
     # call /payment/user_status to check if user has paid
     endpoint = f'{supabase_url}/functions/v1/payment/user-status?id={user_id}'
     headers = {"Authorization": f"Bearer {supabase_anon_key}"}
-
-    print(endpoint)
-    print(headers)
 
     response = requests.get(endpoint, headers=headers)
 
@@ -151,11 +145,14 @@ async def create_item(job: Job):
             detail="cannot get payment status",
             headers={"WWW-Authenticate": "Basic"},
         )
+    
+    payment_status = response.json()['paymentStatus']
 
-    if response.json()['paymentStatus'] != 'active' or response.json()['paymentStatus'] != 'admin':
+    if payment_status != 'active' and payment_status != 'admin':
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="user has not paid",
+            detail=f"user has not paid, current status is {payment_status}",
+            
             headers={"WWW-Authenticate": "Basic"},
         )
 
@@ -172,6 +169,11 @@ async def create_item(job: Job):
         )
 
     instance_type = aws_hardware_code[hardwareType]
+
+    # check if instance type is valid
+    # input_string = "[ml.m6i.xlarge, ml.trn1.32xlarge, ml.p2.xlarge, ml.m5.4xlarge, ml.m4.16xlarge, ml.m6i.12xlarge, ml.p5.48xlarge, ml.m6i.24xlarge, ml.p4d.24xlarge, ml.g5.2xlarge, ml.c5n.xlarge, ml.p3.16xlarge, ml.m5.large, ml.m6i.16xlarge, ml.p2.16xlarge, ml.g5.4xlarge, ml.c4.2xlarge, ml.c5.2xlarge, ml.c6i.32xlarge, ml.c4.4xlarge, ml.c6i.xlarge, ml.g5.8xlarge, ml.c5.4xlarge, ml.c6i.12xlarge, ml.c5n.18xlarge, ml.g4dn.xlarge, ml.c6i.24xlarge, ml.g4dn.12xlarge, ml.c4.8xlarge, ml.g4dn.2xlarge, ml.c6i.2xlarge, ml.c6i.16xlarge, ml.c5.9xlarge, ml.g4dn.4xlarge, ml.c6i.4xlarge, ml.c5.xlarge, ml.g4dn.16xlarge, ml.c4.xlarge, ml.trn1n.32xlarge, ml.g4dn.8xlarge, ml.c6i.8xlarge, ml.g5.xlarge, ml.c5n.2xlarge, ml.g5.12xlarge, ml.g5.24xlarge, ml.c5n.4xlarge, ml.trn1.2xlarge, ml.c5.18xlarge, ml.p3dn.24xlarge, ml.m6i.2xlarge, ml.g5.48xlarge, ml.g5.16xlarge, ml.p3.2xlarge, ml.m6i.4xlarge, ml.m5.xlarge, ml.m4.10xlarge, ml.c5n.9xlarge, ml.m5.12xlarge, ml.m4.xlarge, ml.m5.24xlarge, ml.m4.2xlarge, ml.m6i.8xlarge, ml.m6i.large, ml.p2.8xlarge, ml.m5.2xlarge, ml.m6i.32xlarge, ml.p4de.24xlarge, ml.p3.8xlarge, ml.m4.4xlarge]"
+
+
     image_name = job.repoUri
 
     sage = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
@@ -221,7 +223,8 @@ async def create_item(job: Job):
         'job_name': job_name,
         'created_at': iso_time,
         'supabase_id': user_id,
-        'hardware': job.hardware,
+        'hardware_type': job.hardware.type,
+        'aws_instance_type': instance_type,
         'image_name': image_name,
         'status': 'running'
          }]).execute()

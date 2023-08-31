@@ -10,9 +10,9 @@ router.post('/', async (ctx) => {
   const webhook_type = body.webhook_type;
 
   switch (webhook_type) {
-    case 'customer.payment_provider_created':
-      ctx.response.body = await customerCreatedHandler(body);
-      break;
+    // case 'customer.payment_provider_created':
+    //   ctx.response.body = await customerCreatedHandler(body);
+    //   break;
     case 'invoice.payment_failure':
       ctx.response.body = await customerPaymentFailed(body);
       break;

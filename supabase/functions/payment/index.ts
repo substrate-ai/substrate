@@ -18,22 +18,32 @@ router
   if (ctx.request.url.searchParams.has('token')) {
     const token = ctx.request.url.searchParams.get('token')
 
-    const userId = await getUserIdFromToken(token!)
-
-    id = userId
+    try {
+      const userId = await getUserIdFromToken(token!)
+      id = userId
+    } catch (error) {
+      console.error('no user found with token or id provided', error);
+      console.error('token', token)
+      ctx.response.status = 404
+      ctx.response.body = {detail: "no user found with token or id provided", error: error}
+      return
+    }
+    
   } else if (ctx.request.url.searchParams.has('id')) {
     id = ctx.request.url.searchParams.get('id')!
   } else {
     ctx.response.status = 400
+    ctx.response.body = {detail: "no token or id provided"}
     return
   }
 
   const {data, error} = await supabaseAdmin.from('user_data').select().eq('id', id).single()
 
   if (error) {
-    console.error('error getting user from id', error);
+    console.error('no user found with token or id provided', error);
     console.error('id', id)
-    ctx.response.status = 500
+    ctx.response.status = 404
+    ctx.response.body = {detail: "no user found with token or id provided"}
     return
   }
 
