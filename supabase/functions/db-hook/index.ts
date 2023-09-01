@@ -74,7 +74,7 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
   }
 
   const uuid = crypto.randomUUID();
-  const planCode = 'FREE';
+  const planCode = 'free';
 
   const payloadAssignPlan = {
     subscription : {

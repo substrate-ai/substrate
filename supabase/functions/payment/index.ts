@@ -2,14 +2,14 @@ import { Application, Context, Router } from 'oak'
 import { supabaseAdmin } from '../_shared/supabaseClients.ts'
 import { LAGO_URL } from '../_shared/lagoUrl.ts';
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import { getUserFromId } from "../_shared/userUtils.ts";
+import { getUserDataFromId } from "../_shared/userUtils.ts";
 import getUserIdFromToken from "../_shared/tokenUtils.ts";
 
 
 const router = new Router()
 router
   // Note: path should be prefixed with function name
-  .post('/payment/job-done', async (ctx) => {
+.post('/payment/job-done', async (ctx) => {
     await jobDoneHandler(ctx)
 })
 .get('/payment/user-status', async (ctx) => {
@@ -37,7 +37,7 @@ router
     return
   }
 
-  const {data, error} = await supabaseAdmin.from('user_data').select().eq('id', id).single()
+  const {data, error} = await supabaseAdmin.from('user_data').select("payment_status").eq('id', id).single()
 
   if (error) {
     console.error('no user found with token or id provided', error);
@@ -61,7 +61,6 @@ async function jobDoneHandler(ctx: Context) {
   const value = await body.value
   const jobName = value.jobName
 
-
   const response = await supabaseAdmin.from('job').select().eq('job_name', jobName).single()
 
   if (response.error) {
@@ -72,34 +71,53 @@ async function jobDoneHandler(ctx: Context) {
 
   const job = response.data
 
+  const {data, error} = await supabaseAdmin.from('user_data').select("payment_status").eq('id', job.supabase_id).single()
+
+  if (error) {
+    console.error('Error getting payment status for invoicing', error)
+    ctx.response.status = 500
+    return
+  }
+
+  if (data.payment_status == "admin") {
+    console.log("job payment status is admin, not sending to lago")
+    ctx.response.status = 200
+    return
+  }
+
+
   const minutes = Math.ceil((new Date(job.finished_at).getTime() - new Date(job.created_at).getTime()) / 60000)
 
   console.log("minutes", minutes)
 
   const userId = job.supabase_id
 
-  const user = await getUserFromId(userId)
-  const lagoId = user.lago_id
+  // const user = await getUserDataFromId(userId)
+  // const lagoId = user.lago_id
 
-  const url = LAGO_URL + '/v1/events'
+  const url = LAGO_URL + '/events'
 
-  const freePlanLagoId = "9c3b45cb-7f6c-4d17-bb5d-181f9e540760"
+  const freePlanLagoId = "49a28eb3-a558-4027-baa4-bcbcc292eb96"
 
   // check hardware 
-  const hardware = job.hardware
+  const hardware = job.hardware_type
+  console.log("hardware billed", hardware)
+
   if (!["cpu", "gpu"].includes(hardware)) {
     console.error('Error getting hardware', hardware)
     ctx.response.status = 500
     return
   }
 
+  // TODO invoice chnage unit to minutes and add name of job to it
+
   const payload = {
     "event": {
       "lago_subscription_id": freePlanLagoId,
-      "transaction_id": job.id,
+      "transaction_id": jobName,
       "external_customer_id": userId,
       // "external_subscription_id": "maybe we need to setup this, this is for each customer",
-      "code": job.hardware,
+      "code": job.hardware_type,
       "properties": {
           "minutes": minutes
       }
@@ -115,22 +133,24 @@ async function jobDoneHandler(ctx: Context) {
     body: JSON.stringify(payload)
 })
 
-if (response2.status != 200) {
-  console.error('Error sending event to lago', response2)
-  console.error("associated payload", payload)
-  ctx.response.status = 500
-  return
-}
+  if (response2.status != 200) {
+    console.error('Error sending event to lago', response2)
+    console.error("associated payload", payload)
+    ctx.response.status = 500
+    return
+  }
 
-const response3 = await supabaseAdmin.from('job').update({ payment_status: "sent_to_lago" }).eq('job_name', jobName)
+  const response3 = await supabaseAdmin.from('job').update({ payment_status: "sent_to_lago" }).eq('job_name', jobName)
 
-if (response3.error) {
-  console.error('Error updating job', response3.error)
-  ctx.response.status = 500
-  return
-}
+  if (response3.error) {
+    console.error('Error updating job', response3.error)
+    ctx.response.status = 500
+    return
+  }
 
-ctx.response.status = 200
+  console.log("job payment status updated to sent_to_lago")
+
+  ctx.response.status = 200
 }
 
 

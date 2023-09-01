@@ -10,7 +10,6 @@ const router = new Router()
 router
   // Note: path should be prefixed with function name
   .post('/aws/job-done', async (ctx) => {
-      console.log('Job done 3')
       if (!ctx.request.hasBody) {
         ctx.throw(400, 'Body is required')
       }
