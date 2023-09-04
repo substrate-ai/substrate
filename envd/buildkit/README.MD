@@ -5,15 +5,23 @@ conda create -n envd
 conda activate envd
 pip install envd
 
-envd context create --name local-buildkit-container \                                                                                  ✔  envd Py
+```
+envd context create --name local-buildkit-container \
   --builder tcp \
   --builder-address 127.0.0.1:8888 \
   --use 
+```
+
+
+TO RUN ON GCP 
+```
+envd context create --name remote-buildkit \
+  --builder tcp \
+  --builder-address 35.211.197.85:8888 \
+  --use 
+```
 
 envd context use --name local-buildkit-container
-
-
-
 
 # get credential access account 
 look at access accout and create a key (GCP IAM), you can call it gcp.json and put it in the buidkit folder
@@ -34,13 +42,14 @@ You can modify it or create other repo if needed
 you can modify `build.envd` and remove all python package to speed up creation of docker container so you can debug authentification with gcp faster
 
 # What I need help with 
-THIS IS THE MAIN ISSUE
 - making buildkit container able to push to a gcp registry (authentification problem)
-    -> directions: look at service account in IAM gcp, look at artificat registry
-  
+    -> current state: right now you can push after you first do docker login (but this is not good, as it require docker on the client machine)
+      - look at error folder to see current error
+    -> todo: get rid of the local docker client (because right now we need docker login)
+    -> goal: making this run `envd build --output type=image,name=us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai/substrate-ai,push=true`
 
-(I told you in the meeting this was not working, i just manage to get it working in the end)
-
+    - pointers: look at access and scope parameter of the vm
+    - delete access key used locally to make sure we are not doing docker login locally
 
 
 # How to push manually on docker
@@ -52,3 +61,10 @@ How to do that to login into gcp
 `cat gcp_base64.json | docker login -u _json_key_base64 --password-stdin \ https://us-east1-docker.pkg.dev`
 `docker push us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai/substrate-ai`
 
+
+
+
+
+# Notes for myself about how to call go from python 
+https://www.ardanlabs.com/blog/2020/07/extending-python-with-go.html
+https://fluhus.github.io/snopher/

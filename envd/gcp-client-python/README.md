@@ -7,3 +7,6 @@ thne use vscode with correct python interpreter to run (shift + cmd + p)
 # for running
 conda activate gcp-client-python 
 run with vscode "run" icon top corner
+
+
+LOOK TA BUILDKIT README THIS IS A LOT OF INFO
