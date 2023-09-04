@@ -14,12 +14,15 @@ envd context create --name local-buildkit-container \
 
 
 TO RUN ON GCP 
-```
+``
 envd context create --name remote-buildkit \
   --builder tcp \
   --builder-address 35.211.197.85:8888 \
   --use 
-```
+``
+
+BEFORE USING THE CONTEXT START BUILDKIT ON GCP VM
+``sudo buildkitd   --addr tcp://0.0.0.0:8888``
 
 envd context use --name local-buildkit-container
 
@@ -50,6 +53,8 @@ you can modify `build.envd` and remove all python package to speed up creation o
 
     - pointers: look at access and scope parameter of the vm
     - delete access key used locally to make sure we are not doing docker login locally
+
+    - current state: right now dockerifle is not done, and gcp used a full vm with an OS
 
 
 # How to push manually on docker
