@@ -26,3 +26,8 @@ To install the substrate cli
 ``` bash
 python -m pip install -e ../cli   
 ```
+
+
+## Notes
+
+docker build -f Dockerfile.substrate-ai . -t substrate-ai

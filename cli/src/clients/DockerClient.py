@@ -8,7 +8,7 @@ from utils.console import console
 import yaml
 
 class DockerClient:
-    def __init__(self, server, username, password) -> None:
+    def __init__(self, server, username, password, debug=False) -> None:
         self.docker = DockerPyClient()
         self.tag =  f"substrate:latest"
         self.docker.login(server=server, username=username, password=password)        
@@ -17,6 +17,7 @@ class DockerClient:
         except:
             console.print("Docker engine is not running, please start docker and try again")
             raise typer.Exit(code=1)
+        self.debug = debug
 
     def push(self, repo_uri):
         self.docker.image.tag(self.tag, repo_uri)
@@ -43,4 +44,6 @@ class DockerClient:
                     # copy dockerfile to tempdir
                     shutil.copyfile(dockerfile_traversable, os.path.join(tempdir, "Dockerfile"))
             
-            image = self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"], build_args={"MAIN_LOCATION": main_location})
+            cache = False if self.debug else True
+            console.print(f"using cache: {cache}")
+            image = self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"], build_args={"MAIN_LOCATION": main_location}, cache=cache)

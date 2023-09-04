@@ -62,10 +62,20 @@ class HttpClient:
         
         payment_status = response.json()["paymentStatus"]
 
-        if payment_status != "active":
-            console.print("To use substrate, you need to add a payment method on the substrate website", style="bold red")
+        if payment_status != "active" and payment_status != "admin":
+            console.print("To use substrate, you need to add or update your payment method on the SubstrateAI website", style="bold red")
+            console.print(f"current payment status: {payment_status}", style="bold red")
             raise typer.Exit(code=1)
-
+        
+    def get_repo_uri(self):
+        header = {"token": get_cli_token()}
+        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/repository-uri', headers=header)
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get repository uri")
+            raise typer.Exit(code=1)
+        
+        return response.json()["repositoryUri"]
 
     def get_jobs(self):
         auth_token = get_cli_token()
@@ -117,6 +127,23 @@ class HttpClient:
             table.add_row(job["job_name"], job["hardware"], created_at, finished_at, job["status"])
 
         console.print(table)
+
+    def get_user_id(self):
+        auth_token = get_cli_token()
+        supabase_url = config_data["SUPABASE_URL"]
+        supabase_anon_key = config_data["SUPABASE_ANON_KEY"]
+
+        endpoint = f'{supabase_url}/functions/v1/token/verify-token'
+        payload = {'accessToken': auth_token}
+        headers = {"Authorization": f"Bearer {supabase_anon_key}"}
+        response = requests.post(endpoint, headers=headers, json=payload)
+
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get user id")
+            raise typer.Exit(code=1)
+        
+        return response.json()["userId"]
 
     
 

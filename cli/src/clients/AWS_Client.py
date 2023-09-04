@@ -47,25 +47,6 @@ class AWS_Client:
         username, password = base64.b64decode(ecr_credentials).decode().split(':')
         return username, password
 
-        
-
-        
-    
-    def get_or_create_user_repo(self):
-        repo_name = f"repo.{get_user_id()}"
-
-        # check if repo already exists
-        try:
-            
-            response = self.ecr_client.describe_repositories(repositoryNames=[repo_name])
-            repositoryUri = response["repositories"][0]["repositoryUri"]
-            return repositoryUri
-        except self.ecr_client.exceptions.RepositoryNotFoundException:
-            response = self.ecr_client.create_repository(repositoryName=repo_name)
-            repositoryUri = response["repository"]["repositoryUri"]
-            return repositoryUri
-        
-
     def is_job_running(self, job_name):
         response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
         return response['TrainingJobStatus'] in ['InProgress', 'Stopping']

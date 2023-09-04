@@ -1,16 +1,6 @@
-FROM --platform=linux/amd64 nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
-
-
-ARG DEBIAN_FRONTEND=noninteractive
+FROM 038700340820.dkr.ecr.us-east-1.amazonaws.com/substrate-ai:latest
 
 ARG PYTHON_VERSION=3.10
-
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y build-essential software-properties-common curl && \
-    add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt-get install --no-install-recommends -y python${PYTHON_VERSION} python3-pip python3-setuptools python${PYTHON_VERSION}-distutils && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
 
 COPY requirements.txt /requirements.txt
 

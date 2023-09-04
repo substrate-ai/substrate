@@ -2,12 +2,15 @@ from functools import lru_cache
 import json
 import logging
 import datetime
+from typing import Annotated, Union
 import requests
 
 import boto3
 from human_id import generate_id
 from supabase import create_client
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, Header
+
 
 from pydantic import BaseModel
 from config import Settings
@@ -40,6 +43,31 @@ class Job(BaseModel):
 
 class Token(BaseModel):
     accessToken: str
+
+@app.get("/repository-uri")
+def get_ecr_repo_uri(token: Annotated[Union[str, None], Header()] = None):
+
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect access token",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+    userId = getUser(token)
+
+    ecr_client = boto3.client('ecr', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
+    repo_name = f"repo.{userId}"
+
+    # check if repo already exists otherwise create it
+    try:
+        response = ecr_client.describe_repositories(repositoryNames=[repo_name])
+        repositoryUri = response["repositories"][0]["repositoryUri"]
+        return {"repositoryUri": repositoryUri}
+    except ecr_client.exceptions.RepositoryNotFoundException:
+        response = ecr_client.create_repository(repositoryName=repo_name)
+        repositoryUri = response["repository"]["repositoryUri"]
+        return {"repositoryUri": repositoryUri}
 
 @app.get("/hello")
 def hello_world():
