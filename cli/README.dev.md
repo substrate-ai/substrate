@@ -1,4 +1,6 @@
-# To install the CLI 
+# CLI 
+
+## To install the CLI 
 
 How to install the cli locally
 

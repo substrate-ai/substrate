@@ -211,12 +211,31 @@ async def create_item(job: Job):
     now = datetime.datetime.now()
     iso_time = now.strftime("%Y-%m-%dT%H:%M:%SZ") 
 
+    training_image_config = {
+        'TrainingRepositoryAccessMode': 'Vpc',
+        'TrainingRepositoryAuthConfig': {
+                'TrainingRepositoryCredentialsProviderArn': 'arn:aws:lambda:us-east-1:038700340820:function:gcp_docker_login'
+        }
+    }  
+
+    # TODO CONFIG A NEW VPC
+    vpc_config = {       
+      "SecurityGroupIds": [ "sg-0016597b2395fe358" ],
+      "Subnets": [ "subnet-0fa3a4c8eadd61d6f" ]
+    }
+
+    
+    image_name = "us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai/substrate-ai:latest"
+    # todo make a private vpc not accesible online, for the gcp credentials
+    # to look at vpc config for external acess (internet) https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own-private-registry.html#docker-containers-adapt-your-own-private-registry-configure
+
     response = sage.create_training_job(
         TrainingJobName=job_name,
         AlgorithmSpecification={
             'TrainingImage': image_name,
             # todo change input mode
             'TrainingInputMode': 'File',
+            'TrainingImageConfig': training_image_config,
         },
         RoleArn='arn:aws:iam::038700340820:role/train',
         OutputDataConfig={
@@ -230,7 +249,8 @@ async def create_item(job: Job):
         StoppingCondition={
             # todo change max runtime
             'MaxRuntimeInSeconds': 600
-        }
+        },
+        VpcConfig=vpc_config,
     )
 
     if response['ResponseMetadata']['HTTPStatusCode'] != 200:
@@ -245,6 +265,7 @@ async def create_item(job: Job):
     else:
         print("job on aws created")
 
+    return 
 
     try:
         supabase_admin.table('job').insert([{
