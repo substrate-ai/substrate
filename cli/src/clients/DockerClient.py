@@ -1,20 +1,23 @@
-import os
-import typer
 import importlib.resources
+import os
 import shutil
 import tempfile
-from python_on_whales import DockerClient as DockerPyClient
-from utils.console import console
+
+import typer
 import yaml
+from python_on_whales import DockerClient as DockerPyClient
+from python_on_whales import DockerException
+from utils.console import console
+
 
 class DockerClient:
     def __init__(self, server, username, password, debug=False) -> None:
         self.docker = DockerPyClient()
-        self.tag =  f"substrate:latest"
-        self.docker.login(server=server, username=username, password=password)        
+        self.tag =  "substrate:latest"
+        self.docker.login(server=server, username=username, password=password)
         try:
             self.docker.stats()
-        except:
+        except DockerException:
             console.print("Docker engine is not running, please start docker and try again")
             raise typer.Exit(code=1)
         self.debug = debug
@@ -25,7 +28,7 @@ class DockerClient:
 
     # https://towardsdatascience.com/a-complete-guide-to-building-a-docker-image-serving-a-machine-learning-system-in-production-d8b5b0533bde
     def build(self):
-        console.print(f"Packaging your code", style="bold green")
+        console.print("Packaging your code", style="bold green")
 
         # open yaml file and get main location
         with open("substrate.yaml", "rt") as yaml_file:
@@ -40,10 +43,10 @@ class DockerClient:
             shutil.copytree(".", os.path.join(tempdir, "code"))
 
             dockerfile_traversable = importlib.resources.files("resources").joinpath("Dockerfile")
-            with open(dockerfile_traversable, "rt") as dockerfile:
+            with open(dockerfile_traversable, "rt"):
                     # copy dockerfile to tempdir
                     shutil.copyfile(dockerfile_traversable, os.path.join(tempdir, "Dockerfile"))
-            
+
             cache = False if self.debug else True
             console.print(f"using cache: {cache}")
-            image = self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"], build_args={"MAIN_LOCATION": main_location}, cache=cache)
+            self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"], build_args={"MAIN_LOCATION": main_location}, cache=cache)

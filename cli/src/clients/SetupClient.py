@@ -1,11 +1,12 @@
-import typer
 import os
-import yaml
 import shutil
+
 import requests
-from utils.utils import get_user_config
-from utils.env import config_data
+import typer
+import yaml
 from utils.console import console
+from utils.env import config_data
+from utils.utils import get_user_config
 
 
 class SetupClient:
@@ -43,7 +44,7 @@ class SetupClient:
 
             response = requests.post(endpoint, headers=headers, json=data)
 
-            if response.status_code == 200 and response.json()['verified'] == True:
+            if response.status_code == 200 and response.json()['verified'] is True:
                 break
 
             console.print("Invalid token, please try again")

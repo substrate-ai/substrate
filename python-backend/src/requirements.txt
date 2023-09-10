@@ -6,3 +6,4 @@ pydantic
 human-id
 pydantic_settings
 requests
+google-cloud-artifact-registry==1.8.3

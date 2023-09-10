@@ -26,6 +26,7 @@ dependencies = [
     "supabase == 1.0.4",
     "google-cloud-artifact-registry == 1.8.3",
     "google-cloud-container == 2.30.0",
+    "envd == 0.3.40"
 ]
 requires-python = ">=3.9"
 
@@ -58,4 +59,9 @@ version_pattern = 'MAJOR.MINOR.PATCH'
     'version = "{version}"',
 ]
 "src/__init__.py" = ["{version}"]
+
+
+[tool.ruff]
+line-length = 200
+select = ["E", "F", "N", "I"]
 

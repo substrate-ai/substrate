@@ -1,51 +1,49 @@
 import asyncio
-
-from utils.env import config_data
-import typer
-from utils.utils import get_cli_token, get_project_config
-import requests
-from utils.console import console
-from utils.supabase import supabase_client
-from rich.table import Table
 import json
 
-
+import requests
+import typer
+from rich.table import Table
+from utils.console import console
+from utils.env import config_data
+from utils.supabase import supabase_client
+from utils.utils import get_cli_token, get_project_config
 
 
 class HttpClient:
-    def run_container_from_backend(self, repo_uri):
+    def start_job(self, image_name):
 
         hardware = get_project_config()["hardware"]
 
         auth_token = get_cli_token()
-        
+
         payload = {
             "hardware": hardware,
             "token": auth_token,
-            "repoUri": repo_uri
+            "imageName": image_name
         }
 
-        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/start-job', headers={'Authorization': f'Bearer {auth_token}'}, json=payload)
+        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/aws/start-job', headers={'Authorization': f'Bearer {auth_token}'}, json=payload)
 
         if response.status_code != 200:
             console.print(response.text)
             console.print("Job failed to start")
             raise typer.Exit(code=1)
-        
+
         job_name = response.json()["jobName"]
-        
+
         console.print("Job successfully started")
 
         return job_name
-    
+
     def stop_job(self, job_name):
         auth_token = get_cli_token()
-        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/stop-job/{job_name}', json={"accessToken": auth_token})
+        response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/aws/stop-job/{job_name}', json={"accessToken": auth_token})
         if response.status_code != 200:
             console.print(response.text)
             console.print("Job failed to stop")
             raise typer.Exit(code=1)
-        
+
         console.print("Job successfully stopped")
 
 
@@ -53,29 +51,29 @@ class HttpClient:
         auth_token = get_cli_token()
         header = {"Authorization": f"Bearer {config_data['SUPABASE_ANON_KEY']}"}
         response = requests.get(f'{config_data["SUPABASE_URL"]}/functions/v1/payment/user-status?token={auth_token}', headers=header)
-        
+
         if response.status_code != 200:
             console.print(response.status_code)
             console.print(response.text)
             console.print("Failed to get payment status")
             raise typer.Exit(code=1)
-        
+
         payment_status = response.json()["paymentStatus"]
 
         if payment_status != "active" and payment_status != "admin":
             console.print("To use substrate, you need to add or update your payment method on the SubstrateAI website", style="bold red")
             console.print(f"current payment status: {payment_status}", style="bold red")
             raise typer.Exit(code=1)
-        
-    def get_repo_uri(self):
-        header = {"token": get_cli_token()}
-        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/repository-uri', headers=header)
+
+    def get_image_name(self):
+        json = {"accessToken": get_cli_token()}
+        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/gcp/image-name', json=json)
         if response.status_code != 200:
             console.print(response.text)
-            console.print("Failed to get repository uri")
+            console.print("Failed to get image name", style="bold red")
             raise typer.Exit(code=1)
-        
-        return response.json()["repositoryUri"]
+
+        return response.json()["imageName"]
 
     def get_jobs(self):
         auth_token = get_cli_token()
@@ -117,13 +115,13 @@ class HttpClient:
             created_at = job["created_at"]
             finished_at = job["finished_at"]
 
-            # if job["finished_at"] is not None: 
+            # if job["finished_at"] is not None:
             #     runtime = job["finished_at"] - job["created_at"]
             # else:
             #     runtime = time.time() - job["created_at"]
 
             # console.print(runtime)
-            
+
             table.add_row(job["job_name"], job["hardware"], created_at, finished_at, job["status"])
 
         console.print(table)
@@ -142,8 +140,19 @@ class HttpClient:
             console.print(response.text)
             console.print("Failed to get user id")
             raise typer.Exit(code=1)
-        
+
         return response.json()["userId"]
 
-    
+    def get_gcp_credentials(self):
+
+        json = {"accessToken": get_cli_token()}
+        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/gcp/credentials', json=json)
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get gcp credentials")
+            raise typer.Exit(code=1)
+
+        return response.json()
+
+
 

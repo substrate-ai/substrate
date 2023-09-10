@@ -2,8 +2,14 @@ __pycache__/
 
 env.py
 
+gcp.json
+
+.ruff_cache
+
 .env
 dist/
+
+.space/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

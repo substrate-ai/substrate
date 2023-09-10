@@ -1,35 +1,36 @@
-from clients.EnvdClient import EnvdClient
-from clients.GCP_client import GCP_Client
-from clients.HttpClient import HttpClient
-from clients.AWS_Client import AWS_Client
+from clients.AWSClient import AWSClient
 from clients.DockerClient import DockerClient
+from clients.EnvdClient import EnvdClient
+from clients.HttpClient import HttpClient
 from utils.console import console
 from yaspin import yaspin
-import typer
-import time
 
 
 class JobClient:
     def __init__(self):
-        console.print("Initialization...", style="bold green")     
-        self.aws_client = AWS_Client()
-        self.gcp_client = GCP_Client()
+        console.print("Initialization...", style="bold green")
+        self.http_client = HttpClient()
+        self.image_name = self.http_client.get_image_name()
+
+
+        self.aws_client = AWSClient()
+
         # username, password = self.aws_client.get_ecr_login_password()
         # username, password = self.gcp_client.get_docker_credentials()
-        self.http_client = HttpClient()
-        # self.repo = self.http_client.get_repo_uri()
-        # self.repo = "038700340820.dkr.ecr.us-east-1.amazonaws.com/test"
-        # self.repo = self.gcp_client.create_or_get_repo("test")
-        self.repo = "us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai"
-        console.print(f"Using repository {self.repo}", style="bold green")
+
+
         self.envd = EnvdClient()
-        # self.docker_client = DockerClient(self.repo, username, password, debug=False)
+        self.credentials = self.http_client.get_gcp_credentials()
 
 
-    def start_job(self):   
+
+        self.docker_client = DockerClient(self.credentials["registry"], self.credentials["username"], self.credentials["password"], debug=False)
+
+
+    def start_job(self):
         self.http_client.check_payment_status()
 
-        self.envd.build(self.repo)
+        self.envd.build(self.image_name)
 
         # start_build = time.time()
 
@@ -50,7 +51,7 @@ class JobClient:
         # console.print(f"Total time: seconds {end_push - start_build:.0f}, minutes {(end_push - start_build)/60:.0f}", style="bold yellow")
 
 
-        job_name = self.http_client.run_container_from_backend(self.repo)
+        job_name = self.http_client.start_job(self.image_name)
         console.print(f"Job is starting, your job name is {job_name}", style="bold green")
 
         spinner = yaspin()
@@ -64,7 +65,7 @@ class JobClient:
         try:
             self.aws_client.stream_logs(job_name, True)
         except KeyboardInterrupt:
-            console.print(f"Stopping streaming logs due to keyboard interrupt")
+            console.print("Stopping streaming logs due to keyboard interrupt")
             console.print("Your job is still running in the cloud")
 
         console.print(f"Job {job_name} terminated", style="bold green")
