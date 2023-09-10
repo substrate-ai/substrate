@@ -19,7 +19,7 @@ class JobClient:
         # username, password = self.gcp_client.get_docker_credentials()
 
 
-        self.envd = EnvdClient()
+        # self.envd = EnvdClient()
         self.credentials = self.http_client.get_gcp_credentials()
 
 
@@ -30,11 +30,11 @@ class JobClient:
     def start_job(self):
         self.http_client.check_payment_status()
 
-        self.envd.build(self.image_name)
+        # self.envd.build(self.image_name)
 
         # start_build = time.time()
 
-        # self.docker_client.build()
+        self.docker_client.build()
 
         # end_build = time.time()
         # start_push = time.time()
@@ -42,7 +42,7 @@ class JobClient:
 
         # console.print("Image built", style="bold green")
         # console.print("Uploading your code to the cloud", style="bold green")
-        # self.docker_client.push(self.repo)
+        self.docker_client.push(self.image_name)
         # console.print("Code uploaded", style="bold green")
 
         # end_push = time.time()

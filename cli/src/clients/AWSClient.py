@@ -33,14 +33,18 @@ class AWSClient:
     def is_job_running(self, job_name):
         response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
         return response['TrainingJobStatus'] in ['InProgress', 'Stopping']
+    
+    def get_job_status(self, job_name):
+        response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
+        return response['TrainingJobStatus']
 
     def loop_until_job_running(self, job_name):
         while not self.is_job_running(job_name):
             time.sleep(5)
 
     def is_job_terminated(self, job_name):
-        response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
-        return response['TrainingJobStatus'] in ['Failed', 'Completed', 'Stopped']
+        job_status = self.get_job_status(job_name)
+        return job_status in ['Failed', 'Completed', 'Stopped']
 
     def stop_job(self, job_name):
         self.sagemaker_client.stop_training_job(TrainingJobName=job_name)
@@ -51,6 +55,14 @@ class AWSClient:
         #     console.print("Waiting for logs to be available")
 
         while True:
+            time.sleep(1)
+
+            job_status = self.get_job_status(job_name)
+            
+            if job_status in ['Failed', 'Completed', 'Stopped']:
+                console.print(f"Job {job_name} has terminated with status {job_status}")
+                raise typer.Exit(code=1)
+
             response = self.logs_client.describe_log_streams(
                 logGroupName='/aws/sagemaker/TrainingJobs',
                 logStreamNamePrefix=job_name,
@@ -79,6 +91,14 @@ class AWSClient:
 
         while 'nextForwardToken' in response:
             time.sleep(1)
+
+
+            job_status = self.get_job_status(job_name)
+            
+            if job_status in ['Failed', 'Completed', 'Stopped']:
+                console.print(f"Job {job_name} has terminated with status {job_status}")
+                raise typer.Exit(code=1)
+
             response = self.logs_client.get_log_events(
                 logGroupName='/aws/sagemaker/TrainingJobs',
                 logStreamName=log_stream_name,

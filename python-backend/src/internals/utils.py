@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from fastapi import HTTPException, status
 from resources.env import config_data
@@ -18,6 +20,7 @@ def get_user_id(token: str):
     # todo check for payment status
 
     if response.status_code != 200:
+        logging.error("cannot verify token", response.text)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect access token",

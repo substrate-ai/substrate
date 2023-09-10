@@ -30,6 +30,7 @@ router = APIRouter()
 def get_ecr_repo_uri(token: Annotated[Union[str, None], Header()] = None):
 
     if token is None:
+        logging.error("no token provided")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect access token",
@@ -168,7 +169,8 @@ async def create_item(job: Job):
 
     vpc_config = {       
       "SecurityGroupIds": [ "sg-056399f9e5c8f7805" ],
-      "Subnets": [ "subnet-0392e4ffb50650a71", "subnet-0286b10e9101e4a09", "subnet-0775c57f2d5304587", "subnet-0d91098cbc7d78043" ]
+      
+      "Subnets": [ "subnet-0286b10e9101e4a09"]
     }
 
     response = sage.create_training_job(

@@ -22,9 +22,9 @@ class DockerClient:
             raise typer.Exit(code=1)
         self.debug = debug
 
-    def push(self, repo_uri):
-        self.docker.image.tag(self.tag, repo_uri)
-        self.docker.push(repo_uri)
+    def push(self, image_name):
+        self.docker.image.tag(self.tag, image_name)
+        self.docker.push(image_name)
 
     # https://towardsdatascience.com/a-complete-guide-to-building-a-docker-image-serving-a-machine-learning-system-in-production-d8b5b0533bde
     def build(self):
@@ -48,5 +48,5 @@ class DockerClient:
                     shutil.copyfile(dockerfile_traversable, os.path.join(tempdir, "Dockerfile"))
 
             cache = False if self.debug else True
-            console.print(f"using cache: {cache}")
+            # console.print(f"using cache: {cache}")
             self.docker.build(context_path=tempdir, tags=[self.tag], platforms=["linux/amd64"], build_args={"MAIN_LOCATION": main_location}, cache=cache)
