@@ -169,8 +169,11 @@ async def create_item(job: Job):
 
     vpc_config = {       
       "SecurityGroupIds": [ "sg-056399f9e5c8f7805" ],
+
+      # "subnet-0286b10e9101e4a09", 
+      # "subnet-0775c57f2d5304587", "subnet-0d91098cbc7d78043"
       
-      "Subnets": [ "subnet-0286b10e9101e4a09"]
+      "Subnets": [ "subnet-0775c57f2d5304587"]
     }
 
     response = sage.create_training_job(

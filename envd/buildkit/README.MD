@@ -24,7 +24,7 @@ envd context create --name remote-buildkit \
 BEFORE USING THE CONTEXT START BUILDKIT ON GCP VM
 ``sudo buildkitd   --addr tcp://0.0.0.0:8888``
 
-envd context use --name local-buildkit-container
+envd context use --name remote-buildkit
 
 # get credential access account 
 look at access accout and create a key (GCP IAM), you can call it gcp.json and put it in the buidkit folder
