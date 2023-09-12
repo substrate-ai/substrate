@@ -1,17 +1,22 @@
 import { Session, User } from '@supabase/supabase-js';
-import { useContext, useState, useEffect, createContext } from 'react';
+import { useContext, useState, useEffect, createContext, ReactNode } from 'react';
 import { supabaseClient } from 'src/config/supabase-client';
+
 
 // create a context for authentication
 const AuthContext = createContext<{ session: Session | null | undefined, user: User | null | undefined, signOut: () => void }>({ session: null, user: null, signOut: () => {} });
 
 declare global {
     interface Window {
-        analytics:any;
+        analytics:any; // eslint-disable-line @typescript-eslint/no-explicit-any
     }
 }
 
-export const AuthProvider = ({ children }: any) => {
+interface AuthProviderProps {
+    children: ReactNode;
+  }
+
+export const AuthProvider = ({ children }: AuthProviderProps) => { 
     const [user, setUser] = useState<User>()
     const [session, setSession] = useState<Session | null>();
     const [loading, setLoading] = useState(true);

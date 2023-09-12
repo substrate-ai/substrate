@@ -48,9 +48,13 @@ function MainNavigation() {
                     Documentation
                   </NavigationMenuLink>
 
-                {/* <a href={`/pricing`}> */}
+
                   <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => navigate("/pricing")}>
                     Pricing
+                  </NavigationMenuLink>
+
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => navigate("/blog")}>
+                    Blog
                   </NavigationMenuLink>
           
 

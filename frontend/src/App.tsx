@@ -17,6 +17,7 @@ import { AuthPage, View } from './pages/AuthPage';
 import loadable from '@loadable/component';
 import pMinDelay from 'p-min-delay';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 // todo I think component are reloaded when navigating to a new page
 
@@ -87,6 +88,9 @@ function App() {
                 <Route path="/pricing" element={<Pricing/>}/>
                 <Route path="/404" element={<PageNotFound />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/post/:slug" element={<BlogPost />} />
+
+
                 <Route path="/success" element={<Navigate to="/" />} />
                 <Route path="*" element={<Navigate to="/404" />} />
               </Routes>

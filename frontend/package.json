@@ -51,6 +51,7 @@
     "react-icons": "^4.7.1",
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.6.2",
+    "react-syntax-highlighter": "^15.5.0",
     "rsuite": "^5.37.1",
     "tabler-icons-react": "^1.56.0",
     "tailwind-merge": "^1.14.0",
@@ -61,9 +62,11 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/loadable__component": "^5.13.5",
     "@types/node": "^20.4.5",
     "@types/react-copy-to-clipboard": "^5.0.4",
+    "@types/react-syntax-highlighter": "^15.5.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",

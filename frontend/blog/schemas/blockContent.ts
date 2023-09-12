@@ -1,5 +1,6 @@
 import {defineType, defineArrayMember} from 'sanity'
 
+
 /**
  * This is the schema definition for the rich text fields used for
  * for this blog studio. When you import it in schemas.js it can be
@@ -29,6 +30,8 @@ export default defineType({
         {title: 'H3', value: 'h3'},
         {title: 'H4', value: 'h4'},
         {title: 'Quote', value: 'blockquote'},
+
+
       ],
       lists: [{title: 'Bullet', value: 'bullet'}],
       // Marks let you mark up inline text in the block editor.
@@ -62,6 +65,10 @@ export default defineType({
     defineArrayMember({
       type: 'image',
       options: {hotspot: true},
+    }),
+    defineArrayMember({
+      type: 'code',
+      options: {withFilename: true},
     }),
   ],
 })
