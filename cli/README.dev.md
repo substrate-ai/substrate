@@ -29,6 +29,24 @@ To install the substrate cli
 python -m pip install -e ../cli   
 ```
 
+# How to publish
+
+``` bash
+bumpver update --patch
+```
+
+``` bash
+python -m build
+```
+``` bash
+twine upload -r testpypi dist/*
+```
+``` bash
+twine upload dist/*
+```
+``` bash
+twine check dist/*
+```
 
 ## Notes
 
