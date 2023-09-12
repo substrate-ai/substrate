@@ -1,0 +1,5 @@
+[worker.oci]
+    gckeepstorage = 90000
+    platforms = ["linux/amd64"]
+
+

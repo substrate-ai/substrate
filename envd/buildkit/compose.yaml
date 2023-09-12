@@ -1,0 +1,16 @@
+services:
+  buildkit-envd:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      # local cache
+      - ~/substrate/cache:/home/cache:rw
+    deploy:
+        # the memory on GCP would be 100gb
+        resources:
+            limits:
+              memory: 10G
+            reservations:
+                memory: 5G
+  

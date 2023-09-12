@@ -5,6 +5,8 @@ dist/
 
 env.py
 
+.ruff_cache
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -26,6 +28,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
+gcp.json
 
 # Installer logs
 pip-log.txt

@@ -86,9 +86,13 @@ export function useDeleteToken() {
     }, { onSuccess: (_data,variables) => {
 
        // filter out the deleted token
+       /* eslint-disable @typescript-eslint/no-explicit-any */
+
          queryClient.setQueryData(['tokens'], (oldData: any) => {
             return oldData.filter((token: any) => token.id !== variables)
         })
+        // eslint-enable @typescript-eslint/no-explicit-any */
+
 
     }}
     

@@ -21,8 +21,18 @@ router.post('/lago-webhook', async (ctx) => {
 });
 
 async function customerPaymentFailed(body: any, ctx: Context) {
-  const userId = body.payment_provider_invoice_payment_error.external_customer_id;
+  const payment_provider_invoice_payment_error = body.payment_provider_invoice_payment_error
+  const userId = payment_provider_invoice_payment_error.external_customer_id;
+  const provider_error = payment_provider_invoice_payment_error.provider_error;
 
+  if (provider_error.error_code == 'amount_too_small') {
+    console.log("stripe amount too small, thus not charging customer")
+    ctx.response.body = { detail: 'not charging customer for small jobs'};
+    ctx.response.status = 200;
+    return;
+  }
+
+  // block the user from creating new jobs
   const response = await supabaseAdmin.from('user_data')
     .update({ payment_status: 'payment_failed' })
     .eq('id', userId);

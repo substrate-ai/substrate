@@ -1,12 +1,8 @@
-# Mintlify Starter Kit
+# Docs 
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+This is contaions the markdown that create the pages of the documentation website [docs.substrateai.com](http://docs.substrateai.com) 
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+You can find details about the documentation framework at [mintlify.com](http://mintlify.com) and how to organize pages, links, ect.
 
 ### 👩‍💻 Development
 
@@ -22,13 +18,3 @@ Run the following command at the root of your documentation (where mint.json is)
 mintlify dev
 ```
 
-### 😎 Publishing Changes
-
-Changes will be deployed to production automatically after pushing to the default branch.
-
-You can also preview changes using PRs, which generates a preview link of the docs.
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`

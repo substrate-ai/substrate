@@ -79,7 +79,7 @@ async function jobDoneHandler(ctx: Context) {
     return
   }
 
-  if (data.payment_status == "admin") {
+  if (data.payment_status === "admin") {
     console.log("job payment status is admin, not sending to lago")
     ctx.response.status = 200
     return

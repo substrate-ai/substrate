@@ -1,48 +1,85 @@
 import { Application, Router } from 'oak'
 import { supabaseAdmin, supabaseAnon } from '../_shared/supabaseClients.ts'
 import getUserIdFromToken from "../_shared/tokenUtils.ts";
+import { sleep } from "https://deno.land/x/sleep@v1.2.1/mod.ts";
 // import { STS, AssumeRoleCommand } from 'https://deno.land/x/aws_sdk@v3.32.0-1/client-sts/mod.ts'
+import dayjs from "https://esm.sh/dayjs@1.11.9";
+
 
 console.log(Deno.env.get('SUPABASE_KEY'))
 
 
 const router = new Router()
 router
-  // Note: path should be prefixed with function name
-  .post('/aws/job-done', async (ctx) => {
-      if (!ctx.request.hasBody) {
-        ctx.throw(400, 'Body is required')
-      }
-      
-      const body = ctx.request.body()
-      const value = await body.value
-      const details = value.detail
-      const trainingJobStatus = details.TrainingJobStatus
-      const trainingJobName = details.TrainingJobName
-      // const time = details.TrainingEndTime
-      const time = ((new Date()).toISOString()).toLocaleString()
+  .post('/aws/job-state-changed', async (ctx) => {
+    if (!ctx.request.hasBody) {
+      ctx.throw(400, 'Body is required')
+    }
 
-      // Todo do payment stuff here
+    const body = ctx.request.body()
+    const value = await body.value
+
+    const details = value.detail
+    const trainingJobStatus = details.TrainingJobStatus
+    const trainingJobName = details.TrainingJobName
+
+    const startTime = dayjs(details.TrainingStartTime).toDate()
+    const endTime = details.TrainingEndTime ? dayjs(details.TrainingEndTime).toDate() : null
 
 
-      const {data, error} = await supabaseAdmin.from('job').update({ status: trainingJobStatus, finished_at: time }).eq('job_name', trainingJobName)
+    const {data, error} = await supabaseAdmin.from('job').update({ status: trainingJobStatus, created_at: startTime, finished_at: endTime }).eq('job_name', trainingJobName)
 
-      if (error) {
-        console.error('Error updating job', error)
-        ctx.response.status = 500
-        return
-      }
+    if (error) {
+      console.error('Error updating state job', error)
+      ctx.response.status = 500
+      return
+    }
 
-      await supabaseAnon.functions.invoke('payment/job-done', {body: {jobName: trainingJobName}})
+    if (["Failed", "Completed", "Stopped"].includes(trainingJobStatus)) {
+      supabaseAnon.functions.invoke('payment/job-done', {body: {jobName: trainingJobName}})
+    }
 
-      // return 200
-
-      ctx.response.status = 200
-
-      
-
+    ctx.response.status = 200
 
   })
+  // // Note: path should be prefixed with function name
+  // .post('/aws/job-done', async (ctx) => {
+  //     await sleep(10)
+
+  //     if (!ctx.request.hasBody) {
+  //       ctx.throw(400, 'Body is required')
+  //     }
+      
+  //     const body = ctx.request.body()
+  //     const value = await body.value
+  //     const details = value.detail
+  //     const trainingJobStatus = details.TrainingJobStatus
+  //     const trainingJobName = details.TrainingJobName
+  //     // const time = details.TrainingEndTime
+  //     const time = ((new Date()).toISOString()).toLocaleString()
+
+  //     // Todo do payment stuff here
+
+
+
+
+
+  //     if (error) {
+  //       console.error('Error updating job', error)
+  //       ctx.response.status = 500
+  //       return
+  //     }
+
+  //     await supabaseAnon.functions.invoke('payment/job-done', {body: {jobName: trainingJobName}})
+
+  //     // return 200
+
+  //     ctx.response.status = 200
+
+      
+
+
+  // })
   .post('/aws/get-jobs', async (ctx) => {
     const result = ctx.request.body();
     const value = await result.value;

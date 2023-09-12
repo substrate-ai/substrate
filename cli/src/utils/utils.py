@@ -1,10 +1,11 @@
-import yaml
-import os
-import typer
 import inspect
+import os
+
 import requests
-from utils.env import config_data
+import typer
+import yaml
 from utils.console import console
+from utils.env import config_data
 
 
 def get_user_config():
@@ -15,10 +16,10 @@ def get_user_config():
         console.print("User not logged in", style="bold red")
         raise typer.Exit(code=1)
 
-    
+
 def get_cli_token():
     return get_user_config()['access_token']
-    
+
 def get_project_config():
     try :
         with open(os.path.join(os.getcwd(), 'substrate.yaml'), 'r') as f:
@@ -31,7 +32,7 @@ def get_project_config():
             - You are not in the root directory of the project when using the substrate-ai """
         typer.echo(clean_mutliline_string(error_message))
         raise typer.Exit(code=1)
-    
+
 def get_supabase_endpoint():
     return f'{config_data["SUPABASE_URL"]}/functions/v1'
 
@@ -53,12 +54,12 @@ def supabase_request(method, path, json):
     if response is None:
         console.print("Failed to make supabase request")
         raise typer.Exit(code=1)
-    
+
     return response
-    
+
 def get_user_id():
     response = supabase_request('post', 'token/user-id', {"accessToken": get_user_config()['access_token']})
     return response.json()['userId']
-    
+
 def clean_mutliline_string(t):
     return inspect.cleandoc(t)

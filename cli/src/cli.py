@@ -1,11 +1,12 @@
 import typer
+from clients.AWSClient import AWSClient
 from clients.HttpClient import HttpClient
-from clients.AWS_Client import AWS_Client
-from utils.env import config_data
 from clients.JobClient import JobClient
 from clients.SetupClient import SetupClient
 from utils.check_update import check_update
 from utils.console import console
+from utils.env import config_data
+
 
 def init_typer():
     if config_data["PYTHON_BACKEND_URL"] is None:
@@ -38,14 +39,14 @@ def run():
     Run the project on the substrate platform
     """
     job_client = JobClient()
-    job_client.start_job()    
+    job_client.start_job()
 
 @app.command()
 def logs(job_name: str):
     """
     Stream the logs of a job
     """
-    aws_client = AWS_Client()
+    aws_client = AWSClient()
     aws_client.stream_logs(job_name, False)
 
 @app.command()
@@ -64,7 +65,7 @@ def stop(job_name: str):
     Stop a job
     """
 
-    aws_client = AWS_Client()
+    aws_client = AWSClient()
     aws_client.stop_job(job_name)
 
 
