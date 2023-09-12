@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import {getPosts, sanityClient} from "src/config/sanity-client"
 import dayjs from "dayjs";
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
+import { redirect } from "react-router-dom";
+
+
 
 dayjs.extend(LocalizedFormat)
 
@@ -20,6 +23,10 @@ export default function Blog() {
     }
     retrievePosts();
   }, []);
+
+  const redirectToSlug = (page:string) => {
+    redirect(page)
+  };
 
   return (
     <section className="text-gray-600 body-font">
@@ -38,7 +45,6 @@ export default function Blog() {
                     </p>
                     <div className="flex items-center flex-wrap ">
                       <button className="bg-gradient-to-r from-cyan-400 to-blue-400 hover:scale-105 drop-shadow-md  shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
-                     
                     </div>
                   </div>
                 </div>

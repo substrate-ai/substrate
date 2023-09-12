@@ -10,17 +10,24 @@ class JobClient:
     def __init__(self):
         console.print("Initialization...", style="bold green")
         self.http_client = HttpClient()
-        self.image_name = self.http_client.get_image_name()
+
+        # an alternative would be using different tag for each user
+        # self.image_name = self.http_client.get_image_name()
 
 
         self.aws_client = AWSClient()
+
+        self.credentials = self.aws_client.get_docker_credentials()
+        self.image_name = self.aws_client.get_image_name()["imageName"]
 
         # username, password = self.aws_client.get_ecr_login_password()
         # username, password = self.gcp_client.get_docker_credentials()
 
 
         # self.envd = EnvdClient()
-        self.credentials = self.http_client.get_gcp_credentials()
+        # self.credentials = self.http_client.get_gcp_credentials()
+
+
 
 
 

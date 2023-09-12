@@ -1,4 +1,4 @@
-FROM us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai/base:latest
+FROM 038700340820.dkr.ecr.us-east-1.amazonaws.com/substrate-ai:base
 
 ARG PYTHON_VERSION=3.10
 

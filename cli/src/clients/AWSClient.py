@@ -29,6 +29,29 @@ class AWSClient:
 
         credentials = response.json()
         return credentials
+    
+    def get_docker_credentials(self):
+        auth_token = get_cli_token()
+        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/aws/docker-credentials', json={"accessToken": auth_token})
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get cloud credentials")
+            raise typer.Exit(code=1)
+
+        credentials = response.json()
+        return credentials
+
+
+    def get_image_name(self):
+        auth_token = get_cli_token()
+        response = requests.get(f'{config_data["PYTHON_BACKEND_URL"]}/aws/image-name', json={"accessToken": auth_token})
+        if response.status_code != 200:
+            console.print(response.text)
+            console.print("Failed to get image name aws")
+            raise typer.Exit(code=1)
+
+        image_name = response.json()
+        return image_name
 
     def is_job_running(self, job_name):
         response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
@@ -55,14 +78,6 @@ class AWSClient:
         #     console.print("Waiting for logs to be available")
 
         while True:
-            time.sleep(1)
-
-            job_status = self.get_job_status(job_name)
-            
-            if job_status in ['Failed', 'Completed', 'Stopped']:
-                console.print(f"Job {job_name} has terminated with status {job_status}")
-                raise typer.Exit(code=1)
-
             response = self.logs_client.describe_log_streams(
                 logGroupName='/aws/sagemaker/TrainingJobs',
                 logStreamNamePrefix=job_name,
@@ -80,6 +95,13 @@ class AWSClient:
             time.sleep(5)
 
 
+            job_status = self.get_job_status(job_name)
+            
+            if job_status in ['Failed', 'Completed', 'Stopped']:
+                console.print(f"Job {job_name} has terminated with status {job_status}")
+                raise typer.Exit(code=1)
+
+
         response = self.logs_client.get_log_events(
             logGroupName='/aws/sagemaker/TrainingJobs',
             logStreamName=log_stream_name,
@@ -90,14 +112,7 @@ class AWSClient:
             print(event['message'])
 
         while 'nextForwardToken' in response:
-            time.sleep(1)
-
-
-            job_status = self.get_job_status(job_name)
-            
-            if job_status in ['Failed', 'Completed', 'Stopped']:
-                console.print(f"Job {job_name} has terminated with status {job_status}")
-                raise typer.Exit(code=1)
+            time.sleep(3)
 
             response = self.logs_client.get_log_events(
                 logGroupName='/aws/sagemaker/TrainingJobs',
@@ -111,5 +126,12 @@ class AWSClient:
 
             if self.is_job_terminated(job_name):
                 break
+
+
+            job_status = self.get_job_status(job_name)
+            
+            if job_status in ['Failed', 'Completed', 'Stopped']:
+                console.print(f"Job {job_name} has terminated with status {job_status}")
+                raise typer.Exit(code=1)
 
 
