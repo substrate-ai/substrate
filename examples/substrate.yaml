@@ -1,4 +1,0 @@
-project_name: examples
-hardware:
-  type: t4
-main_file_location: ./main.py
