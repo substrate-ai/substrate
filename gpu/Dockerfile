@@ -17,6 +17,6 @@ RUN python${PYTHON_VERSION} -m pip install --no-cache-dir -r /requirements.txt
 
 COPY . /code
 
-ENV MAIN_LOCATION_VAR=./code/main.py
+ENV MAIN_LOCATION_VAR=./main.py
 
 ENTRYPOINT python3.10 /code/$MAIN_LOCATION_VAR
