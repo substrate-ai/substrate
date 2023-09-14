@@ -49,6 +49,8 @@ class EnvdClient:
 
         self._remove_access_token()
 
+        self._remove_access_token()
+
         console.print("Image built", style="bold green")
 
     def create_context(self):

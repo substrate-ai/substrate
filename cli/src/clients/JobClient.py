@@ -30,7 +30,7 @@ class JobClient:
         # self.docker_client = DockerClient(self.credentials["registry"], self.credentials["username"], self.credentials["password"], debug=False)
 
     def start_job(self):
-        self.http_client.check_payment_status()
+        # self.http_client.check_payment_status()
 
         self.envd.build(self.image_name)
 
