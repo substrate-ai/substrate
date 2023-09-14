@@ -1,0 +1,27 @@
+name: Pip package publish
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+on: workflow_dispatch
+
+jobs:
+    pypi-publish:
+      name: Upload release to PyPI
+      runs-on: ubuntu-latest
+      
+      permissions:
+        id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      steps:
+      # retrieve your distributions here
+
+      - run: python3 -m pip install --upgrade build twine && python3 -m build
+      - name: Check package distributions
+        run: python3 -m twine check dist/*
+
+  
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
