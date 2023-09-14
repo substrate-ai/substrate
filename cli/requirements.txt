@@ -1,10 +1,11 @@
 # this is not linked to cli, if you want to update the cli dependency please contact me because it needs to be done manually right now
-"boto3 >= 1.28.0",
-"docker >= 6.1.0",
-"typer[all] >= 0.9.0",
-"human-id >= 0.2.0",
-"python-on-whales == 0.64.2",
-"yaspin == 3.0.0",
-"supabase == 1.0.4"
+boto3 >= 1.28.0
+docker >= 6.1.0
+typer[all] >= 0.9.0
+human-id >= 0.2.0
+python-on-whales == 0.64.2
+yaspin == 3.0.0
+supabase == 1.0.4
+pyyaml == 6.0.1
 # look at the pyproject.toml for latest version of the requirements
 ```
