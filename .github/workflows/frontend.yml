@@ -13,22 +13,35 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ./frontend/
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
+
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    # - name: Chnage Directory
+    #   run: cd frontend
+    - name: Use Node.js 18.x
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '18.x'
         cache: 'npm'
-    - name: Change to the 'frontend' directory
-      run: cd frontend
+        cache-dependency-path: ./frontend/package-lock.json
 
-    - run: npm run lint
-    - run: npm run build
+
+    - name: Install Frontend Dependencies
+    #   working-directory: frontend
+      run: npm install
+
+    - name: Lint Frontend
+    #   working-directory: frontend
+      run: npm run lint  # Replace with your linting script command
+    - name: Build Frontend
+    #   working-directory: frontend
+      run: npm run build  # Replace with your build script command
+
+
 

@@ -3,7 +3,7 @@
 [project]
 name = "substrate-ai"
 # dynamic = ["version"]
-version = "0.0.3"
+version = "0.0.4"
 description = "Substrate AI package"
 readme = "README.md"
 authors = [{ name = "SubstrateAI", email = "support@substrateai.com" }]
@@ -45,7 +45,7 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.bumpver]
-current_version = "0.0.3"
+current_version = "0.0.4"
 version_pattern = 'MAJOR.MINOR.PATCH'
 # commit_message = "bump version {old_version} -> {new_version}"
 # tag_message = "{new_version}"

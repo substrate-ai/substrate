@@ -7,10 +7,4 @@ export const sanityClient = createClient({
     apiVersion: '2023-05-03', 
 })
 
-export async function getPosts() {
-  const posts = await sanityClient.fetch('*[_type == "post"]')
-  console.log(posts)
-  return posts
-}
-
 

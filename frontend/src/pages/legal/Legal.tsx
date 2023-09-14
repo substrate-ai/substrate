@@ -1,5 +1,3 @@
-import "./markdown.css"
-
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -30,7 +28,7 @@ export default function LegalPage({termsLocation} : Props) {
 
   return (
     <div className="flex h-screen bg-[#0d1117] overflow-scroll">
-    <div className="m-auto w-10/12 lg:w-1/2 py-20">
+    <div className="m-auto w-10/12 lg:w-1/2 py-20 prose-invert prose lg:prose-xl">
     <article className="markdown-body">
       {terms && <ReactMarkdown children={terms} />}
     </article>

@@ -1,9 +1,36 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {sanityClient} from "../config/sanity-client";
+import { sanityClient } from "../config/sanity-client";
 import { PortableText } from '@portabletext/react'
 import imageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+
+const serializers = {
+  types: {
+    code: ({value}: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+      // console.log(value)
+      return (
+        // <div className="not-prose">
+          <SyntaxHighlighter 
+              useInlineStyles={false} 
+              language={value.language}
+              style={dark}
+              showLineNumbers
+              >
+              {/* style={vs} */}
+              {/* showLineNumbers */}
+              
+            {value.code}
+          </SyntaxHighlighter>
+        // </div>
+      )
+    },
+    image: ({value} : any) => <img src={urlFor(value.asset).url()} />, // eslint-disable-line @typescript-eslint/no-explicit-any
+  },
+}
 
 const builder = imageUrlBuilder(sanityClient);
 function urlFor(source: SanityImageSource) {
@@ -11,7 +38,7 @@ function urlFor(source: SanityImageSource) {
 }
 
 export default function OnePost() {
-  const [postData, setPostData] = useState<any | null>(null);
+  const [postData, setPostData] = useState<any | null>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const { slug } = useParams();
 
   useEffect(() => {
@@ -27,53 +54,58 @@ export default function OnePost() {
             }
           },
           body,
-          "name": author->name,
-          "authorImage": author->image
+          "authorName": author->name,
+          "authorImage": author->image,
+          "authorTitle": author->title,
        }`
       )
       .then((data) => setPostData(data[0]))
       .catch(console.error);
   }, [slug]);
 
+  console.log(postData)
+
   if (!postData) return <div>Loading...</div>;
 
   return (
-    <div className="bg-gray-200 min-h-screen p-12">
-      <div className="container shadow-lg mx-auto bg-green-100 rounded-lg">
-        <div className="relative">
-          <div className="absolute h-full w-full flex items-center justify-center p-8">
-            {/* Title Section */}
-            <div className="bg-white bg-opacity-75 rounded p-12">
-              <h2 className="cursive text-3xl lg:text-6xl mb-4">
-                {postData.title}
-              </h2>
-              <div className="flex justify-center text-gray-800">
-                <img
-                  src={urlFor(postData.authorImage).url()}
-                  className="w-10 h-10 rounded-full"
-                  alt="Author is Kap"
-                />
-                <h4 className="cursive flex items-center pl-2 text-2xl">
-                  {postData.name}
-                </h4>
-              </div>
-            </div>
-          </div>
-          <img
-            className="w-full object-cover rounded-t"
-            src={urlFor(postData.mainImage).url()}
-            alt=""
-            style={{ height: "400px" }}
-          />
-        </div>
-        <div className="px-16 lg:px-48 py-12 lg:py-20 prose lg:prose-xl max-w-full">
-          <PortableText
-            value={postData.body}
-            // projectId={sanityClient.clientConfig.projectId}
-            // dataset={sanityClient.clientConfig.dataset}
-          />
-        </div>
-      </div>
+<div className="mb-4 md:mb-0 w-full mx-auto relative flex flex-col items-center">
+  <div className="px-10 lg:px-4">
+    <h2 className="text-4xl font-semibold text-white leading-tight pt-10">
+      {postData.title}
+    </h2>
+    <img
+      // make it centered and not cropped
+      className="w-full object-contain lg:rounded-t-lg"
+      src={urlFor(postData.mainImage).url()}
+      alt="Post image"
+      style={{ height: "400px" }}
+    />
+  </div>
+
+  <div className="px-16 lg:px-48 py-12 lg:py-20 prose-invert prose lg:prose-xl max-w-full">
+    <PortableText
+      value={postData.body}
+      components={serializers}
+    />
+  </div>
+
+  <div className="flex px-10 lg:px-4 mb-5">
+    <img
+      src={urlFor(postData.authorImage).url()}
+      className="h-10 w-10 rounded-full mr-2 object-cover"
+      alt="Author"
+    />
+    <div>
+      <p className="font-semibold text-gray-200 text-sm"> {postData.authorName} </p>
+      <p className="font-semibold text-gray-400 text-xs"> {postData.authorTitle} </p>
     </div>
+  </div>
+</div>
+
+
+
+
+
+
   );
 }

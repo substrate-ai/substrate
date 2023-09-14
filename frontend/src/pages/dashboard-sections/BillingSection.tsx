@@ -15,9 +15,9 @@ import {
 export default function BillingSection() {
 
     const [loading, setLoading] = useState(true);
-    const [checkoutUrl, setCheckoutUrl] = useState<any>(null);
-    const [errorCheckoutUrl, setCheckoutUrlError] = useState<any>(null);
-
+    const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+    const [errorCheckoutUrl, setCheckoutUrlError] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+ 
     const {data, isSuccess, isError, error} = useGetPaymentStatusQuery();
 
     if (isError) {
@@ -64,7 +64,7 @@ export default function BillingSection() {
         
             <Button onClick={() => {
 
-                window.location.replace(checkoutUrl)
+                window.location.replace(checkoutUrl!)
                 return null
             }} disabled={loading}>
                 {loading ? <Loader2 className="animate-spin" size={24} /> : null}

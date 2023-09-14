@@ -8,3 +8,4 @@ yaspin == 3.0.0
 supabase == 1.0.4
 pyyaml == 6.0.1
 # look at the pyproject.toml for latest version of the requirements
+```
