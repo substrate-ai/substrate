@@ -6,4 +6,5 @@ human-id >= 0.2.0
 python-on-whales == 0.64.2
 yaspin == 3.0.0
 supabase == 1.0.4
+pyyaml == 6.0.1
 # look at the pyproject.toml for latest version of the requirements
