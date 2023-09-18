@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/Auth';
 
 import {
@@ -21,8 +21,6 @@ function MainNavigation() {
   const { user } = useAuth()
   const { signOut } = useAuth()
 
-  const navigate = useNavigate()
-
   const handleLogout = () => {
     
     console.log('logout')
@@ -33,35 +31,42 @@ function MainNavigation() {
     <NavigationMenu>
       <NavigationMenuList>
           <NavigationMenuItem>
-                  <NavigationMenuLink className="font-bold px-5" onClick={() => navigate("/")} >
+                  <Link to="/">
+                  <NavigationMenuLink className="font-bold px-5">
                     {/* todo add logo */}
                     <p className='inline px-2'>SubstrateAI</p>
                     
                     <Badge variant="outline">Beta</Badge>
 
                   </NavigationMenuLink>
-
+                  </Link>
                   <>
                   
-
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => window.open('https://docs.substrateai.com', '_blank', 'noreferrer')}>
+                  <Link to="https://docs.substrateai.com">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Documentation
                   </NavigationMenuLink>
+                  </Link>
 
-
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => navigate("/pricing")}>
+                  <Link to="pricing">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Pricing
                   </NavigationMenuLink>
+                  </Link>
 
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => navigate("/blog")}>
+                  <Link to="blog">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Blog
                   </NavigationMenuLink>
+                  </Link>
           
 
                 { user &&
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}  onClick={() => navigate("/dashboard")}>
+                  <Link to="dashboard">
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                       Dashboard
                     </NavigationMenuLink>
+                    </Link>
 
                 }
 
@@ -69,13 +74,17 @@ function MainNavigation() {
 
                 { !user &&
                   <>  
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()}  onClick={() => navigate("/sign-up")}>
+                      <Link to="sign-up">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                         Sign-up 
                       </NavigationMenuLink>
+                      </Link>
 
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()} onClick={() => navigate("/login")}>
+                      <Link to="login">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                         Login 
                       </NavigationMenuLink>
+                      </Link>
                   </>
                 }
 
@@ -98,9 +107,11 @@ function MainNavigation() {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                        <Link to="/dashboard">
+                        <DropdownMenuItem>
                           Dashboard
                         </DropdownMenuItem>
+                        </Link>
                         {/* <DropdownMenuItem onClick={() => navigate("/settings")}>
                           Settings
                         </DropdownMenuItem> */}

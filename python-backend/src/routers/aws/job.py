@@ -10,6 +10,7 @@ from internals.DTOs import Token
 import boto3
 from internals.supabase_client import supabase_admin, supabase_url, supabase_anon_key
 from internals.aws_access import access_key_id, secret_access_key
+import yaml
 
 router = APIRouter()
 
@@ -46,19 +47,22 @@ async def create_item(job: Job):
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    with open('./resources/aws_hardware_code.json') as f:
-        aws_hardware_code = json.load(f)
+    with open('./src/resources/aws_hardware.yaml') as f:
+        aws_hardware = yaml.safe_load(f)
+        print(aws_hardware)
+    
 
     hardware_type = job.hardware.type
 
-    if hardware_type not in aws_hardware_code:
+
+    if hardware_type not in list(aws_hardware.keys()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Hardware type selected is not supported",
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    instance_type = aws_hardware_code[hardware_type]
+    instance_type = aws_hardware[hardware_type]["instance_type"]
 
     # check if instance type is valid
     # input_string = "[ml.m6i.xlarge, ml.trn1.32xlarge, ...] 

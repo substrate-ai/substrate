@@ -41,9 +41,14 @@ export default function BillingSection() {
     if (errorCheckoutUrl) {
         console.error(errorCheckoutUrl)
         return (
-            <div>
-                There was a server error preventing you from adding a payment method. Please contact support or try again later.
-            </div>
+            <>
+            <p>
+                Could not get checkout url
+            </p>
+            <p>
+                Error message: {errorCheckoutUrl.message}
+            </p>
+            </>
         )
     }
 

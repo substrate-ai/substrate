@@ -1,80 +1,155 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-  } from "@/components/ui/card"
-  import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-   
-  const pricingData = [
-    {
-        name: 'CPU (2 cores, 8GB RAM)',
-        pricePerHour: 0.345,
-    },
-    {
-        name: 'NVIDIA T4',
-        availability: "COMING SOON",
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useState } from "react";
 
-    },
-    {
-        name: 'NVIDIA A100',
-        availability: "COMING SOON",
-    },
+type PricingData = {
+  name: string;
+  pricePerSeconds?: number;
+  priceAwsPerHour: number;
+  availability?: string;
+}
+
+let pricingData : PricingData[] = [
+  {
+    name: 'CPU (2 cores, 8GB RAM)',
+    priceAwsPerHour: 0.115,
+  },
+  {
+    name: 'NVIDIA T4',
+    priceAwsPerHour: 0.736,
+  },
+  {
+    name: 'NVIDIA A10G',
+    priceAwsPerHour: 1.515,
+  },
 ]
-   
-  export default function Pricing() {
-    return (
-        <div className="flex h-screen">
-            <div className="m-auto">
+
+
+
+const abbreviationTimeUnit = {
+  hour: 'hr',
+  minute: 'min',
+  second: 'sec',
+}
+
+enum TimeUnit {
+  hour = 'hour',
+  minute = 'minute',
+  second = 'second',
+}
+
+function computePricePerMinute(pricePerSeconds: number) {
+  return (pricePerSeconds * 60).toPrecision(2);
+}
+
+function computePricePerHour(pricePerSeconds: number) {
+  return (pricePerSeconds * 60 * 60).toPrecision(2);
+}
+
+function getPrice(pricePerSeconds: number, timeUnit: TimeUnit) {
+  return {
+    hour: computePricePerHour(pricePerSeconds),
+    minute: computePricePerMinute(pricePerSeconds),
+    second: pricePerSeconds,
+  }[timeUnit];
+}
+
+function computePricePerSeconds(priceAwsPerHour: number) {
+  return Number((priceAwsPerHour * 3 / 60 / 60).toPrecision(2));
+}
+
+export default function Pricing() {
+
+  const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.hour);
+
+  const abbreviation = abbreviationTimeUnit[timeUnit];
+
+  pricingData = pricingData.map((data) => {
+    return {
+      ...data,
+      pricePerSeconds: computePricePerSeconds(data.priceAwsPerHour),
+    }
+  })
+
+  return (
+    <div className="flex h-screen">
+      <div className="m-auto">
         <Card className="w-[500px]">
-            <CardHeader>
+          <CardHeader>
             <CardTitle>Compute Costs</CardTitle>
             <CardDescription>Pay only for what you use</CardDescription>
 
-        </CardHeader>
-      <CardContent>
+            <Select onValueChange={(timeUnit: TimeUnit) => setTimeUnit(timeUnit)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue defaultValue="hour" placeholder="price per hour"/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="hour">price per hour</SelectItem>
+                  <SelectItem value="minute">price per minute</SelectItem>
+                  <SelectItem value="second">price per second</SelectItem>
 
-        
-        <Table>
-            <TableHeader>
-            <TableRow className="pointer-events-none">
-                <TableHead className="w-[100px]"></TableHead>
-                <TableHead className="text-right">Price per Hour</TableHead>
-            </TableRow>
-            </TableHeader>
-            <TableBody>
-            {pricingData.map((data) => (
-                <TableRow key={data.name}>
-                <TableCell className="font-medium">{data.name}</TableCell>
-                {data.availability ? (
-                    <TableCell className="text-right">{data.availability}</TableCell>
-                ) : (
-                    <TableCell className="text-right">${data.pricePerHour} / hr</TableCell>
-                )}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+          </CardHeader>
+          <CardContent>
+
+
+            <Table>
+              <TableHeader>
+                <TableRow className="pointer-events-none">
+                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead className="text-right">Price per {timeUnit}</TableHead>
                 </TableRow>
-            ))}
-            </TableBody>
-        </Table>
-      </CardContent>
-      <CardFooter>
-        <div>
-            <p className="font-bold text-indigo-500">Paid by the minute</p>
-        </div>
-        
-      </CardFooter>
+              </TableHeader>
+              <TableBody>
+                {pricingData.map((data) => (
+                  <TableRow key={data.name}>
+                    <TableCell className="font-medium">{data.name}</TableCell>
+                    {data.availability ? (
+                      <TableCell className="text-right">{data.availability}</TableCell>
+                    ) : (
+                      <TableCell className="text-right">${getPrice(data.pricePerSeconds!, timeUnit)} / {abbreviation}</TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+          <CardFooter>
+            <div>
+              <p className="font-bold text-indigo-500">Paid by the second</p>
+            </div>
 
-      </Card>
-        </div>
-        </div>
-    )
-  }
+          </CardFooter>
+
+        </Card>
+      </div>
+    </div>
+  )
+}
 

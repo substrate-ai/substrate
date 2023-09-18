@@ -2,7 +2,6 @@ import { Application, Context, Router } from 'oak'
 import { supabaseAdmin } from '../_shared/supabaseClients.ts'
 import { LAGO_URL } from '../_shared/lagoUrl.ts';
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import { getUserDataFromId } from "../_shared/userUtils.ts";
 import getUserIdFromToken from "../_shared/tokenUtils.ts";
 
 
@@ -85,10 +84,11 @@ async function jobDoneHandler(ctx: Context) {
     return
   }
 
+  const seconds = Math.ceil((new Date(job.finished_at).getTime() - new Date(job.created_at).getTime()) / 1000)
+  // const minutes = Math.ceil((new Date(job.finished_at).getTime() - new Date(job.created_at).getTime()) / 60000)
+  console.log("seconds", seconds)
 
-  const minutes = Math.ceil((new Date(job.finished_at).getTime() - new Date(job.created_at).getTime()) / 60000)
-
-  console.log("minutes", minutes)
+  // console.log("minutes", minutes)
 
   const userId = job.supabase_id
 
@@ -119,7 +119,7 @@ async function jobDoneHandler(ctx: Context) {
       // "external_subscription_id": "maybe we need to setup this, this is for each customer",
       "code": job.hardware_type,
       "properties": {
-          "minutes": minutes
+          "seconds": seconds
       }
     }
   }
