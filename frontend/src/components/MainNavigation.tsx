@@ -32,7 +32,7 @@ function MainNavigation() {
       <NavigationMenuList>
           <NavigationMenuItem>
                   <Link to="/">
-                  <NavigationMenuLink className="font-bold px-5">
+                  <NavigationMenuLink className="font-bold px-5" href='/'>
                     {/* todo add logo */}
                     <p className='inline px-2'>SubstrateAI</p>
                     
@@ -43,19 +43,19 @@ function MainNavigation() {
                   <>
                   
                   <Link to="https://docs.substrateai.com">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://docs.substrateai.com">
                     Documentation
                   </NavigationMenuLink>
                   </Link>
 
                   <Link to="pricing">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="pricing">
                     Pricing
                   </NavigationMenuLink>
                   </Link>
 
                   <Link to="blog">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="blog">
                     Blog
                   </NavigationMenuLink>
                   </Link>
@@ -63,7 +63,7 @@ function MainNavigation() {
 
                 { user &&
                   <Link to="dashboard">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} href="dashboard">
                       Dashboard
                     </NavigationMenuLink>
                     </Link>
@@ -75,13 +75,13 @@ function MainNavigation() {
                 { !user &&
                   <>  
                       <Link to="sign-up">
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="sign-up">
                         Sign-up 
                       </NavigationMenuLink>
                       </Link>
 
                       <Link to="login">
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="login">
                         Login 
                       </NavigationMenuLink>
                       </Link>
