@@ -13,7 +13,8 @@ export default defineConfig({
     },
   },
   assetsInclude: ['**/*.md'],
-  // build: {
+  build: {
+    sourcemap: true,
   //   rollupOptions: {
   //       external: ["react", "react-router", "react-router-dom", "react-redux"],
   //       output: {
@@ -22,5 +23,5 @@ export default defineConfig({
   //         },
   //       },
   //     },
-  // }
+  }
 })
