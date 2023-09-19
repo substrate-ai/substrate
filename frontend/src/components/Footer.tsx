@@ -29,8 +29,6 @@ export default function Footer() {
                             Privacy
                         </a>
 
-                        {/* todo make help page */}
-
                         <a href="contact" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Help
                         </a>

@@ -54,10 +54,11 @@ def jobs():
     """
     Get all jobs
     """
+    # TODO not working
     # TODO add running argument
     http_client = HttpClient()
     http_client.get_jobs()
-    # todo not working
+
 
 @app.command()
 def stop(job_name: str):

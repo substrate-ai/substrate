@@ -35,7 +35,7 @@ class EnvdClient:
             install.python_packages(name = {requirements})
         """
 
-        # TODO why cache is not working
+        # To do kj why cache is not working
         #.substrate-ai-cache
         # with open(".substrate-ai-cache/build.envd", "w") as f:
 
@@ -114,7 +114,7 @@ class EnvdClient:
         with open(self.docker_config_file, 'w') as f:
             json.dump(injected_config, f, indent=2)
         
-        # TODO logs
+        # kj to do logs
         
 
     def _remove_access_token(self): 
@@ -131,6 +131,6 @@ class EnvdClient:
         with open(self.docker_config_file, 'w') as f:
             json.dump(injected_config, f, indent=2)
         
-        # TODO logs
+        # kj to do logs
 
 

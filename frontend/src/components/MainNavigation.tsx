@@ -33,7 +33,7 @@ function MainNavigation() {
           <NavigationMenuItem>
                   <Link to="/">
                   <NavigationMenuLink className="font-bold px-5" href='/'>
-                    {/* todo add logo */}
+                    {/* TODO add logo */}
                     <p className='inline px-2'>SubstrateAI</p>
                     
                     <Badge variant="outline">Beta</Badge>

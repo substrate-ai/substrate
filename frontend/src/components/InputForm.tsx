@@ -35,8 +35,7 @@ export function InputForm() {
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   
-//   mutate({tokenName: newToken})
-  // TODO add loading state after submit + ideally handle everything with reatc query
+  // TODO add loading state after submit + ideally handle everything with react query
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true)
     const response = await createToken(data.tokenName)

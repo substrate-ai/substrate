@@ -12,7 +12,6 @@ export function useGetTokensQuery() {
     return useQuery(['tokens'], async () => {
 
         console.log(supabaseClient.auth.getSession())
-        // todo fix RLS and this should work
         const {data, error} = await supabaseClient.from("token").select()
 
         if (error) {
@@ -74,7 +73,6 @@ export function useDeleteToken() {
 
     return useMutation(['tokens'], async (id: string) => {
         console.log(supabaseClient.auth.getSession())
-        // todo fix RLS and this should work
         const {data, error} = await supabaseClient.from("token").delete().eq("id", id)
 
         if (error) {

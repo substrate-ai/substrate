@@ -1,0 +1,11 @@
+# price_aws is per hour in usd
+
+cpu:
+    instance_type: ml.m5.large
+    price_aws_per_hour: 0.115
+t4:
+    instance_type: ml.g4dn.xlarge
+    price_aws_per_hour: 0.736
+a10g:
+    instance_type: ml.g5.2xlarge
+    price_aws_per_hour: 1.515

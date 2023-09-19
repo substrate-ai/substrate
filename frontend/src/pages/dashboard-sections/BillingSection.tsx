@@ -77,9 +77,6 @@ export default function BillingSection() {
                 Add a payment method
             </Button>
 
-
-            {/* TODO LIST OF INVOICES */}
-
         </>
     )
 }

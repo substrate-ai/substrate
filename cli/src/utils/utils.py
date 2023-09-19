@@ -42,7 +42,9 @@ def get_supabase_headers():
 def supabase_request(method, path, json):
     endpoint = f'{get_supabase_endpoint()}/{path}'
 
-    # TODO replace with match
+
+
+    # replace with match when moved to python 3.10
     methods = {
         'get': lambda: requests.get(endpoint, headers=get_supabase_headers(), json=json),
         'post': lambda: requests.post(endpoint, headers=get_supabase_headers(), json=json),

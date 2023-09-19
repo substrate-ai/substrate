@@ -42,44 +42,6 @@ router
     ctx.response.status = 200
 
   })
-  // // Note: path should be prefixed with function name
-  // .post('/aws/job-done', async (ctx) => {
-  //     await sleep(10)
-
-  //     if (!ctx.request.hasBody) {
-  //       ctx.throw(400, 'Body is required')
-  //     }
-      
-  //     const body = ctx.request.body()
-  //     const value = await body.value
-  //     const details = value.detail
-  //     const trainingJobStatus = details.TrainingJobStatus
-  //     const trainingJobName = details.TrainingJobName
-  //     // const time = details.TrainingEndTime
-  //     const time = ((new Date()).toISOString()).toLocaleString()
-
-  //     // Todo do payment stuff here
-
-
-
-
-
-  //     if (error) {
-  //       console.error('Error updating job', error)
-  //       ctx.response.status = 500
-  //       return
-  //     }
-
-  //     await supabaseAnon.functions.invoke('payment/job-done', {body: {jobName: trainingJobName}})
-
-  //     // return 200
-
-  //     ctx.response.status = 200
-
-      
-
-
-  // })
   .post('/aws/get-jobs', async (ctx) => {
     const result = ctx.request.body();
     const value = await result.value;

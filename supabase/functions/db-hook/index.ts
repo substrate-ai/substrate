@@ -1,11 +1,29 @@
-import { Application, Router } from 'oak';
+import { Application, Context, Router } from 'oak';
 import { supabaseAdmin } from '../_shared/supabaseClients.ts';
 import { LAGO_URL } from "../_shared/lagoUrl.ts";
 
 const app = new Application();
 const router = new Router();
 
-router.post('/db-hook/create-lago-customer', async (ctx) => {
+
+router.post('/db-hook', async (ctx) => {
+  const parameter = ctx.request.url.searchParams.get('method');
+
+  switch (parameter) {
+    case 'create-lago-customer':
+      await createLagoCustomer(ctx);
+      break;
+
+    default:
+      ctx.response.status = 400;
+      ctx.response.body = { error: 'no method' };
+      break;
+  }
+
+})
+
+
+async function createLagoCustomer(ctx: Context) {
   const body = await ctx.request.body().value;
 
 
@@ -20,22 +38,19 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
   const supabaseId = body.record.id
 
   const payloadCreateCustomer = {
-      customer: {
-        email: email,
-        name: email,
-        external_id: supabaseId,
-        billing_configuration: {
-          payment_provider: 'stripe',
-          sync: true,
-          sync_with_provider: true,
-          provider_payment_methods: ['card']
-        }
+    customer: {
+      email: email,
+      name: email,
+      external_id: supabaseId,
+      billing_configuration: {
+        payment_provider: 'stripe',
+        sync: true,
+        sync_with_provider: true,
+        provider_payment_methods: ['card']
+      }
     }
-    
+
   };
-
-
-
 
   const responseCreateCustomer = await fetch(`${LAGO_URL}/customers`, {
     method: 'POST',
@@ -52,7 +67,7 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
     ctx.response.status = 500;
     ctx.response.body = { error: 'error creating customer', response: responseCreateCustomer };
     return;
-  } 
+  }
 
 
   const lagoBody = (await responseCreateCustomer.json())
@@ -77,7 +92,7 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
   const planCode = 'free';
 
   const payloadAssignPlan = {
-    subscription : {
+    subscription: {
       external_customer_id: supabaseId,
       plan_code: planCode,
       external_id: `sub_id_${uuid}`,
@@ -103,7 +118,7 @@ router.post('/db-hook/create-lago-customer', async (ctx) => {
   }
 
   ctx.response.status = 200;
-});
+}
 
 app.use(router.routes());
 app.use(router.allowedMethods());

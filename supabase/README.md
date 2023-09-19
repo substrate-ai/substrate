@@ -24,7 +24,7 @@ The functions folders list all of functions:
 The _shared folder contains a list of methods that are used by multiple functions
 
 
-# Refractoring TODO
+# Refractoring (improvment to be done)
     - remove stripe-checkout-url folder and integrate it into another folder
     - rename aws to aws-webhook
 

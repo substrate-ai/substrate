@@ -32,8 +32,12 @@ router
     ctx.response.body = { payment_status: paymentStatus }
   })
 
-// todo replace any with enum
-async function checkPaymentStatus(supabaseId: string): Promise<any> {
+
+
+
+type paymentStatus = "not set" | "admin" | "active" | "payment_failed" // not sure if up to date
+
+async function checkPaymentStatus(supabaseId: string): Promise<paymentStatus> {
   const { data, error } = await supabaseAnon.from('user_data').select("payment_status").eq('id', supabaseId).single()
 
   if (error) {
@@ -68,9 +72,6 @@ async function signIn(email: string, password: string): Promise<Session> {
 
 
   return dataSignIn.session
-
-
-
 
 }
   

@@ -90,7 +90,7 @@ async def create_item(job: Job):
     #   # "subnet-0286b10e9101e4a09", works
     #   # "subnet-0775c57f2d5304587" is not working
     #   # "subnet-0d91098cbc7d78043" works
-    #   # Todo why are all not all the subnet working?
+    #   # why are all not all the subnet working?
       
     #   "Subnets": ["subnet-0286b10e9101e4a09", "subnet-0d91098cbc7d78043"]
     # }
@@ -99,7 +99,7 @@ async def create_item(job: Job):
         TrainingJobName=job_name,
         AlgorithmSpecification={
             'TrainingImage': image_name,
-            # todo change input mode
+            # could change input mode
             'TrainingInputMode': 'File',
             # 'TrainingImageConfig': training_image_config,
         },
@@ -113,7 +113,7 @@ async def create_item(job: Job):
             'VolumeSizeInGB': 1,
         },
         StoppingCondition={
-            # todo change max runtime
+            # TODO change max runtime
             'MaxRuntimeInSeconds': 600
         },
         # VpcConfig=vpc_config,
@@ -165,7 +165,7 @@ async def stop_job(token: Token, job_name: str):
 
     # check user of job is same as user of token
     try:
-        # todo add .eq('supabase_id', user_id) so match on job_name and user_id
+        # TODO add .eq('supabase_id', user_id) so match on job_name and user_id
         response = supabase_admin.table('job').select('supabase_id').eq('job_name', job_name).execute()
     except Exception as e:
         logging.error(e)

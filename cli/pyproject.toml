@@ -15,7 +15,6 @@ classifiers = [
 ]
 keywords = ["cloud", "gpu", "ml", "ai"]
 
-# todo fix the version
 dependencies = [
     "boto3 >= 1.28.0",
     "docker >= 6.1.0",

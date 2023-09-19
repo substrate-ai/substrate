@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                     email: session?.user?.email,
                 });
 
-                // todo to be removed log
                 // console.log('analytics')
             }
 

@@ -109,8 +109,6 @@ async function jobDoneHandler(ctx: Context) {
     return
   }
 
-  // TODO invoice chnage unit to minutes and add name of job to it
-
   const payload = {
     "event": {
       "lago_subscription_id": freePlanLagoId,

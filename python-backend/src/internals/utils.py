@@ -10,14 +10,11 @@ supabase_anon_key = config_data["SUPABASE_ANON_KEY"]
 
 def get_user_id(token: str):
 
-    # todo should remove first post request and do everything in the second one?
+    # should remove first post request and do everything in the second one?
     endpoint = f'{supabase_url}/functions/v1/token/verify-token'
     payload = {'accessToken': token}
     headers = {"Authorization": f"Bearer {supabase_anon_key}"}
     response = requests.post(endpoint, headers=headers, json=payload)
-
-
-    # todo check for payment status
 
     if response.status_code != 200:
         logging.error("cannot verify token", response.text)

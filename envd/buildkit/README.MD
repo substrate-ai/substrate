@@ -48,7 +48,7 @@ you can modify `build.envd` and remove all python package to speed up creation o
 - making buildkit container able to push to a gcp registry (authentification problem)
     -> current state: right now you can push after you first do docker login (but this is not good, as it require docker on the client machine)
       - look at error folder to see current error
-    -> todo: get rid of the local docker client (because right now we need docker login)
+    -> to do: get rid of the local docker client (because right now we need docker login)
     -> goal: making this run `envd build --output type=image,name=us-east1-docker.pkg.dev/practical-robot-393509/substrate-ai/substrate-ai,push=true`
 
     - pointers: look at access and scope parameter of the vm
