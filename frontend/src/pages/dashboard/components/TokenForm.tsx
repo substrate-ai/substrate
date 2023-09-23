@@ -25,7 +25,7 @@ const FormSchema = z.object({
 
 
  
-export function InputForm() {
+export function TokenForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
@@ -35,7 +35,6 @@ export function InputForm() {
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   
-  // TODO add loading state after submit + ideally handle everything with react query
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true)
     const response = await createToken(data.tokenName)

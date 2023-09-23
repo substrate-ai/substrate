@@ -8,7 +8,7 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { useDeleteToken, useGetTokensQuery } from "src/api/token";
-import { InputForm } from "src/components/InputForm";
+import { TokenForm } from "../components/TokenForm";
    
    
 export default function TokenSection() {
@@ -37,7 +37,7 @@ export default function TokenSection() {
 
         <>
 
-            <InputForm/>
+            <TokenForm/>
 
             <div className="h-5"/>
         

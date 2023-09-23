@@ -1,4 +1,4 @@
-import DashboardLayout from "src/components/DashboardLayout";
+import DashboardLayout from "src/pages/dashboard/components/DashboardLayout";
 import { Outlet } from "react-router-dom"
 
 

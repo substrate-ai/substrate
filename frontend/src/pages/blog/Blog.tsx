@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {sanityClient} from "src/config/sanity-client"
+import {sanityClient} from "src/clients/sanityClient"
 import dayjs from "dayjs";
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 

@@ -1,6 +1,6 @@
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { supabaseClient } from 'src/config/supabase-client';
+import { supabaseClient } from 'src/clients/supabaseClient';
 
 export enum View {
   SIGN_IN = 'sign_in',

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import MainNavigation from './MainNavigation';
+import MainNavigation from './MainNavigationBar';
 
 function RootLayout({ children }: {children: ReactNode}) {
   return (

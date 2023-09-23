@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/Auth';
+import { useAuth } from '../contexts/UserAuthContext';
 
 import {
   NavigationMenu,

@@ -1,5 +1,5 @@
 import terms from "src/assets/markdowns/terms.md";
-import LegalPage from "./Legal";
+import LegalPage from "./components/Legal";
 
 export default function TermsPage() {
     return (

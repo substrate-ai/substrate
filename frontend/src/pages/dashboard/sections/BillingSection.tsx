@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CreditCard } from 'tabler-icons-react';
 import { Button } from "@/components/ui/button"
-import { supabaseClient } from "src/config/supabase-client";
+import { supabaseClient } from "src/clients/supabaseClient";
 import { Loader2 } from "lucide-react"
 import { useGetPaymentStatusQuery } from "src/api/payment";
  

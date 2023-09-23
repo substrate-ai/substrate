@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { sanityClient } from "../config/sanity-client";
+import { sanityClient } from "../../clients/sanityClient";
 import { PortableText } from '@portabletext/react'
 import imageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";

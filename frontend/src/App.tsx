@@ -1,23 +1,23 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import RootLayout from './components/RootLayout';
 
-import WelcomePage from './pages/Welcome';
+import WelcomePage from './pages/homepage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './hooks/Auth';
-import PageNotFound from './pages/PageNotFound';
-import Dashboard from './pages/Dashboard';
+import { AuthProvider } from './contexts/UserAuthContext';
+import PageNotFound from './pages/404';
+import Dashboard from './pages/dashboard';
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { ThemeProvider } from "@/components/theme-provider"
-import Pricing from './pages/Pricing';
-import HelpPage from './pages/Help';
-import { AuthPage, View } from './pages/AuthPage';
+import Pricing from './pages/price';
+import HelpPage from './pages/help';
+import { AuthPage, View } from './pages/auth';
 import loadable from '@loadable/component';
 import pMinDelay from 'p-min-delay';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
+import Blog from './pages/blog/Blog';
+import BlogPost from './pages/blog/BlogPost';
 
 // todo I think component are reloaded when navigating to a new page
 
@@ -26,12 +26,12 @@ const fallback = <h1>Loading</h1>
 const minDelay = 200;
 
 const BillingSection = loadable(() =>
-  pMinDelay(import('./pages/dashboard-sections/BillingSection'), minDelay),
+  pMinDelay(import('./pages/dashboard/sections/BillingSection'), minDelay),
   { fallback }
 );
 
 const TokenSection = loadable(() =>
-  pMinDelay(import('./pages/dashboard-sections/TokenSection'), minDelay),
+  pMinDelay(import('./pages/dashboard/sections/TokenSection'), minDelay),
   { fallback }
 );
 
