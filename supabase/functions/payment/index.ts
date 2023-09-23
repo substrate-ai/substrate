@@ -2,7 +2,7 @@ import { Application, Context, Router } from 'oak'
 import { supabaseAdmin } from '../_shared/supabaseClients.ts'
 import { LAGO_URL } from '../_shared/lagoUrl.ts';
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import getUserIdFromToken from "../_shared/tokenUtils.ts";
+import {getUserIdFromToken} from "../_shared/tokenUtils.ts";
 
 
 const router = new Router()

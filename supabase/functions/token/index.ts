@@ -3,7 +3,7 @@ import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import { Context } from 'oak';
 import { supabaseAdmin } from "../_shared/supabaseClients.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import getUserIdFromToken from "../_shared/tokenUtils.ts";
+import {getUserIdFromToken} from "../_shared/tokenUtils.ts";
 import { getUserFromContext } from "../_shared/userUtils.ts";
 
 

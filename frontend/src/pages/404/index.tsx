@@ -1,4 +1,4 @@
-export default function PageNotFound() {
+export function PageNotFound() {
 
 
     

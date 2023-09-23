@@ -1,6 +1,6 @@
 import { Application, Router } from 'oak'
 import { supabaseAdmin, supabaseAnon } from '../_shared/supabaseClients.ts'
-import getUserIdFromToken from "../_shared/tokenUtils.ts";
+import {getUserIdFromToken} from "../_shared/tokenUtils.ts";
 import { sleep } from "https://deno.land/x/sleep@v1.2.1/mod.ts";
 // import { STS, AssumeRoleCommand } from 'https://deno.land/x/aws_sdk@v3.32.0-1/client-sts/mod.ts'
 import dayjs from "https://esm.sh/dayjs@1.11.9";

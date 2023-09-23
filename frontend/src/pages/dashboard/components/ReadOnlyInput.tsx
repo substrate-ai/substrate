@@ -12,7 +12,7 @@ type ReadOnlyInputProps = {
     value: string
 }
 
-export default function ReadOnlyInput({value}: ReadOnlyInputProps) {
+export function ReadOnlyInput({value}: ReadOnlyInputProps) {
 
     const [copied, setCopied] = useState(false)
 

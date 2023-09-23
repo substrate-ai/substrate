@@ -111,7 +111,7 @@ class HttpClient:
 
             # finished_at = datetime.datetime.strptime(job["finished_at"], format)
 
-            # todo fix the format of the date
+            # TODO parse the format of the date for pretty printing
             created_at = job["created_at"]
             finished_at = job["finished_at"]
 

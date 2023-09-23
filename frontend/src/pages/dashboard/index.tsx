@@ -1,8 +1,8 @@
-import DashboardLayout from "src/pages/dashboard/components/DashboardLayout";
+import {DashboardLayout} from "src/pages/dashboard/components/DashboardLayout";
 import { Outlet } from "react-router-dom"
 
 
-export default function Dashboard() {
+export function Dashboard() {
     
     
     

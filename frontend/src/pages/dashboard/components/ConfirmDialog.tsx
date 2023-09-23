@@ -14,7 +14,7 @@ type ConfirmDialogProps = {
   setOpen: (open: boolean) => void
 }
  
-export default function ConfirmDialog({open, children, setOpen} : ConfirmDialogProps) {
+export function ConfirmDialog({open, children, setOpen} : ConfirmDialogProps) {
   return (
     <AlertDialog open={open}>
       <AlertDialogContent>

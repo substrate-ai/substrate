@@ -13,17 +13,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { createToken } from "src/api/token"
 import { useState } from "react"
-import ConfirmDialog from "./ConfirmDialog"
-import ReadOnlyInput from "./ReadOnlyInput"
+import {ConfirmDialog} from "./ConfirmDialog"
+import {ReadOnlyInput} from "./ReadOnlyInput"
 import { useQueryClient } from "@tanstack/react-query"
 import { ReloadIcon } from "@radix-ui/react-icons"
 
- 
 const FormSchema = z.object({
   tokenName: z.string().nonempty({ message: "Token name is required" })
 })
-
-
  
 export function TokenForm() {
   const form = useForm<z.infer<typeof FormSchema>>({

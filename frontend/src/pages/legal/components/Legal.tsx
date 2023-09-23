@@ -7,25 +7,26 @@ type Props = {
 }
 
 
-export default function LegalPage({termsLocation} : Props) {
-
-    async function fetchTerms() {
-        const response = await fetch(termsLocation);
-        const text = await response.text();
-        return text;
-      }
+export function LegalPage({termsLocation} : Props) {
 
   const [terms, setTerms] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadTerms() {
-      const termsText = await fetchTerms();
-      setTerms(termsText);
-    }
-
-    loadTerms();
-  }, []);
-
+    const fetchTerms = async () => {
+      try {
+        const response = await fetch(termsLocation);
+        if (!response.ok) {
+          throw new Error('Failed to fetch terms');
+        }
+        const termsText = await response.text();
+        setTerms(termsText);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchTerms();
+  }, [termsLocation]);
   return (
     <div className="flex h-screen bg-[#0d1117] overflow-scroll">
     <div className="m-auto w-10/12 lg:w-1/2 py-20 prose-invert prose lg:prose-xl">

@@ -1,14 +1,10 @@
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { supabaseClient } from 'src/clients/supabaseClient';
-
-export enum View {
-  SIGN_IN = 'sign_in',
-  SIGN_UP = 'sign_up',
-}
+import { AuthView } from 'src/pages/auth/AuthViewEnum';
 
 type Props = {
-  view: View
+  view: AuthView
 }
 
 export function AuthPage({ view }: Props) {

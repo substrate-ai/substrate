@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/UserAuthContext';
 
 import {
   NavigationMenu,
@@ -14,12 +13,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from "@/components/ui/badge"
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from 'src/hooks/useAuth';
 
 
 
-function MainNavigation() {
+
+export function MainNavigationBar() {
   const { user } = useAuth()
   const { signOut } = useAuth()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     
@@ -31,60 +34,59 @@ function MainNavigation() {
     <NavigationMenu>
       <NavigationMenuList>
           <NavigationMenuItem>
-                  <Link to="/">
-                  <NavigationMenuLink className="font-bold px-5" href='/'>
+
+                  <NavigationMenuLink className="font-bold px-5" href="/" onClick={(e) => {e.preventDefault(); navigate("/")}}>
                     {/* TODO add logo */}
                     <p className='inline px-2'>SubstrateAI</p>
                     
                     <Badge variant="outline">Beta</Badge>
 
                   </NavigationMenuLink>
-                  </Link>
+
                   <>
                   
-                  <Link to="https://docs.substrateai.com">
+
                   <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://docs.substrateai.com">
                     Documentation
                   </NavigationMenuLink>
-                  </Link>
 
-                  <Link to="pricing">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="pricing">
+
+
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="pricing" onClick={(e) => {e.preventDefault(); navigate("/pricing")}}>
                     Pricing
                   </NavigationMenuLink>
-                  </Link>
 
-                  <Link to="blog">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="blog">
+
+
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="blog" onClick={(e) => {e.preventDefault(); navigate("/blog")}}>
                     Blog
                   </NavigationMenuLink>
-                  </Link>
+
           
 
                 { user &&
-                  <Link to="dashboard">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()} href="dashboard">
+
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} href="dashboard" onClick={(e) => {e.preventDefault(); navigate("/dashboard")}}>
                       Dashboard
                     </NavigationMenuLink>
-                    </Link>
+
 
                 }
 
                   </>
 
                 { !user &&
-                  <>  
-                      <Link to="sign-up">
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="sign-up">
+                  <>   <Link to="sign-up">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="sign-up" onClick={(e) => {e.preventDefault(); navigate("/sign-up")}}>
                         Sign-up 
                       </NavigationMenuLink>
                       </Link>
 
-                      <Link to="login">
-                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="login">
+
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()} href="login" onClick={(e) => {e.preventDefault(); navigate("/login")}}>
                         Login 
                       </NavigationMenuLink>
-                      </Link>
+
                   </>
                 }
 
@@ -156,5 +158,3 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
-
-export default MainNavigation;

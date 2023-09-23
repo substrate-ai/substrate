@@ -1,13 +1,11 @@
 import { ReactNode } from 'react';
-import MainNavigation from './MainNavigationBar';
+import { MainNavigationBar } from './MainNavigationBar';
 
-function RootLayout({ children }: {children: ReactNode}) {
+export function RootLayout({ children }: {children: ReactNode}) {
   return (
     <>
-      <MainNavigation />
+      <MainNavigationBar />
       <main>{children}</main>
-      </>
+    </>
   );
 }
-
-export default RootLayout;

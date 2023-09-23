@@ -80,7 +80,7 @@ function computePricePerSeconds(priceAwsPerHour: number) {
   return Number((priceAwsPerHour * 3 / 60 / 60).toPrecision(2));
 }
 
-export default function Pricing() {
+export function Pricing() {
 
   const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.hour);
 

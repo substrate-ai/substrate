@@ -6,7 +6,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(LocalizedFormat)
 
-export default function Blog() {
+export function Blog() {
 
   const [allPostsData, setAllPosts] = useState<any | null>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
 

@@ -2,7 +2,7 @@ import { supabaseAdmin } from "./supabaseClients.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 
 
-export default async function getUserIdFromToken(token: string): Promise<string> {
+export async function getUserIdFromToken(token: string): Promise<string> {
 
     console.log("token", token)
 

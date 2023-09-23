@@ -1,10 +1,10 @@
 import { Session, User } from '@supabase/supabase-js';
-import { useContext, useState, useEffect, createContext, ReactNode } from 'react';
+import { useState, useEffect, createContext, ReactNode } from 'react';
 import { supabaseClient } from 'src/clients/supabaseClient';
 
 
 // create a context for authentication
-const AuthContext = createContext<{ session: Session | null | undefined, user: User | null | undefined, signOut: () => void }>({ session: null, user: null, signOut: () => {} });
+export const AuthContext = createContext<{ session: Session | null | undefined, user: User | null | undefined, signOut: () => void }>({ session: null, user: null, signOut: () => {} });
 
 declare global {
     interface Window {
@@ -69,9 +69,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             {!loading && children}
         </AuthContext.Provider>
     );
-};
-
-// export the useAuth hook
-export const useAuth = () => {
-    return useContext(AuthContext);
 };

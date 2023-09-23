@@ -1,23 +1,24 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import RootLayout from './components/RootLayout';
+import {RootLayout} from './components/RootLayout';
 
-import WelcomePage from './pages/homepage';
-import ProtectedRoute from './components/ProtectedRoute';
+import {LandingPage} from './pages/homepage';
+import {ProtectedRoute} from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/UserAuthContext';
-import PageNotFound from './pages/404';
-import Dashboard from './pages/dashboard';
+import {PageNotFound} from './pages/404';
+import {Dashboard} from './pages/dashboard';
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { ThemeProvider } from "@/components/theme-provider"
-import Pricing from './pages/price';
-import HelpPage from './pages/help';
-import { AuthPage, View } from './pages/auth';
+import {Pricing} from './pages/price';
+import {HelpPage} from './pages/help';
+import { AuthPage } from './pages/auth';
+import { AuthView } from './pages/auth/AuthViewEnum';
 import loadable from '@loadable/component';
 import pMinDelay from 'p-min-delay';
-import Blog from './pages/blog/Blog';
-import BlogPost from './pages/blog/BlogPost';
+import {Blog} from './pages/blog/Blog';
+import {BlogPost} from './pages/blog/BlogPost';
 
 // todo I think component are reloaded when navigating to a new page
 
@@ -68,9 +69,9 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <RootLayout>
               <Routes>
-                <Route path="/" element={<WelcomePage />} />
-                <Route path="/login" element={<AuthPage view={View.SIGN_IN} />} />
-                <Route path="/sign-up" element={<AuthPage view={View.SIGN_UP} />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<AuthPage view={AuthView.SIGN_IN} />} />
+                <Route path="/sign-up" element={<AuthPage view={AuthView.SIGN_UP} />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                       <Dashboard />
@@ -86,13 +87,12 @@ function App() {
                 <Route path="contact" element={<HelpPage/>} />
 
                 <Route path="/pricing" element={<Pricing/>}/>
-                <Route path="/404" element={<PageNotFound />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/post/:slug" element={<BlogPost />} />
 
 
                 <Route path="/success" element={<Navigate to="/" />} />
-                <Route path="*" element={<Navigate to="/404" />} />
+                <Route path="*" element={<PageNotFound />} />
               </Routes>
             </RootLayout>
           </QueryClientProvider>

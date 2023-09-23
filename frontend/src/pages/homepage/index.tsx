@@ -1,7 +1,7 @@
-import Footer from "src/components/Footer";
+import {Footer} from "src/components/Footer";
 import { Hero } from "src/pages/homepage/components/Hero";
 
-function WelcomePage() {
+export function LandingPage() {
   return (
     <>
     <Hero />
@@ -11,5 +11,3 @@ function WelcomePage() {
      
   );
 }
-
-export default WelcomePage;

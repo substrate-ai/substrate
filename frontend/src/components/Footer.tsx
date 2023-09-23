@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
+import {Link} from "react-router-dom";
 
-export default function Footer() {
+export function Footer() {
 
     return (
         <>
@@ -13,25 +14,25 @@ export default function Footer() {
                     </a> */}
 
                     <div className="flex flex-wrap items-center justify-center gap-4 mt-6 lg:gap-6 lg:mt-0">
-                        <a href="https://docs.substrateai.com/" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
+                        <Link to="https://docs.substrateai.com/" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Documentation
-                        </a>
+                        </Link>
 
-                        <a href="pricing" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
+                        <Link to="pricing" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Pricing
-                        </a>
+                        </Link>
 
-                        <a href="legal/terms-and-conditions" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
+                        <Link to="legal/terms-and-conditions" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Terms and Conditions
-                        </a>
+                        </Link>
 
-                        <a href="legal/privacy-policy" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
+                        <Link to="legal/privacy-policy" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Privacy
-                        </a>
+                        </Link>
 
-                        <a href="contact" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
+                        <Link to="contact" className="text-sm text-gray-600 transition-colors duration-300 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400">
                             Help
-                        </a>
+                        </Link>
 
                     </div>
 
