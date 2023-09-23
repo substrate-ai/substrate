@@ -1,7 +1,7 @@
 import { supabaseClient } from "src/clients/supabaseClient";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "src/contexts/UserAuthContext";
 import axios from "axios";
+import { useAuth } from "src/hooks/useAuth";
 
 
 export type GetTokenDTO = {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {RootLayout} from './components/RootLayout';
 
-import {LandingPage} from './pages/homepage';
+import {LandingPage} from './pages/landing';
 import {ProtectedRoute} from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/UserAuthContext';
 import {PageNotFound} from './pages/404';
