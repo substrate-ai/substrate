@@ -56,9 +56,9 @@ export function MainNavigationBar() {
 
 
 
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="blog" onClick={(e) => {e.preventDefault(); navigate("/blog")}}>
+                  {/* <NavigationMenuLink className={navigationMenuTriggerStyle()} href="blog" onClick={(e) => {e.preventDefault(); navigate("/blog")}}>
                     Blog
-                  </NavigationMenuLink>
+                  </NavigationMenuLink> */}
 
           
 
