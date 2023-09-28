@@ -32,7 +32,7 @@ export function CardProject({
             />
           </div>
       <div className="space-y-1 text-sm">
-        <h3 className="font-medium leading-none">{project.title}</h3>
+        <h2 className="font-medium leading-none">{project.title}</h2>
         <p className="text-xs text-muted-foreground">{project.description}</p>
       </div>
     </div>

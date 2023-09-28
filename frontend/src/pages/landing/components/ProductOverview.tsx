@@ -98,7 +98,7 @@ export function ProductOverview() {
         </div>
         <div className="space-y-2">
           <p>Enjoy your hard work</p>
-          <img src={ad} className="w-[250px] lg:w-1/3"></img>
+          <img src={ad} alt="output of code" className="w-[250px] lg:w-1/3"></img>
         </div>
       </div>
     </div>
