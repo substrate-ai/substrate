@@ -63,5 +63,5 @@ version_pattern = 'MAJOR.MINOR.PATCH'
 
 [tool.ruff]
 line-length = 200
-select = ["E", "F", "N", "I"]
+select = ["E", "F", "N"]
 

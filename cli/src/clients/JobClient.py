@@ -22,16 +22,16 @@ class JobClient:
         # username, password = self.aws_client.get_ecr_login_password()
         # username, password = self.gcp_client.get_docker_credentials()
 
-        self.envd = EnvdClient(self.credentials)
+        # self.envd = EnvdClient(self.credentials)
         # self.credentials = self.http_client.get_gcp_credentials()
 
 
-        # self.docker_client = DockerClient(self.credentials["registry"], self.credentials["username"], self.credentials["password"], debug=False)
+        self.docker_client = DockerClient(self.credentials["registry"], self.credentials["username"], self.credentials["password"], debug=False)
 
     def start_job(self):
         self.http_client.check_payment_status()
 
-        self.envd.build(self.image_name)
+        # self.envd.build(self.image_name)
 
         # start_build = time.time()
 

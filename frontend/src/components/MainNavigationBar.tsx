@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from "@/components/ui/badge"
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'src/hooks/useAuth';
 
@@ -39,7 +38,6 @@ export function MainNavigationBar() {
                     {/* TODO add logo */}
                     <p className='inline px-2'>SubstrateAI</p>
                     
-                    <Badge variant="outline">Beta</Badge>
 
                   </NavigationMenuLink>
 
