@@ -106,8 +106,8 @@ export function PricingTable({view, hideFooter} : props) {
             <CardDescription>Pay only for what you use</CardDescription>
             <Select onValueChange={(timeUnit: TimeUnit) => setTimeUnit(timeUnit)}>
               {/* className="w-[180px]" */}
-              <SelectTrigger >
-                <SelectValue Label="change time unit for pricin" defaultValue="hour" placeholder="price per hour"/>
+              <SelectTrigger aria-label="pricing time unit config button">
+                <SelectValue  defaultValue="hour" placeholder="price per hour"/>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
