@@ -37,7 +37,7 @@ function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
-export function BlogPost() {
+export default function BlogPost() {
   const [postData, setPostData] = useState<any | null>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const { slug } = useParams();
 

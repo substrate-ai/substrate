@@ -4,7 +4,7 @@ import { Mail } from "lucide-react"
 
 
 
-export function HelpPage() {
+export default function HelpPage() {
 
     const email = 'support@substrateai.com'
 

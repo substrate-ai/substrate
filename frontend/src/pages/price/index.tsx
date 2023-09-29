@@ -1,7 +1,7 @@
 import { PricingTable } from "src/components/PricingTable"
 
 
-export function Pricing() {
+export default function Pricing() {
 
   return (
     <div className="flex h-screen">

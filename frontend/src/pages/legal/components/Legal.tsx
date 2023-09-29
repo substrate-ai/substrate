@@ -27,6 +27,7 @@ export function LegalPage({termsLocation} : Props) {
   
     fetchTerms();
   }, [termsLocation]);
+  
   return (
     <div className="flex h-screen bg-[#0d1117] overflow-scroll">
     <div className="m-auto w-10/12 lg:w-1/2 py-20 prose-invert prose lg:prose-xl">

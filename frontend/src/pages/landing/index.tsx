@@ -2,7 +2,7 @@ import {Footer} from "src/components/Footer";
 import { Hero } from "src/pages/landing/components/Hero";
 import { ProductOverview } from "src/pages/landing/components/ProductOverview";
 
-export function LandingPage() {
+export default function LandingPage() {
   return (
     <>
       <div className="">

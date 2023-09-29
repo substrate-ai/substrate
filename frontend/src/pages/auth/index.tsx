@@ -1,13 +1,13 @@
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { supabaseClient } from 'src/clients/supabaseClient';
-import { AuthView } from 'src/pages/auth/AuthViewEnum';
+import { AuthView } from 'src/types/enums';
 
 type Props = {
   view: AuthView
 }
 
-export function AuthPage({ view }: Props) {
+export default function AuthPage({ view }: Props) {
 
 
     return(
