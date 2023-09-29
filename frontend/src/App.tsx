@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RootLayout } from './components/RootLayout';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/UserAuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -20,7 +20,7 @@ const PageNotFound = lazy(() => import('./pages/404/index'));
 const LandingPage = lazy(() => import('./pages/landing/index'));
 const Dashboard = lazy(() => import('./pages/dashboard/index'));
 
-// const renderLoader = () => <p></p>;
+const renderLoader = () => <p></p>;
 
 const queryClient = new QueryClient(
   {
@@ -43,7 +43,7 @@ function App() {
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
             <RootLayout>
-            {/* <Suspense fallback={renderLoader()}> */}
+            <Suspense fallback={renderLoader()}>
               <Routes>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/login" element={<AuthPage view={AuthView.SIGN_IN} />} />
@@ -71,7 +71,7 @@ function App() {
                   <Route path="*" element={<PageNotFound />} />
                 
               </Routes>
-              {/* </Suspense> */}
+              </Suspense>
             </RootLayout>
           </QueryClientProvider>
         </AuthProvider>
