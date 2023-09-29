@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RootLayout } from './components/RootLayout';
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/UserAuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
