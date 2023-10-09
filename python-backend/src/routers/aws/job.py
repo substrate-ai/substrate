@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import json
 import logging
 from fastapi import APIRouter, HTTPException, status
@@ -11,8 +11,14 @@ import boto3
 from internals.supabase_client import supabase_admin, supabase_url, supabase_anon_key
 from internals.aws_access import access_key_id, secret_access_key
 import yaml
+import os
 
 router = APIRouter()
+
+# get number of process running for a user
+async def number_of_process(userId: str):
+    
+
 
 
 @router.post("/start-job")
@@ -46,8 +52,8 @@ async def create_item(job: Job):
             
             headers={"WWW-Authenticate": "Basic"},
         )
-
-    with open('./src/resources/aws_hardware.yaml') as f:
+    
+    with open('./resources/aws_hardware.yaml') as f:
         aws_hardware = yaml.safe_load(f)
         print(aws_hardware)
     
@@ -74,26 +80,8 @@ async def create_item(job: Job):
 
     job_name = generate_id()
 
-    now = datetime.datetime.now()
-    iso_time = now.strftime("%Y-%m-%dT%H:%M:%SZ") 
-
-    # training_image_config = {
-    #     'TrainingRepositoryAccessMode': 'Vpc',
-    #     'TrainingRepositoryAuthConfig': {
-    #             'TrainingRepositoryCredentialsProviderArn': 'arn:aws:lambda:us-east-1:038700340820:function:gcp_docker_login'
-    #     }
-    # }  
-
-    # vpc_config = {       
-    #   "SecurityGroupIds": [ "sg-056399f9e5c8f7805" ],
-
-    #   # "subnet-0286b10e9101e4a09", works
-    #   # "subnet-0775c57f2d5304587" is not working
-    #   # "subnet-0d91098cbc7d78043" works
-    #   # why are all not all the subnet working?
-      
-    #   "Subnets": ["subnet-0286b10e9101e4a09", "subnet-0d91098cbc7d78043"]
-    # }
+    current_time = datetime.utcnow()
+    iso_time = current_time.strftime("%Y-%m-%d %H:%M:%S.%f+00")
 
     response = sage.create_training_job(
         TrainingJobName=job_name,

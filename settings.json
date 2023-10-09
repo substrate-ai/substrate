@@ -1,0 +1,54 @@
+{
+    // "remote.SSH.showLoginTerminal": true,
+    // "remote.SSH.useLocalServer": false,
+    // "remote.SSH.useFlock": true,
+    "cmake.configureOnOpen": true,
+    "editor.accessibilitySupport": "off",
+    "editor.inlineSuggest.enabled": true,
+    "editor.quickSuggestions": {
+      "strings": "on"
+    },
+    "jupyter.widgetScriptSources": [
+      "jsdelivr.com",
+      "unpkg.com"
+    ],
+    "notebook.output.textLineLimit": 100,
+    "terminal.integrated.inheritEnv": false,
+    "terminal.integrated.env.osx": {
+      "FIG_NEW_SESSION": "1"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "cmake.configureArgs": [
+      "-DCMAKE_TOOLCHAIN_FILE=/Users/baptiste/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    ],
+    "git.enableSmartCommit": true,
+    "[python]": {
+      "editor.formatOnType": true
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "editor.linkedEditing": true,
+    "vs-kubernetes": {
+      "vs-kubernetes.minikube-show-information-expiration": "2024-01-22T17:09:21.358Z"
+    },
+    "github.copilot.enable": {
+      "*": true,
+      "plaintext": true,
+      "markdown": false,
+      "scminput": false
+    },
+    "remote.extensionKind": {
+      "vscode.typescript-language-features": "ui"
+    },
+    "typescript.tsserver.maxTsServerMemory": 256,
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "git.autofetch": true,
+    "[typescript]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "remote.SSH.configFile": "~/.ssh/config",
+    "remote.SSH.maxReconnectionAttempts": 3,
+    "git.ignoreLegacyWarning": true,
+    "security.workspace.trust.untrustedFiles": "open",
+  }

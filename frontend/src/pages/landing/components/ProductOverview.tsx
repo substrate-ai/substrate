@@ -51,7 +51,7 @@ const substrateRun = `$ substrate-ai run`
 const useCases = [
   {"title": "Text-to-Image", "src": textToImage, "description": "Generate images from text with model such as StableDiffusion"},
   {"title": "Text-to-Speech", "src": textToSpeech, "description": "Generate speech from text with model such as CoquiTTS"},
-  {"title": "Language Models", "src": languageModels, "description": "Generate text from text with model such as LLAMA"},
+  {"title": "Language Models", "src": languageModels, "description": "Generate text with model such as LLAMA"},
   {"title": "Speech Recognition", "src": caption, "description": "Generate text from speech with model such as Whisper"},
 ]
 

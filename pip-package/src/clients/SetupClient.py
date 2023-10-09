@@ -15,7 +15,7 @@ class SetupClient:
         pass
 
     def init_folder_creation(self):
-        console.print("Init project with config file and requirements.txt 2")
+        console.print("Init project with config file and requirements.txt")
 
         project_name = os.path.basename(os.getcwd())
 
