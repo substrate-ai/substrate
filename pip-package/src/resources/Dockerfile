@@ -11,4 +11,4 @@ COPY ./code /code
 ARG MAIN_LOCATION
 ENV MAIN_LOCATION_VAR=$MAIN_LOCATION
 
-ENTRYPOINT python3.10 /code/$MAIN_LOCATION_VAR
+ENTRYPOINT s3fs substrate-user-test /substrate; python3.10 /code/$MAIN_LOCATION_VAR

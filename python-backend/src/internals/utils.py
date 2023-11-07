@@ -3,9 +3,19 @@ import logging
 import requests
 from fastapi import HTTPException, status
 from resources.env import config_data
+from internals.supabase_client import supabase_admin
 
 supabase_url = config_data["SUPABASE_URL"]
 supabase_anon_key = config_data["SUPABASE_ANON_KEY"]
+
+def get_username(id: str):
+    # use supabase client to get username
+    data = supabase_admin.table('user_data').select('username').eq('id', id).execute()
+    
+    if data.count == 0 or len(data.data) == 0:
+        raise Exception("user not found")
+    
+    return data.data[0]['username']
 
 
 def get_user_id(token: str):

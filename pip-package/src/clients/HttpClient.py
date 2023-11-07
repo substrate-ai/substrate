@@ -26,6 +26,7 @@ class HttpClient:
         response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/aws/start-job', headers={'Authorization': f'Bearer {auth_token}'}, json=payload)
 
         if response.status_code != 200:
+            console.print(response.status_code)
             console.print(response.text)
             console.print("Job failed to start")
             raise typer.Exit(code=1)

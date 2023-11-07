@@ -30,6 +30,7 @@ export default function AuthPage({ view }: Props) {
           theme="dark" 
           providers={['github']}
           redirectTo={`${window.location.origin}/dashboard`}
+          onlyThirdPartyProviders={true}
           // redirectTo='/dashboard'
           view={view}
           /> 

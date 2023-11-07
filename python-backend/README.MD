@@ -1,5 +1,16 @@
 # Python-backend
 
+```
+conda create -n substrate-python-backend 
+```
+
+```
+conda activate substrate-python-backend 
+```
+```
+pip install -r requirements.txt
+```
+
 This is mainly used when the supabase based backend cannot support a use case.
 Right now it is mainly used for the aws-sdk to control our user job in the cloud
 

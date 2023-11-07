@@ -26,8 +26,7 @@ pip install -r requirements.txt
 To install the substrate cli
 
 ``` bash
-python -m pip install -e ../cli   
-```
+python -m pip install -e ../pip-package
 
 # How to publish
 
@@ -49,6 +48,8 @@ twine check dist/*
 ```
 
 ## Notes
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 038700340820.dkr.ecr.us-east-1.amazonaws.com
 
 docker build -f Dockerfile.substrate-ai . -t substrate-ai-base
 docker tag substrate-ai-base 038700340820.dkr.ecr.us-east-1.amazonaws.com/substrate-ai:base

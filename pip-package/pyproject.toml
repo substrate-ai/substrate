@@ -1,7 +1,7 @@
 # pyproject.toml
 
 [project]
-name = "substrate-ai"
+name = "substrateai"
 # dynamic = ["version"]
 version = "0.0.4"
 description = "Substrate AI package"
@@ -14,6 +14,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 keywords = ["cloud", "gpu", "ml", "ai"]
+
+
 
 dependencies = [
     "boto3 >= 1.28.0",
@@ -30,6 +32,8 @@ dependencies = [
 ]
 requires-python = ">=3.9"
 
+
+
 [project.optional-dependencies]
 dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 
@@ -40,8 +44,17 @@ Homepage = "https://docs.substrateai.com/"
 substrate-ai = "cli:app"
 
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
+
+#[tool.setuptools.packages]
+#find = {} 
+
+#[tool.setuptools]
+#package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where=["src"]
 
 [tool.bumpver]
 current_version = "0.0.4"

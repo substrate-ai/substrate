@@ -8,11 +8,9 @@ from internals.aws_access import access_key_id, secret_access_key
 
 router = APIRouter()
 
-@router.post("/get-credentials")
-async def get_aws_credentials(token: Token):
-
+def _get_aws_credentials(token: str):
     # frist get user id from token
-    user_id = get_user_id(token.accessToken)
+    user_id = get_user_id(token)
 
     # then use sts to assume role
     sts = boto3.client('sts', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, region_name='us-east-1')
@@ -31,5 +29,11 @@ async def get_aws_credentials(token: Token):
     credentials = response['Credentials']
 
     return credentials
+
+
+@router.post("/get-credentials")
+async def get_aws_credentials(token: Token):
+    return _get_aws_credentials(token.accessToken)
+    
     
 

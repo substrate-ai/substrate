@@ -6,6 +6,10 @@ import typer
 from utils.console import console
 from utils.env import config_data
 from utils.utils import get_cli_token
+import s3fs
+from utils.utils import get_user_id
+
+
 
 
 class AWSClient:
@@ -15,8 +19,18 @@ class AWSClient:
         secret_access_key = self.credentials["SecretAccessKey"]
         session_token = self.credentials["SessionToken"]
         region_name = config_data["AWS_REGION_NAME"]
+        self.session = boto3.Session(
+            aws_access_key_id=access_key_id,
+            aws_secret_access_key=secret_access_key,
+            region_name=region_name,
+        )
         self.logs_client = boto3.client('logs', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
         self.sagemaker_client = boto3.client('sagemaker', aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key, aws_session_token=session_token, region_name=region_name)
+
+    def get_filesystem(self):  
+        user_id = get_user_id()
+        bucket_name = f"substrate-user-{user_id}"
+        fs = s3fs.S3FileSystem(anon=False, session=self.session, bucket_name=bucket_name)
 
     def __get_aws_credentials(self):
         # get credentials from backend

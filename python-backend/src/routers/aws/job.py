@@ -1,8 +1,8 @@
 from datetime import datetime
-import json
 import logging
 from fastapi import APIRouter, HTTPException, status
 from human_id import generate_id
+from routers.aws.s3 import get_user_s3_credentials_from_token
 import requests
 from internals.DTOs import Job
 from internals.utils import get_user_id
@@ -11,14 +11,8 @@ import boto3
 from internals.supabase_client import supabase_admin, supabase_url, supabase_anon_key
 from internals.aws_access import access_key_id, secret_access_key
 import yaml
-import os
 
 router = APIRouter()
-
-# get number of process running for a user
-async def number_of_process(userId: str):
-    
-
 
 
 @router.post("/start-job")
@@ -83,13 +77,13 @@ async def create_item(job: Job):
     current_time = datetime.utcnow()
     iso_time = current_time.strftime("%Y-%m-%d %H:%M:%S.%f+00")
 
+    s3_credentials = get_user_s3_credentials_from_token(token)
+
     response = sage.create_training_job(
         TrainingJobName=job_name,
         AlgorithmSpecification={
             'TrainingImage': image_name,
-            # could change input mode
             'TrainingInputMode': 'File',
-            # 'TrainingImageConfig': training_image_config,
         },
         RoleArn='arn:aws:iam::038700340820:role/train',
         OutputDataConfig={
@@ -101,10 +95,13 @@ async def create_item(job: Job):
             'VolumeSizeInGB': 1,
         },
         StoppingCondition={
-            # TODO change max runtime
             'MaxRuntimeInSeconds': 600
         },
-        # VpcConfig=vpc_config,
+        Environment = {
+            'AWS_ACCESS_KEY_ID':s3_credentials["AccessKeyId"],
+            'AWS_SECRET_ACCESS_KEY':s3_credentials["SecretAccessKey"],
+            'AWS_SESSION_TOKEN':s3_credentials["SessionToken"],
+        }
     )
 
     if response['ResponseMetadata']['HTTPStatusCode'] != 200:
