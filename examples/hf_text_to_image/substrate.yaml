@@ -1,0 +1,4 @@
+project_name: hf_text_to_image
+hardware:
+  type: t4
+main_file_location: ./main.py
