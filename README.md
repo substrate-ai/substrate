@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="/LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/github/license/datasaurus-ai/datasaurus?style=flat-square"></a>
+  <a href="/LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/github/license/substrate-ai/substrate?style=flat-square"></a>
 </p>
 
 <p align="center">
