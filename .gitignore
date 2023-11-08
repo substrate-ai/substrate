@@ -1,6 +1,7 @@
 .vercel
 test/
 playground/
-private/
+private/*
 .cosine
 lago/
+private*/

@@ -1,1 +1,1 @@
-from filesystem.SubstrateFilesystem import fs
+from filesystem.SubstrateFilesystem import FileSystem

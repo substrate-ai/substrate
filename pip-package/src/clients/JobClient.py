@@ -65,8 +65,9 @@ class JobClient:
 
         try:
             self.aws_client.stream_logs(job_name, True)
+            console.print(f"Job {job_name} terminated", style="bold green")
         except KeyboardInterrupt:
             console.print("Stopping streaming logs due to keyboard interrupt")
-            console.print("Your job is still running in the cloud")
+            console.print("Your job is still running in the cloud", style="bold red")
 
-        console.print(f"Job {job_name} terminated", style="bold green")
+        

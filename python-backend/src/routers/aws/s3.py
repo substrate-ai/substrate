@@ -122,7 +122,6 @@ def get_user_s3_credentials_from_token(payload = Body(None)):
 
     return _get_user_s3_credentials(username)
 
-
 @router.post("/create-user-bucket")
 def user_created_s3_hook(payload = Body(None)):
     username = payload["record"]["username"]

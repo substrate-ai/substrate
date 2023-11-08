@@ -36,6 +36,11 @@ class AWSClient:
         # get credentials from backend
         auth_token = get_cli_token()
         response = requests.post(f'{config_data["PYTHON_BACKEND_URL"]}/aws/get-credentials', json={"accessToken": auth_token})
+
+        if response.status_code == 401:
+            console.print("Token is not valid, please login again via substrate-ai login")
+            raise typer.Exit(code=1)
+
         if response.status_code != 200:
             console.print(response.text)
             console.print("Failed to get cloud credentials")
