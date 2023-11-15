@@ -2,7 +2,7 @@
 
 [project]
 name = "substrateai"
-# dynamic = ["version"]
+# dynamic = ["version", "dependencies"]
 version = "0.0.4"
 description = "Substrate AI package"
 readme = "README.md"
@@ -15,21 +15,6 @@ classifiers = [
 ]
 keywords = ["cloud", "gpu", "ml", "ai"]
 
-
-
-dependencies = [
-    "boto3 >= 1.28.0",
-    "docker >= 6.1.0",
-    "typer[all] >= 0.9.0",
-    "human-id >= 0.2.0",
-    "python-on-whales == 0.64.2",
-    "yaspin == 3.0.0",
-    "supabase == 1.0.4",
-    "google-cloud-artifact-registry == 1.8.3",
-    "google-cloud-container == 2.30.0",
-    "envd == 0.3.40",
-    "pyyaml == 6.0.1"
-]
 requires-python = ">=3.9"
 
 
@@ -55,6 +40,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where=["src"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [tool.bumpver]
 current_version = "0.0.4"

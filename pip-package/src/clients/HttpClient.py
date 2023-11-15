@@ -33,8 +33,6 @@ class HttpClient:
 
         job_name = response.json()["jobName"]
 
-        console.print("Job successfully started")
-
         return job_name
 
     def stop_job(self, job_name):

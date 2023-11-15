@@ -71,6 +71,10 @@ class AWSClient:
 
         image_name = response.json()
         return image_name
+    
+    def is_job_training(self, job_name):
+        response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
+        return response['SecondaryStatus'] in ['Training', "Stopped"]
 
     def is_job_running(self, job_name):
         response = self.sagemaker_client.describe_training_job(TrainingJobName=job_name)
@@ -81,7 +85,7 @@ class AWSClient:
         return response['TrainingJobStatus']
 
     def loop_until_job_running(self, job_name):
-        while not self.is_job_running(job_name):
+        while not self.is_job_training(job_name):
             time.sleep(5)
 
     def is_job_terminated(self, job_name):
@@ -91,11 +95,22 @@ class AWSClient:
     def stop_job(self, job_name):
         self.sagemaker_client.stop_training_job(TrainingJobName=job_name)
 
+    def print_exit_message(self, job_name):
+        job_status = self.get_job_status(job_name)
+
+        if job_status == "Failed":
+            console.print(f":x: [bold red] Job {job_name} failed")
+            raise typer.Exit(code=1)
+        
+        if job_status == "Stopped":
+            console.print(f":x: [bold red] Job {job_name} stopped")
+            raise typer.Exit(code=1)
+        
+        if job_status == "Completed":
+            console.print(f":heavy_check_mark: [bold green] Job {job_name} completed")
+
     def stream_logs(self, job_name, wait):
-
-        # if wait:
-        #     console.print("Waiting for logs to be available")
-
+        
         while True:
             response = self.logs_client.describe_log_streams(
                 logGroupName='/aws/sagemaker/TrainingJobs',
@@ -108,7 +123,7 @@ class AWSClient:
                 break
 
             if not wait:
-                print("No log stream found for job: %s" % job_name)
+                console.print("No log stream found for job: %s" % job_name)
                 raise typer.Exit(code=1)
 
             time.sleep(5)
@@ -117,9 +132,8 @@ class AWSClient:
             job_status = self.get_job_status(job_name)
             
             if job_status in ['Failed', 'Completed', 'Stopped']:
-                console.print(f"Job {job_name} has terminated with status {job_status}")
+                console.print(f":x: [bold red] Job {job_name} has terminated with status {job_status}")
                 raise typer.Exit(code=1)
-
 
         response = self.logs_client.get_log_events(
             logGroupName='/aws/sagemaker/TrainingJobs',
@@ -145,7 +159,6 @@ class AWSClient:
 
             if self.is_job_terminated(job_name):
                 break
-
 
             job_status = self.get_job_status(job_name)
             

@@ -4,7 +4,13 @@ ARG PYTHON_VERSION=3.10
 
 COPY requirements.txt /requirements.txt
 
-RUN python${PYTHON_VERSION} -m pip install --no-cache-dir -r /requirements.txt
+# --disable-pip-version-check --root-user-action=ignore --no-cache-dir
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_ROOT_USER_ACTION=ignore
+
+
+RUN python${PYTHON_VERSION} -m pip install -r /requirements.txt
 
 COPY ./code /code
 
