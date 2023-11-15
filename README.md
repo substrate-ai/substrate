@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://datasaurus.app">
-    <img height="150" src="https://github.com/datasaurus-ai/datasaurus/assets/32412211/9ac40d6b-097b-4eaf-ba69-5129b52121af" alt="logo">
+    <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/4aad3e0f-670c-452f-a3bc-9e97151acaab" alt="logo">
   </a>
 </p>
 
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="/LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/github/license/datasaurus-ai/datasaurus?style=flat-square"></a>
+  <a href="/LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/github/license/substrate-ai/substrate?style=flat-square"></a>
 </p>
 
 <p align="center">
