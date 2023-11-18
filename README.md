@@ -24,9 +24,9 @@
 You want to run your ML training on cloud GPU, however, it takes forever to setup. No more, use our platform to get up and running in a couple of minutes. 
 <br>
 <br>
-<p align="center">
- <img width="720" src="https://github.com/datasaurus-ai/datasaurus/assets/32412211/7b9a36dd-9264-4442-ba25-e29a5a1516f3" alt="demo">
-</p>
+
+https://github.com/substrate-ai/substrate/assets/32412211/8b84b8d6-1126-46ff-a469-6dcaef0dc83d
+
 
 ## Features
 
