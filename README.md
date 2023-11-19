@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://datasaurus.app">
-    <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/4aad3e0f-670c-452f-a3bc-9e97151acaab" alt="logo">
+    <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/a0c125ad-f6d8-48bd-86f7-7b80d880f3c3" alt="logo">
   </a>
 </p>
 
@@ -21,54 +21,92 @@
 </p>
 
 <br>
-You want to run your ML training on cloud GPU, however, it takes forever to setup. No more, use our platform to get up and running in a couple of minutes. 
+You want to run your ML training on cloud GPU, however, it takes forever to set up. No more, using our platform to get up and running in a couple of minutes. 
 <br>
-<br>
+<be>
 
-https://github.com/substrate-ai/substrate/assets/32412211/8b84b8d6-1126-46ff-a469-6dcaef0dc83d
+## Getting Started
+Install the package
 
+```
+pip install substrate-ai
+```
+
+Configure your folder to use substrate
+
+```
+substrate-ai init
+```
+
+Run your code on the cloud
+
+```
+substrate-ai run
+```
+
+## Demo
+<details>
+  <summary>View Demo</summary>
+
+  Initialize your folder to be able to run with Substrate
+  ```
+  substrate-ai init
+  ```
+
+  Create a file with some Python code 
+  ```py
+  print("Welcome to substrate!")
+  ```
+
+  modify your `substrate.yaml` if necessary
+  ```yaml
+  project_name: basic
+  hardware:
+  type: cpu
+  main_file_location: ./main.py
+  ```
+
+  Then run your code
+  ```
+  substrate-ai run
+  ```
+
+  The result
+  <div align="center">
+    <video src="https://github.com/substrate-ai/substrate/assets/32412211/8b84b8d6-1126-46ff-a469-6dcaef0dc83d"/>
+  </div>
+</details>
 
 ## Features
 
 - Fully open-source
+   - You can even run our platform yourself
 - Your ml code running in the cloud in a couple of minutes
+- No vendor-specific lock-in, we adjust your code to fit our framework, not the other way around
 - Selling compute with zero markup
-    - we use AWS for our gpus and sell this compute at AWS cost
+    - we use AWS for our GPUs and sell this computes at the same price as AWS cost
+- Run your model on powerful GPUs
 And many more features coming soon
 
 ## Examples
 
-Look at our example folder for a couple of use-cases
+Look at our example folder for a couple of example projects
 
 ## Documentation
 
-https://docs.substrateai.com/
+Read our extensive documentation on our website https://docs.substrateai.com/
 
 ## Roadmap
 
 - [x] v0 launched
-- [x] Open-sourced the project (yes, we closed-source before 😣)
 - [ ] Filesystem
 - [ ] Remote image building
-- [ ] Analytics on job
-- [ ] Inference support (only training right now)
+- [ ] Analytics on cloud jobs
+- [ ] Inference support (mainly focusing on the ml training pipeline for right now)
 
 ## Running Locally
 
-Requirement: You need an AWS account
-
-1. Install [NodeJS 20](https://nodejs.org/en/download/current) (earlier versions will very likely work but aren't tested)
-2. Install [Supabase](https://supabase.com/docs/guides/cli/local-development) with `npm i supabase --save-dev`
-3. Install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
-4. Clone this repository and open it: `git clone https://github.com/substrate-ai/substrate && cd substrate`
-5. Install the frontend dependencies: `cd frontend && npm install && cd ..`
-6. Install the backend dependencies: `cd backend && virtualenv substrate-backend && source substrate-backend/bin/activate && pip install -r requirements.txt && cd ..`
-7. Start Supabase: `cd supabase && supabase start && cd ..`
-9. Create the backend `.env` file (`cd backend && cp .env.example .env && cd ..`) and complete it
-10. Create the frontend `.env` file (`cd frontend && cp .env.example .env && cd ..`) and complete it
-11. Start the backend: `cd backend && source substrate-backend/bin/activate && uvicorn src.main:app --reload && cd ..`
-12. Start the frontend: `cd frontend && npm run dev && cd ..`.
-13. Navigate to [http://localhost:3000](http://localhost:3000)
+Detailed instructions coming soon. 
 
 ## Interested?
 
