@@ -86,6 +86,7 @@ substrate-ai run
 - Quick deployment of ML code in the cloud
 - No vendor lock-in
 - AWS-powered GPUs without extra cost
+
 More features on the horizon
 
 ## 💡 Examples
