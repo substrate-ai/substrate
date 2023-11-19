@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://datasaurus.app">
+  <a href="https://substrateai.com">
     <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/a0c125ad-f6d8-48bd-86f7-7b80d880f3c3" alt="logo">
   </a>
 </p>
@@ -73,9 +73,12 @@ substrate-ai run
 
   The result
   <div align="center">
-    <video src="https://github.com/substrate-ai/substrate/assets/32412211/8b84b8d6-1126-46ff-a469-6dcaef0dc83d"/>
+    <video src="https://github.com/substrate-ai/substrate/assets/32412211/7534a6f7-82f5-4ed5-ad55-f8c045df4300"/>
   </div>
 </details>
+
+
+
 
 ## Features
 
