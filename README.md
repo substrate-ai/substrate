@@ -60,7 +60,7 @@ substrate-ai run
 
   modify your `substrate.yaml` if necessary
   ```yaml
-  project_name: basic
+  project_name: Example Project
   hardware:
   type: cpu
   main_file_location: ./main.py
