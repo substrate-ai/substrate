@@ -103,6 +103,8 @@ Access our [documentation](https://docs.substrateai.com/)
 - [ ] Remote image building
 - [ ] Cloud job analytics
 - [ ] Inference support
+- [ ] Spot training
+- [ ] Decreased compute cost (as we do not profit from computing, our focus is minimizing expenses)
 
 ## 🖥  Running Locally
 
