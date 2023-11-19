@@ -1,9 +1,9 @@
 # pyproject.toml
 
 [project]
-name = "substrateai"
+name = "substrate-ai"
 # dynamic = ["version", "dependencies"]
-version = "0.0.4"
+version = "0.0.7"
 description = "Substrate AI package"
 readme = "README.md"
 authors = [{ name = "SubstrateAI", email = "support@substrateai.com" }]
@@ -45,7 +45,7 @@ where=["src"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.bumpver]
-current_version = "0.0.4"
+current_version = "0.0.7"
 version_pattern = 'MAJOR.MINOR.PATCH'
 # commit_message = "bump version {old_version} -> {new_version}"
 # tag_message = "{new_version}"

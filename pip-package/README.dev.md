@@ -7,14 +7,14 @@ How to install the cli locally
 create a conda environement 
 
 ``` bash
-conda create --name substrate-ai-cli
+conda create --name substrate-pip-package
 ```
 
 Then activate it
 
 
 ``` bash
-conda activate substrate-ai-cli
+conda activate substrate-pip-package
 ```
 
 
@@ -34,8 +34,9 @@ python -m pip install -e ../pip-package
 bumpver update --patch
 ```
 
+
 ``` bash
-python -m build
+rm -rf dist && python -m build
 ```
 ``` bash
 twine upload -r testpypi dist/*

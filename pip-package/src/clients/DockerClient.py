@@ -175,7 +175,7 @@ class DockerClient:
 
     
 
-    def __init__(self, server, username, password, use_cache=False) -> None:
+    def __init__(self, server, username, password, use_cache=True) -> None:
         self.docker = DockerPyClient()
         self.docker_py = docker.from_env()
         self.tag =  "substrate:latest"

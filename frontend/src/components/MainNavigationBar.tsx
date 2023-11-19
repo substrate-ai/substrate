@@ -16,8 +16,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'src/hooks/useAuth';
 
 
-
-
 export function MainNavigationBar() {
   const { user } = useAuth()
   const { signOut } = useAuth()
@@ -42,6 +40,8 @@ export function MainNavigationBar() {
                   </NavigationMenuLink>
 
                   <>
+
+
                   
 
                   <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://docs.substrateai.com">
@@ -52,6 +52,10 @@ export function MainNavigationBar() {
 
                   <NavigationMenuLink className={navigationMenuTriggerStyle()} href="pricing" onClick={(e) => {e.preventDefault(); navigate("/pricing")}}>
                     Pricing
+                  </NavigationMenuLink>
+
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://github.com/substrate-ai/substrate">
+                      Github
                   </NavigationMenuLink>
 
 
@@ -124,7 +128,6 @@ export function MainNavigationBar() {
                   </DropdownMenu>
                   </>
                 }
-                
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

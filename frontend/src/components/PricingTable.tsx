@@ -73,7 +73,7 @@ function getPrice(pricePerSeconds: number, timeUnit: TimeUnit) {
 }
 
 function computePricePerSeconds(priceAwsPerHour: number) {
-  return Number((priceAwsPerHour * 3 / 60 / 60).toPrecision(2));
+  return Number((priceAwsPerHour * 1.5 / 60 / 60).toPrecision(2));
 }
 
 
