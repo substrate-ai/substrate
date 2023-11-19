@@ -1,32 +1,34 @@
 <p align="center">
   <a href="https://substrateai.com">
-    <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/a0c125ad-f6d8-48bd-86f7-7b80d880f3c3" alt="logo">
+    <img height="150" src="https://github.com/substrate-ai/substrate/assets/32412211/a0c125ad-f6d8-48bd-86f7-7b80d880f3c3" alt="Substrate AI logo">
   </a>
 </p>
 
-<h1 align="center">
-  Substrate AI
-</h1>
+<h1 align="center">Substrate AI</h1>
 
 <p align="center">
-  <i>Get your ML code up and running in the cloud in less than 5 minutes</i>
+  <i>Deploy your ML code in the cloud in under 5 minutes</i>
 </p>
 
 <p align="center">
-  <a href="/LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/github/license/substrate-ai/substrate?style=flat-square"></a>
+  <a href="/LICENSE">
+    <img alt="License Apache-2.0" src="https://img.shields.io/github/license/substrate-ai/substrate?style=flat-square">
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://substrateai.com">Hosted Platfrom</a> - <a href="#running-locally">Running Locally</a>
+  <a href="https://substrateai.com">Hosted Platform</a> • <a href="#running-locally">Running Locally</a>
 </p>
 
-<br>
-You want to run your ML training on cloud GPU, however, it takes forever to set up. No more, using our platform to get up and running in a couple of minutes. 
-<br>
-<be>
+---
 
-## Getting Started
-Install the package
+Simplify your ML training on cloud GPUs with Substrate AI. Our platform allows you to set up and run your models quickly, bypassing the usual setup hassles.
+
+## 🚀 Getting Started
+
+### Installation
+
+Install the package:
 
 ```
 pip install substrate-ai
@@ -44,7 +46,7 @@ Run your code on the cloud
 substrate-ai run
 ```
 
-## Demo
+## 🎬 Demo
 <details>
   <summary>View Demo</summary>
 
@@ -77,40 +79,35 @@ substrate-ai run
   </div>
 </details>
 
-
-
-
-## Features
+## ✨ Features
 
 - Fully open-source
-   - You can even run our platform yourself
-- Your ml code running in the cloud in a couple of minutes
-- No vendor-specific lock-in, we adjust your code to fit our framework, not the other way around
-- Selling compute with zero markup
-    - we use AWS for our GPUs and sell this computes at the same price as AWS cost
-- Run your model on powerful GPUs
-And many more features coming soon
+    - Self-host our platform
+- Quick deployment of ML code in the cloud
+- No vendor lock-in
+- AWS-powered GPUs without extra cost
+More features on the horizon
 
-## Examples
+## 💡 Examples
 
-Look at our example folder for a couple of example projects
+Explore example projects in our [example folder](https://github.com/substrate-ai/substrate/tree/main/examples)
 
-## Documentation
+## 📚 Documentation
 
-Read our extensive documentation on our website https://docs.substrateai.com/
+Access our [documentation](https://docs.substrateai.com/)
 
-## Roadmap
+## 🗺️ Roadmap
 
 - [x] v0 launched
-- [ ] Filesystem
+- [ ] Filesystem integration
 - [ ] Remote image building
-- [ ] Analytics on cloud jobs
-- [ ] Inference support (mainly focusing on the ml training pipeline for right now)
+- [ ] Cloud job analytics
+- [ ] Inference support
 
-## Running Locally
+## 🖥  Running Locally
 
-Detailed instructions coming soon. 
+Stay tuned for detailed instructions
 
-## Interested?
+## 🌟 Interested?
 
-If you are interested, please leave us a star and/or sign up for the hosted version on [substrateai.com](https://substrateai.com)
+Please leave us a star and/or sign up for the [hosted version](https://substrateai.com)
